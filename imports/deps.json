@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "prompt": {
+      "url": "https://deno.land/x/cliffy/prompt/mod.ts",
+      "hash": "568c78ce63b11c246d2a5bd6a0469b0ced69250028c846a30f7b2073a131cff7"
+    },
+    "command": {
+      "url": "https://deno.land/x/cliffy@v0.17.0/command/mod.ts",
+      "hash": "c343dc2d10c59285101b7fd9383e1ed742f2cf3ff1a404f96b7cb001932e521e"
+    },
+    "fs": {
+      "url": "https://deno.land/std/fs/mod.ts",
+      "hash": "b66e2c84f186bee87133865e0642c49d3c647d2facac1ebc4eb7346418c2bdd1"
+    },
+    "path": {
+      "url": "https://deno.land/std/path/mod.ts",
+      "hash": "d3fb56f65ba6205e71b771449caed7928f104ecfae28bc72f7ba8cf5c82b26b8"
+    },
+    "fmt": {
+      "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
+      "hash": "5b4388adfdc1f5ad8a727f95a91c3f255cb36f430b6b4503f8f3ddacc162db53"
+    }
+  }
+}
