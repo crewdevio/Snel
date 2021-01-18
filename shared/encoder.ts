@@ -6,4 +6,6 @@
  *
  */
 
-export * from "./compiler/compiler.ts";
+export const decoder = new TextDecoder("utf-8");
+
+export const encoder = new TextEncoder();

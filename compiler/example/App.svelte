@@ -2,4 +2,10 @@
 	let message = "svelte is awesome!!!";
 </script>
 
-<p>{message}</p>
+<style>
+.msg {
+	color: blue;
+}
+</style>
+
+<p class="msg">{message}</p>

@@ -1,4 +1,3 @@
-  
 /**
  * Copyright (c) Crew Dev.
  *
@@ -7,15 +6,13 @@
  *
  */
 
-import { compile, preprocess } from "./compiler.js";
-import { fileName, transform, findComponentPath } from "../shared/utils.ts";
+import { fileName, transform, findComponentPath, Name } from "../shared/utils.ts";
+import { decoder, encoder } from "../shared/encoder.ts";
+import { compile, preprocess } from "./compiler.ts";
 
 export async function build(path: string, isRoot?: boolean) {
-  const decoder = new TextDecoder("utf-8");
-  const encoder = new TextEncoder();
-
-  const filename = fileName(path) as string;
-  const name = filename.split(".")[0];
+  const filename = fileName(path);
+  const name = Name(path);
   const source = decoder.decode(await Deno.readFile(path));
 
   const out = transform(source);
@@ -23,7 +20,7 @@ export async function build(path: string, isRoot?: boolean) {
   const { code } = await preprocess(
     source,
     {
-      markup({ content }: any) {
+      markup({ content }) {
         let code = content;
         for (let index = 0; index < out.paths.length; index++) {
           code = code.replace(
@@ -62,12 +59,11 @@ export async function build(path: string, isRoot?: boolean) {
 
   if (out.paths.length) {
     for (const path of out.paths) {
-      const name = fileName(path) as string;
-
+      const name = fileName(path);
       const find = await findComponentPath(name);
 
-      if (find.length) {
-        await build(find[0].path);
+      if (find) {
+        await build(find.path);
       }
     }
   }

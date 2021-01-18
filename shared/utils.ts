@@ -6,7 +6,6 @@
  *
  */
 
-
 import { walk, WalkEntry } from "../imports/fs.ts";
 
 const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
@@ -35,7 +34,7 @@ export function getPaths(imports: string[]) {
 }
 
 export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
-export const fileName = (path: string) => path.split(/(\\|\/)/g).pop();
+export const fileName = (path: string) => path.split(/(\\|\/)/g).pop()!;
 export function transform(source: string) {
   const paths = getPaths(siblings(source));
   const jsPaths = [...paths].map((path) => svelteToJs(path));
@@ -52,5 +51,7 @@ export async function findComponentPath(name: string) {
     files.push(file);
   }
 
-  return files.filter((file) => name === file.name);
+  return files.filter((file) => name === file.name)[0];
 }
+
+export const Name = (path: string) => fileName(path)?.split(".")[0];

@@ -4,7 +4,7 @@ import {
   isIdentifierStart,
   isIdentifierChar,
 } from "https://cdn.skypack.dev/acorn?dts";
-import parse$3$1 from "https://esm.sh/css-tree@1.0.0-alpha22";
+import { parse as parse$3$1 } from "https://esm.sh/css-tree@1.0.0-alpha22";
 import MagicString from "https://esm.sh/magic-string";
 
 const now =
