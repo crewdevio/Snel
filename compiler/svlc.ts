@@ -6,6 +6,7 @@
  *
  */
 
+import { VERSION as svelteVersion } from "./compiler.ts";
 import { VERSION } from "../src/shared/version.ts";
 import { resolve } from "../imports/path.ts";
 import { colors } from "../imports/fmt.ts";
@@ -24,12 +25,12 @@ async function main() {
   }
   // show version
   else if (["version", "-v", "--version"].includes(args[0])) {
-    console.log(VERSION);
+    console.log(`svlc ${VERSION}\nsvelte ${svelteVersion}`);
   }
 
   // transpile to js
   else {
-    if (!args[0].endsWith(".svelte")) {
+    if (args[0] && !args[0].endsWith(".svelte")) {
       throw new EvalError(
         colors.red(
           `only ${colors.yellow(".svelte")} files are allowed to compile`
