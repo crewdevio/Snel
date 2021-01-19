@@ -9,6 +9,7 @@
 import { VERSION as svelteVersion } from "./compiler.ts";
 import { VERSION } from "../src/shared/version.ts";
 import { resolve } from "../imports/path.ts";
+import { parse } from "../imports/flags.ts";
 import { colors } from "../imports/fmt.ts";
 import { build } from "./build.ts";
 
@@ -39,8 +40,12 @@ async function main() {
     }
 
     // compile file
-    if (args[0]) await build(resolve(Deno.cwd(), args[0]), true);
-    else help();
+    if (args[0]) {
+      const parsed = parse(Deno.args);
+      await build(resolve(Deno.cwd(), parsed._[0] as string), {
+        isRoot: true,
+      });
+    } else help();
   }
 }
 

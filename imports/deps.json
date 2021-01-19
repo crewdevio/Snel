@@ -1,13 +1,5 @@
 {
   "meta": {
-    "prompt": {
-      "url": "https://deno.land/x/cliffy/prompt/mod.ts",
-      "hash": "568c78ce63b11c246d2a5bd6a0469b0ced69250028c846a30f7b2073a131cff7"
-    },
-    "command": {
-      "url": "https://deno.land/x/cliffy@v0.17.0/command/mod.ts",
-      "hash": "c343dc2d10c59285101b7fd9383e1ed742f2cf3ff1a404f96b7cb001932e521e"
-    },
     "fs": {
       "url": "https://deno.land/std/fs/mod.ts",
       "hash": "b66e2c84f186bee87133865e0642c49d3c647d2facac1ebc4eb7346418c2bdd1"
@@ -19,6 +11,22 @@
     "fmt": {
       "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
       "hash": "5b4388adfdc1f5ad8a727f95a91c3f255cb36f430b6b4503f8f3ddacc162db53"
+    },
+    "flags": {
+      "url": "https://deno.land/std@0.83.0/flags/mod.ts",
+      "hash": "fac9f4fe61ffabfb819c54b43b0d493374a2e320a34302b80322360cf27565b1"
+    },
+    "http": {
+      "url": "https://deno.land/std@0.83.0/http/mod.ts",
+      "hash": "225d18ed8516402006d979f5ef8de97a347a182fdee3b694d67d13c93c171142"
+    },
+    "assert_util": {
+      "url": "https://deno.land/std@0.74.0/_util/assert.ts",
+      "hash": "4126b9159f64da5c3afc0a505a01ddbccf4b735ba64bd1e9e108992fd4c312e1"
+    },
+    "jsonio": {
+      "url": "https://raw.githubusercontent.com/crewdevio/Trex/master/temp_deps/writeJson.ts",
+      "hash": "87aa6b4a85c93717366cc2da9c2d529f8b2ac9c7acf0884f2802ada5a4b6fa1f"
     }
   }
 }

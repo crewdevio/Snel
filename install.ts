@@ -6,17 +6,19 @@
  *
  */
 
-import { Command } from "./imports/command.ts";
 import { PromptConfig } from "./src/cli/prompt.ts";
-import { VERSION } from "./src/shared/version.ts";
-import { create } from "./src/cli/create.ts";
+import { Create } from "./src/cli/create.ts";
+import { build } from "./compiler/build.ts";
 
-const snel = new Command()
-  .throwErrors()
-  .name("Snel")
-  .version(VERSION)
-  .description("A Cybernetically compiler for web applications")
-  .action(() => {
-    console.log("help ....");
-  })
-  .command("create", create);
+const { args } = Deno;
+
+if (args[0] === "create") {
+  await Create({ ...PromptConfig(), projectName: Deno.args[1] });
+} else if (args[0] === "build") {
+
+  await build("./App/src/App.svelte", {
+    isRoot: true,
+    outDir: "App/public/build/",
+    dev: true
+  });
+}

@@ -96,3 +96,9 @@ export interface PreprocessorGroup {
   style?: Preprocessor;
   script?: Preprocessor;
 }
+
+export interface BuildOptions {
+  isRoot?: boolean;
+  outDir?: string;
+  dev?: boolean;
+}

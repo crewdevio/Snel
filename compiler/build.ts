@@ -6,11 +6,20 @@
  *
  */
 
-import { fileName, transform, findComponentPath, Name } from "../shared/utils.ts";
+import {
+  fileName,
+  transform,
+  findComponentPath,
+  Name,
+} from "../shared/utils.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
+import { BuildOptions } from "./types.ts";
 
-export async function build(path: string, isRoot?: boolean) {
+export async function build(
+  path: string,
+  { dev, outDir, isRoot }: BuildOptions
+) {
   const filename = fileName(path);
   const name = Name(path);
   const source = decoder.decode(await Deno.readFile(path));
@@ -39,12 +48,13 @@ export async function build(path: string, isRoot?: boolean) {
     }
   );
 
-  const file = await Deno.create(`./${name}.js`);
+  const file = await Deno.create(`./${outDir ?? ""}${name}.js`);
 
   const compiled = compile(code, {
     filename: filename,
     generate: "dom",
     name,
+    dev: dev ?? false,
     sveltePath: "https://esm.sh/svelte",
   });
 
@@ -63,7 +73,7 @@ export async function build(path: string, isRoot?: boolean) {
       const find = await findComponentPath(name);
 
       if (find) {
-        await build(find.path);
+        await build(find.path, { dev: false, outDir });
       }
     }
   }

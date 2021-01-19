@@ -1,1 +1,0 @@
-export * from "https://deno.land/x/cliffy/prompt/mod.ts";

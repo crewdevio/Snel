@@ -55,3 +55,14 @@ export async function findComponentPath(name: string) {
 }
 
 export const Name = (path: string) => fileName(path)?.split(".")[0];
+
+export const flags = {
+  help: ["--help", "-h"],
+  version: ["-v", "--version"],
+};
+
+export const keyWords = {
+  create: "create",
+  build: "build",
+  dev: "dev",
+};
