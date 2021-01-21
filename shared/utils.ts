@@ -54,6 +54,20 @@ export async function findComponentPath(name: string) {
   return files.filter((file) => name === file.name)[0];
 }
 
+export async function open(url: string): Promise<void> {
+  try {
+    const programAliases = {
+      windows: "explorer",
+      darwin: "open",
+      linux: "sensible-browser",
+    };
+    const process = Deno.run({ cmd: [programAliases[Deno.build.os], url] });
+    await process.status();
+  } catch (error: unknown) {
+    console.log(error);
+  }
+}
+
 export const Name = (path: string) => fileName(path)?.split(".")[0];
 
 export const flags = {
@@ -61,8 +75,31 @@ export const flags = {
   version: ["-v", "--version"],
 };
 
+export async function getIP() {
+  const process = Deno.run({
+    cmd: ["ipconfig"],
+    stdout: "piped",
+  });
+
+  const ip = new TextDecoder()
+    .decode(await process.output())
+    .split("\n")
+    .filter((chunk) => chunk.includes("IPv4 Address"))
+    .map((ip) => {
+      return ip
+        .trim()
+        .replaceAll("\r", "")
+        .replaceAll("IPv4 Address.", "")
+        .replaceAll(" .", "")
+        .replaceAll(" : ", "");
+    });
+
+  return ip.length ? ip[0] : null;
+}
+
 export const keyWords = {
   create: "create",
   build: "build",
   dev: "dev",
+  serve: "serve",
 };

@@ -6,19 +6,28 @@
  *
  */
 
-import { PromptConfig } from "./src/cli/prompt.ts";
-import { Create } from "./src/cli/create.ts";
-import { build } from "./compiler/build.ts";
-
-const { args } = Deno;
-
-if (args[0] === "create") {
-  await Create({ ...PromptConfig(), projectName: Deno.args[1] });
-} else if (args[0] === "build") {
-
-  await build("./App/src/App.svelte", {
-    isRoot: true,
-    outDir: "App/public/build/",
-    dev: true
+const install = async (name: string, url: string) => {
+  const process = Deno.run({
+    cmd: [
+      ...`deno install -A -f -r --unstable -n ${name} ${url}`.split(
+        " "
+      ),
+    ],
   });
+
+  return (await process.status()).success;
+};
+
+async function Main() {
+  try {
+    await install("trex", "https://deno.land/x/trex/cli.ts");
+    await install("snel", "https://raw.githubusercontent.com/crewdevio/Snel/main/cli.ts");
+  } catch (error: any) {
+    console.log(error?.message);
+  }
+}
+
+if (import.meta.main) {
+  await Main();
+  console.clear();
 }

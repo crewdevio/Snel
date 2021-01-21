@@ -126,7 +126,7 @@ async function serveDir(
   return res;
 }
 
-function serveFallback(req: ServerRequest, e: Error): Promise<Response> {
+function serveFallback(_: ServerRequest, e: Error): Promise<Response> {
   if (e instanceof Deno.errors.NotFound) {
     return Promise.resolve({
       status: 404,
@@ -140,10 +140,9 @@ function serveFallback(req: ServerRequest, e: Error): Promise<Response> {
   }
 }
 
-export default function serve(port: number, dir: string) {
-  const addr = `localhost:${port}`;
+export default function serve(port: number, dir: string, net?: boolean) {
   listenAndServe(
-    addr,
+    { port, hostname: net ? "0.0.0.0" : "localhost"},
     async (req): Promise<void> => {
       let normalizedUrl = posix.normalize(req.url);
       try {
@@ -164,7 +163,6 @@ export default function serve(port: number, dir: string) {
           response = await serveFile(req, fsPath);
         }
       } catch (e) {
-        console.error(e.message);
         response = await serveFallback(req, e);
       } finally {
         if (CORSEnabled) {
@@ -174,7 +172,6 @@ export default function serve(port: number, dir: string) {
         try {
           await req.respond(response!);
         } catch (e) {
-          console.error(e.message);
         }
       }
     }

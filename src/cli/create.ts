@@ -14,8 +14,16 @@ import {
   Home,
 } from "./templates.ts";
 import { createDir, createFile } from "./io.ts";
+import { colors } from "../../imports/fmt.ts";
+import { join } from "../../imports/path.ts";
 
-export async function CreateProject({ root, port, projectName, buildDir }: any) {
+export async function CreateProject({
+  root,
+  port,
+  projectName,
+  buildDir,
+}: any) {
+  const startTime = Date.now();
   const projectRoot = `${Deno.cwd()}/${projectName}`;
 
   const dirs = [
@@ -76,6 +84,24 @@ export async function CreateProject({ root, port, projectName, buildDir }: any) 
       path: projectRoot,
       source: gitIgnore,
     },
+    {
+      name: "run.json",
+      path: projectRoot,
+      source: JSON.stringify(
+        {
+          scripts: {
+            __internal__: "snel dev",
+            dev: "trex run __internal__",
+            watch: "trex run __internal__ --watch",
+            serve: "snel serve",
+            build: "snel build",
+          },
+          files: ["./src"],
+        },
+        null,
+        2
+      ),
+    },
   ];
 
   for (const { name, path } of dirs) {
@@ -85,4 +111,32 @@ export async function CreateProject({ root, port, projectName, buildDir }: any) 
   for (const { name, path, source } of files) {
     await createFile(name, path, source);
   }
+
+  const endTime = Date.now();
+
+  const message = `
+Done in ${(endTime - startTime) / 1000}s.
+
+Success! Created test at ${join(Deno.cwd(), projectName)}
+Inside that directory, you can run several commands:
+
+  ${colors.blue("trex run serve")} (not support watch mode)
+    Starts the development server.
+
+  ${colors.blue("trex run build")}
+    Bundles the app into static files for production.
+
+  ${colors.blue("trex run dev")}
+    Compile the project in dev mode.
+
+  ${colors.blue("trex run watch")}
+    Compile the project in dev mode but using watch mode.
+
+We suggest that you begin by typing:
+
+  ${colors.blue("cd")} ${projectName}
+  ${colors.blue("trex run serve")}
+`;
+  console.clear();
+  console.log(message);
 }
