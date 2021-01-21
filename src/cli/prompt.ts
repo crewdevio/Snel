@@ -9,7 +9,7 @@
 import { colors } from "../../imports/fmt.ts";
 
 export function PromptConfig(): { [key: string]: string } {
-  const answer: { [key: string]: string } = {};
+  const answers: { [key: string]: string } = {};
 
   const questions = [
     {
@@ -30,16 +30,40 @@ export function PromptConfig(): { [key: string]: string } {
   ];
 
   for (const question of questions) {
-    answer[question.name] = prompt(
+    answers[question.name] = prompt(
       colors.green(question.message),
       question.default
     )!;
   }
 
-  console.log(answer);
+  for (const answer in answers) {
+    console.log(colors.green(`\n${(answer)}: ${answers[answer]}`));
+  }
+
   if (confirm(colors.yellow("\nthis is the final configuration"))) {
-    return answer;
+    return answers;
   } else {
     return PromptConfig();
   }
+}
+
+export function notFoundConfig() {
+  throw new Error(
+    colors.red(`${colors.yellow("snel.config.json")} file could not be found`)
+    ).message;
+}
+
+export function serverLog({ dirName, port, localNet}: any) {
+  console.clear();
+  console.log(`
+  ${colors.green("Compiled successfully!")}
+
+  You can now view ${colors.yellow(dirName)} in the browser.
+
+      ${colors.bold("Local:")}            http://localhost:${colors.bold(port)}
+      ${localNet}
+
+  Note that the development build is not optimized.
+  To create a production build, use ${colors.blue("trex run build")}.
+  `);
 }

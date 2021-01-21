@@ -7,9 +7,10 @@
  */
 
 import { walk, WalkEntry } from "../imports/fs.ts";
+import { basename } from "../imports/path.ts";
 
-const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
-const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
+export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
+export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
 
 export function siblings(source: string) {
   // get .svelte imports
@@ -19,7 +20,7 @@ export function siblings(source: string) {
     .filter(
       (line) =>
         (line.includes(".svelte") && importPattern.test(line)) ||
-        /import/gm.test(line)
+        (/import/gm.test(line) && !line.includes("@svelte"))
     );
 }
 
@@ -34,7 +35,7 @@ export function getPaths(imports: string[]) {
 }
 
 export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
-export const fileName = (path: string) => path.split(/(\\|\/)/g).pop()!;
+export const fileName = (path: string) => basename(path);
 export function transform(source: string) {
   const paths = getPaths(siblings(source));
   const jsPaths = [...paths].map((path) => svelteToJs(path));
@@ -45,13 +46,19 @@ export function transform(source: string) {
   };
 }
 
-export async function findComponentPath(name: string) {
+export async function findComponentPath(pathToFind: string) {
   const files: WalkEntry[] = [];
   for await (const file of walk(Deno.cwd(), { exts: ["svelte"] })) {
     files.push(file);
   }
 
-  return files.filter((file) => name === file.name)[0];
+  // remove relative paths
+  const paths = pathToFind.split("/").filter(path => (path !== "." && path !== ".."));
+
+  // join for unix or windows
+  const normalize = Deno.build.os === "windows" ? paths.join("\\") : paths.join("/");
+
+  return files.filter((file) => file.path.includes(normalize)).shift();
 }
 
 export async function open(url: string): Promise<void> {
@@ -68,7 +75,7 @@ export async function open(url: string): Promise<void> {
   }
 }
 
-export const Name = (path: string) => fileName(path)?.split(".")[0];
+export const Name = (path: string) => fileName(path).split(".").shift();
 
 export const flags = {
   help: ["--help", "-h"],

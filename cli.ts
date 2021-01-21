@@ -6,15 +6,17 @@
  *
  */
 
+import { PromptConfig, notFoundConfig, serverLog } from "./src/cli/prompt.ts";
 import { flags, keyWords, open, getIP } from "./shared/utils.ts";
 import { HelpCommand, CommandNotFound } from "./shared/log.ts";
 import type { snelConfig } from "./src/shared/types.ts";
 import { CreateProject } from "./src/cli/create.ts";
-import { PromptConfig } from "./src/cli/prompt.ts";
 import server from "./src/dev-server/server.ts";
 import { readJson } from "./imports/jsonio.ts";
 import { build } from "./compiler/build.ts";
+import { resolve } from "./imports/path.ts";
 import { colors } from "./imports/fmt.ts";
+import { exists } from "./imports/fs.ts";
 
 async function Main() {
   const { args } = Deno;
@@ -46,12 +48,16 @@ async function Main() {
       });
     }
 
-    else {
+    else if (await exists(resolve("snel.config.json"))) {
       const { root, buildDir } = (await readJson(
         "./snel.config.json"
       )) as snelConfig;
 
       await build(root, { dev: false, isRoot: true, outDir: `./${buildDir}/` });
+    }
+
+    else {
+      notFoundConfig();
     }
   }
 
@@ -66,16 +72,19 @@ async function Main() {
       });
     }
 
-    else {
+    else if (await exists(resolve("snel.config.json"))) {
       const { root } = (await readJson("./snel.config.json")) as snelConfig;
 
       console.time(colors.green("Compiled successfully in"));
       await build(root, {
         isRoot: true,
         outDir: "./public/build/",
-        dev: true,
       });
       console.timeEnd(colors.green("Compiled successfully in"));
+    }
+
+    else {
+      notFoundConfig();
     }
   }
 
@@ -90,7 +99,7 @@ async function Main() {
       });
     }
 
-    else {
+    else if (await exists(resolve("snel.config.json"))) {
       const { root, port } = (await readJson(
         "./snel.config.json"
       )) as snelConfig;
@@ -101,8 +110,9 @@ async function Main() {
         dev: true,
       });
 
-      // run dev server
+      // run dev server in localhost
       server(parseInt(port), "./public");
+      /// ru  dev server in network
       server(parseInt(port), "./public", true);
 
       const dirName = Deno.cwd()
@@ -118,22 +128,14 @@ async function Main() {
             )}  http://${await getIP()}:${colors.bold(port)}`
           : "";
 
-      const message = `
-${colors.green("Compiled successfully!")}
-
-You can now view ${colors.yellow(dirName)} in the browser.
-
-    ${colors.bold("Local:")}   http://localhost:${colors.bold(port)}
-    ${localNet}
-
-Note that the development build is not optimized.
-To create a production build, use ${colors.blue("trex run build")}.
-`;
-
-      console.clear();
-      console.log(message);
+      // server logs
+      serverLog({ port, dirName, localNet });
       // open in browser
       setTimeout(async () => await open(`http://localhost:${port}`), 500);
+    }
+
+    else {
+      notFoundConfig();
     }
   }
 

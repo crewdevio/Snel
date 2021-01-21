@@ -12,11 +12,11 @@ export const indexHtml = (script: string) => `<!DOCTYPE html>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="./global.css" />
+    <link rel="icon" type="image/png" href="https://svelte.dev/favicon.png">
     <title>Svelte app</title>
   </head>
-
   <body>
-
+    <!-- injected by snel don't remove it -->
     <script type="module" src="${script}"></script>
   </body>
 </html>
@@ -92,7 +92,7 @@ button:focus {
 
 export const rootSvelte = `<script>
   import Home from "./components/Home.svelte";
-	let name = "Buddy!";
+	let name = "World";
 </script>
 
 <main>

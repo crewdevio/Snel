@@ -5,7 +5,7 @@ const { yellow, red, green, blue } = colors;
 export interface HelpCommandParams {
   command: {
     alias: string[];
-    description: string; //
+    description: string;
   };
   flags: Array<{
     description: string;

@@ -8,6 +8,12 @@ you can also install the compiler as a cli
 deno install -A --unstable ./svlc.ts
 ```
 
+or create a standalone executable
+
+```
+deno compile -A --unstable ./svlc.ts
+```
+
 and use:
 
 ```console

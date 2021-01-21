@@ -114,29 +114,28 @@ export async function CreateProject({
 
   const endTime = Date.now();
 
-  const message = `
-Done in ${(endTime - startTime) / 1000}s.
-
-Success! Created test at ${join(Deno.cwd(), projectName)}
-Inside that directory, you can run several commands:
-
-  ${colors.blue("trex run serve")} (not support watch mode)
-    Starts the development server.
-
-  ${colors.blue("trex run build")}
-    Bundles the app into static files for production.
-
-  ${colors.blue("trex run dev")}
-    Compile the project in dev mode.
-
-  ${colors.blue("trex run watch")}
-    Compile the project in dev mode but using watch mode.
-
-We suggest that you begin by typing:
-
-  ${colors.blue("cd")} ${projectName}
-  ${colors.blue("trex run serve")}
-`;
   console.clear();
-  console.log(message);
+  console.log(`
+  Done in ${(endTime - startTime) / 1000}s.
+
+  Success! Created ${projectName} at ${join(Deno.cwd(), projectName)}
+  Inside that directory, you can run several commands:
+
+    ${colors.blue("trex run serve")} (not support watch mode)
+      Starts the development server.
+
+    ${colors.blue("trex run build")}
+      Bundles the app into static files for production.
+
+    ${colors.blue("trex run dev")}
+      Compile the project in dev mode.
+
+    ${colors.blue("trex run watch")}
+      Compile the project in dev mode but using watch mode.
+
+  We suggest that you begin by typing:
+
+    ${colors.blue("cd")} ${projectName}
+    ${colors.blue("trex run serve")}
+  `);
 }
