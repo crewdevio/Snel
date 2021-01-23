@@ -54,7 +54,7 @@ async function Main() {
         "./snel.config.json"
       )) as snelConfig;
 
-      await build(root, { dev: false, isRoot: true, outDir: `./${buildDir}/` });
+      await build(root, { dev: false, isRoot: true, outDir: `./${buildDir}/`, dist: true });
     }
 
     else {

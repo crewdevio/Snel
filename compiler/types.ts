@@ -101,4 +101,5 @@ export interface BuildOptions {
   isRoot?: boolean;
   outDir?: string;
   dev?: boolean;
+  dist?: boolean;
 }

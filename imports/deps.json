@@ -1,12 +1,12 @@
 {
   "meta": {
     "fs": {
-      "url": "https://deno.land/std/fs/mod.ts",
-      "hash": "b66e2c84f186bee87133865e0642c49d3c647d2facac1ebc4eb7346418c2bdd1"
+      "url": "https://deno.land/std@0.83.0/fs/mod.ts",
+      "hash": "85a1cd0294c2d5e2c24179cdc55d02cab53309751860a4bd46333c0f155cd0e8"
     },
     "path": {
-      "url": "https://deno.land/std/path/mod.ts",
-      "hash": "d3fb56f65ba6205e71b771449caed7928f104ecfae28bc72f7ba8cf5c82b26b8"
+      "url": "https://deno.land/std@0.83.0/path/mod.ts",
+      "hash": "3e6ec3fad1569ba1705463995f141af35ee28d5c65c3ef1c067fcddbbd70b1a6"
     },
     "fmt": {
       "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
@@ -31,6 +31,22 @@
     "wocket": {
       "url": "https://deno.land/x/wocket@v0.6.2/mod.ts",
       "hash": "d2d17470e47452e7cd16289909689271929eba7e9822150b5b519731fff73b87"
+    },
+    "scss": {
+      "url": "https://raw.githubusercontent.com/crewdevio/deno_sass2/master/mod.ts",
+      "hash": "b6e39d818c6b94d50b9f9779affbb75afc7477f8709f38b41d15815ec9da5e6a"
+    },
+    "less": {
+      "url": "https://deno.land/x/aleph@v0.2.28/vendor/less/less.js",
+      "hash": "2142d07ff2b26f4044bf29ae41d85ef4c6e19f09f7156c530c414e9554a9b12e"
+    },
+    "terser": {
+      "url": "https://esm.sh/terser@5.3.2",
+      "hash": "eaa64ba1f10950c38e11df2fc8dd2291b0f367d596bc89652318691c6b071a2d"
+    },
+    "clean-css": {
+      "url": "https://esm.sh/clean-css@4.2.3?no-check",
+      "hash": "6d4758390abcd7aaf12432b1e144a4be6e7ec82bd75704ec0c74c5dbee820f78"
     }
   }
 }

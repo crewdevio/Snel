@@ -28,4 +28,12 @@ export function preprocess(
   return sveltePreprocess(source, preprocessor, options);
 }
 
+export function parse(template: string, options?: any) {
+  return svelteParse(template, options);
+}
+
+export function walk(ast: any, handler: any) {
+  return svelteWalk(ast, handler);
+}
+
 export { VERSION };
