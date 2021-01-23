@@ -3,9 +3,9 @@ import {
   parseExpressionAt as parseExpressionAt$1,
   isIdentifierStart,
   isIdentifierChar,
-} from "https://cdn.skypack.dev/acorn?dts";
+} from "https://cdn.skypack.dev/acorn@v8.0.4";
 import { parse as parse$3$1 } from "https://esm.sh/css-tree@1.0.0-alpha22";
-import MagicString from "https://esm.sh/magic-string";
+import MagicString from "https://cdn.skypack.dev/magic-string@v0.25.7";
 
 const now =
   typeof process !== "undefined" && process.hrtime

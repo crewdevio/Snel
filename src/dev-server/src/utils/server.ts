@@ -11,18 +11,17 @@
 import { posix, extname } from "../../../../imports/path.ts";
 import { listenAndServe } from "../../../../imports/http.ts";
 import { assert } from "../../../../imports/assert_util.ts";
-import { parse } from "../../../../imports/flags.ts";
 
 // types
 import type { Response, ServerRequest } from "../../../../imports/http.ts";
-import type { Args, EntryInfo } from "./types.ts";
+import type { EntryInfo } from "./types.ts";
 
 // pages
 import errPage from "../pages/err.ts";
 import dirPage from "../pages/dir.ts";
 
-const args = parse(Deno.args) as Args;
-const CORSEnabled = args.cors ? true : false;
+
+const CORSEnabled = true;
 
 const encoder = new TextEncoder();
 
@@ -82,7 +81,6 @@ async function serveFile(
   };
 }
 
-// TODO: simplify this after deno.stat and deno.readDir are fixed
 async function serveDir(
   req: ServerRequest,
   dirPath: string, _target: string

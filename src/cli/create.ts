@@ -43,17 +43,13 @@ export async function CreateProject({
       name: "components",
       path: `${Deno.cwd()}/${projectName}/src`,
     },
-    {
-      name: "build",
-      path: `${projectRoot}/public`,
-    },
   ];
 
   const files = [
     {
       name: "index.html",
       path: `${projectRoot}/public`,
-      source: indexHtml(`./build/${root}.js`),
+      source: await indexHtml(`./build/${root}.js`, parseInt(port) + 1),
     },
     {
       name: "global.css",
@@ -93,7 +89,7 @@ export async function CreateProject({
             __internal__: "snel dev",
             dev: "trex run __internal__",
             watch: "trex run __internal__ --watch",
-            serve: "snel serve",
+            start: "snel serve",
             build: "snel build",
           },
           files: ["./src"],
@@ -121,7 +117,7 @@ export async function CreateProject({
   Success! Created ${projectName} at ${join(Deno.cwd(), projectName)}
   Inside that directory, you can run several commands:
 
-    ${colors.blue("trex run serve")} (not support watch mode)
+    ${colors.blue("trex run start")} (experimental hot reloading)
       Starts the development server.
 
     ${colors.blue("trex run build")}
@@ -136,6 +132,6 @@ export async function CreateProject({
   We suggest that you begin by typing:
 
     ${colors.blue("cd")} ${projectName}
-    ${colors.blue("trex run serve")}
+    ${colors.blue("trex run start")}
   `);
 }

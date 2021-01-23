@@ -27,6 +27,10 @@
     "jsonio": {
       "url": "https://raw.githubusercontent.com/crewdevio/Trex/master/temp_deps/writeJson.ts",
       "hash": "87aa6b4a85c93717366cc2da9c2d529f8b2ac9c7acf0884f2802ada5a4b6fa1f"
+    },
+    "wocket": {
+      "url": "https://deno.land/x/wocket@v0.6.2/mod.ts",
+      "hash": "d2d17470e47452e7cd16289909689271929eba7e9822150b5b519731fff73b87"
     }
   }
 }

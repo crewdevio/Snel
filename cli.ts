@@ -9,6 +9,7 @@
 import { PromptConfig, notFoundConfig, serverLog } from "./src/cli/prompt.ts";
 import { flags, keyWords, open, getIP } from "./shared/utils.ts";
 import { HelpCommand, CommandNotFound } from "./shared/log.ts";
+import { HotReload } from "./src/dev-server/hotReloading.ts";
 import type { snelConfig } from "./src/shared/types.ts";
 import { CreateProject } from "./src/cli/create.ts";
 import server from "./src/dev-server/server.ts";
@@ -112,7 +113,7 @@ async function Main() {
 
       // run dev server in localhost
       server(parseInt(port), "./public");
-      /// ru  dev server in network
+      /// run  dev server in network
       server(parseInt(port), "./public", true);
 
       const dirName = Deno.cwd()
@@ -132,6 +133,15 @@ async function Main() {
       serverLog({ port, dirName, localNet });
       // open in browser
       setTimeout(async () => await open(`http://localhost:${port}`), 500);
+
+      // hot reloading
+      await HotReload("./src", parseInt(port) + 1, async () => {
+        await build(root, {
+          isRoot: true,
+          outDir: "./public/build/",
+          dev: true,
+        });
+      });
     }
 
     else {
