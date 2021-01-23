@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="./static/svelte-logo.svg" width="250">
-  <p align="center">A Cybernetically compiler for svelte applications in deno (Snel = fast in Nederlands) </p>
+  <p align="center">A Cybernetical compiler for svelte applications in deno (Snel = fast in Nederlands) </p>
 </p>
 
 <p align="center">
