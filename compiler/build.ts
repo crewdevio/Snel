@@ -65,7 +65,7 @@ export async function build(
             code = replaceToUrl(
               code,
               routerPatter,
-              "https://deno.land/x/snel/core/router/mod.ts"
+              "https://raw.githubusercontent.com/crewdevio/Snel/main/core/router/mod.js"
             );
           }
 
