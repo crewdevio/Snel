@@ -13,6 +13,7 @@ import {
   gitIgnore,
   Home,
 } from "./templates.ts";
+import type { CreateProjectOptions } from "../shared/types.ts";
 import { createDir, createFile } from "./io.ts";
 import { colors } from "../../imports/fmt.ts";
 import { join } from "../../imports/path.ts";
@@ -22,7 +23,7 @@ export async function CreateProject({
   port,
   projectName,
   buildDir,
-}: any) {
+}: CreateProjectOptions) {
   const startTime = Date.now();
   const projectRoot = `${Deno.cwd()}/${projectName}`;
 

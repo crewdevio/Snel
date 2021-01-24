@@ -12,6 +12,10 @@ import { basename } from "../imports/path.ts";
 export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
 export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
 
+export const sveltePatter = /@svelte\/?/gm;
+export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gm;
+export const routerPatter = /@router\/?/gm;
+
 export function siblings(source: string) {
   // get .svelte imports
   return source
@@ -53,10 +57,13 @@ export async function findComponentPath(pathToFind: string) {
   }
 
   // remove relative paths
-  const paths = pathToFind.split("/").filter(path => (path !== "." && path !== ".."));
+  const paths = pathToFind
+    .split("/")
+    .filter((path) => path !== "." && path !== "..");
 
   // join for unix or windows
-  const normalize = Deno.build.os === "windows" ? paths.join("\\") : paths.join("/");
+  const normalize =
+    Deno.build.os === "windows" ? paths.join("\\") : paths.join("/");
 
   return files.filter((file) => file.path.includes(normalize)).shift();
 }
@@ -83,25 +90,65 @@ export const flags = {
 };
 
 export async function getIP() {
-  const process = Deno.run({
-    cmd: ["ipconfig"],
-    stdout: "piped",
-  });
-
-  const ip = new TextDecoder()
-    .decode(await process.output())
-    .split("\n")
-    .filter((chunk) => chunk.includes("IPv4 Address"))
-    .map((ip) => {
-      return ip
-        .trim()
-        .replaceAll("\r", "")
-        .replaceAll("IPv4 Address.", "")
-        .replaceAll(" .", "")
-        .replaceAll(" : ", "");
+  if (Deno.build.os === "linux") {
+    const process = Deno.run({
+      cmd: ["hostname", "-I"],
+      stdout: "piped",
     });
 
-  return ip.length ? ip[0] : null;
+    const ip = new TextDecoder().decode(await process.output()).trim();
+
+    return ip.length ? ip : null;
+  } else if (Deno.build.os === "windows") {
+    const process = Deno.run({
+      cmd: ["ipconfig"],
+      stdout: "piped",
+    });
+
+    const ip = new TextDecoder()
+      .decode(await process.output())
+      .split("\n")
+      .filter((chunk) => chunk.includes("IPv4 Address"))
+      .map((ip) => {
+        return ip
+          .trim()
+          .replaceAll("\r", "")
+          .replaceAll("IPv4 Address.", "")
+          .replaceAll(" .", "")
+          .replaceAll(" : ", "");
+      });
+
+    return ip.length ? ip[0] : null;
+  } else {
+    const process = Deno.run({
+      cmd: ["ipconfig", "getifaddr", "en0"],
+      stdout: "piped",
+    });
+
+    const ip = new TextDecoder().decode(await process.output()).trim();
+
+    return ip.length ? ip : null;
+  }
+}
+
+export function replaceToUrl(
+  code: string,
+  pattern: RegExp,
+  url: string
+) {
+  return code
+    .split("\n")
+    .map((chunk) => chunk.trim())
+    .map((chunk) => {
+      if (pattern.test(chunk) || svelteImport.test(chunk)) {
+        return chunk.replace(
+          pattern,
+          url
+        );
+      }
+      return chunk;
+    })
+    .join("\n");
 }
 
 export const keyWords = {

@@ -7,8 +7,9 @@
  */
 
 import { colors } from "../../imports/fmt.ts";
+import type { CreateProjectOptions } from "../shared/types.ts";
 
-export function PromptConfig(): { [key: string]: string } {
+export function PromptConfig(): Omit<CreateProjectOptions, "projectName"> {
   const answers: { [key: string]: string } = {};
 
   const questions = [
@@ -24,7 +25,8 @@ export function PromptConfig(): { [key: string]: string } {
     },
     {
       name: "buildDir",
-      message: "in which directory do you want your app to be compiled for production?",
+      message:
+        "in which directory do you want your app to be compiled for production?",
       default: "dist",
     },
   ];
@@ -37,11 +39,11 @@ export function PromptConfig(): { [key: string]: string } {
   }
 
   for (const answer in answers) {
-    console.log(colors.green(`\n${(answer)}: ${answers[answer]}`));
+    console.log(colors.green(`\n${answer}: ${answers[answer]}`));
   }
 
   if (confirm(colors.yellow("\nthis is the final configuration"))) {
-    return answers;
+    return answers as Omit<CreateProjectOptions, "projectName">;
   } else {
     return PromptConfig();
   }
@@ -50,10 +52,10 @@ export function PromptConfig(): { [key: string]: string } {
 export function notFoundConfig() {
   throw new Error(
     colors.red(`${colors.yellow("snel.config.json")} file could not be found`)
-    ).message;
+  ).message;
 }
 
-export function serverLog({ dirName, port, localNet}: any) {
+export function serverLog({ dirName, port, localNet }: any) {
   console.clear();
   console.log(`
   ${colors.green("Compiled successfully!")}

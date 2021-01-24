@@ -12,6 +12,7 @@ import {
   findComponentPath,
   Name,
 } from "../shared/utils.ts";
+import { replaceToUrl, sveltePatter, routerPatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
@@ -22,9 +23,6 @@ import { colors } from "../imports/fmt.ts";
 import { BuildOptions } from "./types.ts";
 import { exists } from "../imports/fs.ts";
 import { less } from "../imports/less.ts";
-
-const sveltePatter = /@svelte\/?/gm;
-const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gm;
 
 export async function build(
   path: string,
@@ -56,19 +54,19 @@ export async function build(
               `./${fileName(out.jsPaths[index])}`
             );
 
-            code = code
-              .split("\n")
-              .map((chunk) => chunk.trim())
-              .map((chunk) => {
-                if (sveltePatter.test(chunk) || svelteImport.test(chunk)) {
-                  return chunk.replace(
-                    sveltePatter,
-                    "https://cdn.skypack.dev/svelte@3.31.2/"
-                  );
-                }
-                return chunk;
-              })
-              .join("\n");
+            // replace svelte core
+            code = replaceToUrl(
+              code,
+              sveltePatter,
+              "https://cdn.skypack.dev/svelte@3.31.2/"
+            );
+
+            // core router
+            code = replaceToUrl(
+              code,
+              routerPatter,
+              "https://deno.land/x/snel/core/router/mod.ts"
+            );
           }
 
           return {
@@ -93,7 +91,7 @@ export async function build(
             }
 
             // minify css
-            const { styles, errors, warnings } = clear.minify(css);
+            const { styles, errors, warnings } = clear.minify(css ?? content);
 
             if (warnings?.length) {
               warnings.forEach((warning: string) => {
@@ -110,8 +108,7 @@ export async function build(
 
             // asign styles
             css = styles;
-          }
-          catch (error: any) {
+          } catch (error: any) {
             throw new Error(
               colors.red(`compiling to css ${colors.yellow(filename!)}`)
             ).message;
@@ -148,6 +145,12 @@ export async function build(
       "https://cdn.skypack.dev/svelte@3.31.2/"
     );
 
+    compiled.js.code = replaceToUrl(
+      compiled.js.code,
+      routerPatter,
+      "https://deno.land/x/snel/core/router/mod.ts"
+    );
+
     if (isRoot) {
       compiled.js.code = compiled.js.code.replace(
         `export default ${name};`,
@@ -178,9 +181,7 @@ export async function build(
 
         if (find) {
           await build(find.path, { dev: false, outDir, dist });
-        }
-
-        else if (!find && path.endsWith(".svelte")) {
+        } else if (!find && path.endsWith(".svelte")) {
           console.error(
             colors.green(
               `the component "${colors.yellow(

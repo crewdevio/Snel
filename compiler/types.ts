@@ -77,7 +77,7 @@ export interface compileOut {
     };
   };
 }
-interface Processed {
+export interface Processed {
   code: string;
   map?: string | object;
   dependencies?: string[];

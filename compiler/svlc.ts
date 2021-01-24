@@ -44,7 +44,7 @@ async function main() {
       const parsed = parse(Deno.args);
       await build(resolve(Deno.cwd(), parsed._[0] as string), {
         isRoot: true,
-        dist: true,
+        dist: false,
         dev: true
       });
     } else help();

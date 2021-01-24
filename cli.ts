@@ -111,23 +111,23 @@ async function Main() {
         dev: true,
       });
 
+      const ipv4 = await getIP();
+
+      const dirName = Deno.cwd()
+      .split(Deno.build.os === "windows" ? "\\" : "/")
+      .pop()!;
+
       // run dev server in localhost
       server(parseInt(port), "./public");
       /// run  dev server in network
       server(parseInt(port), "./public", true);
 
-      const dirName = Deno.cwd()
-        .split(Deno.build.os === "windows" ? "\\" : "/")
-        .pop()!;
-
-      const isWindow = Deno.build.os === "windows";
-
       const localNet =
-        (await getIP()) && isWindow
-          ? `${colors.bold(
-              "On Your Network:"
-            )}  http://${await getIP()}:${colors.bold(port)}`
-          : "";
+          ipv4
+            ? `${colors.bold(
+                "On Your Network:"
+              )}  http://${ipv4}:${colors.bold(port)}`
+            : "";
 
       // server logs
       serverLog({ port, dirName, localNet });

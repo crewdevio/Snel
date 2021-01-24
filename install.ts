@@ -20,7 +20,7 @@ const install = async (name: string, url: string) => {
 
 async function Main() {
   try {
-    await install("snel", "https://raw.githubusercontent.com/crewdevio/Snel/main/cli.ts");
+    await install("snel", "https://deno.land/x/snel/cli.ts");
     await install("trex", "https://deno.land/x/trex/cli.ts");
     await install("bundler", "https://deno.land/x/bundler/cli.ts");
   } catch (error: any) {
