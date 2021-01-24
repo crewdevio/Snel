@@ -12,7 +12,7 @@ import {
   findComponentPath,
   Name,
 } from "../shared/utils.ts";
-import { replaceToUrl, sveltePatter, routerPatter } from "../shared/utils.ts";
+import { replaceToUrl, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
@@ -61,12 +61,6 @@ export async function build(
               "https://cdn.skypack.dev/svelte@3.31.2/"
             );
 
-            // core router
-            code = replaceToUrl(
-              code,
-              routerPatter,
-              "https://raw.githubusercontent.com/crewdevio/Snel/main/core/router/mod.js"
-            );
           }
 
           return {
@@ -143,12 +137,6 @@ export async function build(
     compiled.js.code = compiled.js.code.replace(
       sveltePatter,
       "https://cdn.skypack.dev/svelte@3.31.2/"
-    );
-
-    compiled.js.code = replaceToUrl(
-      compiled.js.code,
-      routerPatter,
-      "https://deno.land/x/snel/core/router/mod.ts"
     );
 
     if (isRoot) {

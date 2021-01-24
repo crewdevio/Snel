@@ -12,9 +12,8 @@ import { basename } from "../imports/path.ts";
 export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
 export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
 
-export const sveltePatter = /@svelte\/?/gm;
-export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gm;
-export const routerPatter = /@router\/?/gm;
+export const sveltePatter = /@svelte\/?/gim;
+export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gim;
 
 export function siblings(source: string) {
   // get .svelte imports
@@ -141,7 +140,7 @@ export function replaceToUrl(
     .map((chunk) => chunk.trim())
     .map((chunk) => {
       if (pattern.test(chunk) || svelteImport.test(chunk)) {
-        return chunk.replace(
+        return chunk.replaceAll(
           pattern,
           url
         );

@@ -6,7 +6,6 @@
  *
  */
 
-
 // deps
 import { posix, extname } from "../../../../imports/path.ts";
 import { listenAndServe } from "../../../../imports/http.ts";
@@ -19,9 +18,6 @@ import type { EntryInfo } from "./types.ts";
 // pages
 import errPage from "../pages/err.ts";
 import dirPage from "../pages/dir.ts";
-
-
-const CORSEnabled = true;
 
 const encoder = new TextEncoder();
 
@@ -83,7 +79,8 @@ async function serveFile(
 
 async function serveDir(
   req: ServerRequest,
-  dirPath: string, _target: string
+  dirPath: string,
+  _target: string
 ): Promise<Response> {
   const dirUrl = `/${posix.relative(_target, dirPath)}`;
   const listEntry: EntryInfo[] = [];
@@ -140,7 +137,7 @@ function serveFallback(_: ServerRequest, e: Error): Promise<Response> {
 
 export default function serve(port: number, dir: string, net?: boolean) {
   listenAndServe(
-    { port, hostname: net ? "0.0.0.0" : "localhost"},
+    { port, hostname: net ? "0.0.0.0" : "localhost" },
     async (req): Promise<void> => {
       let normalizedUrl = posix.normalize(req.url);
       try {
@@ -160,17 +157,15 @@ export default function serve(port: number, dir: string, net?: boolean) {
         } else {
           response = await serveFile(req, fsPath);
         }
+
+        setCORS(response);
       } catch (e) {
         response = await serveFallback(req, e);
       } finally {
-        if (CORSEnabled) {
-          assert(response);
-          setCORS(response);
-        }
+        assert(response);
         try {
           await req.respond(response!);
-        } catch (e) {
-        }
+        } catch (e) {}
       }
     }
   );

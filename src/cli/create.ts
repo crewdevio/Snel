@@ -79,7 +79,7 @@ export async function CreateProject({
     {
       name: ".gitignore",
       path: projectRoot,
-      source: gitIgnore,
+      source: gitIgnore(buildDir),
     },
     {
       name: "run.json",
