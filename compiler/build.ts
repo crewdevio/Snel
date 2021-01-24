@@ -12,7 +12,8 @@ import {
   findComponentPath,
   Name,
 } from "../shared/utils.ts";
-import { replaceToUrl, sveltePatter } from "../shared/utils.ts";
+import { replaceToUrl, importMapToUrl } from "../shared/utils.ts";
+import { mapPattern, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
@@ -23,10 +24,9 @@ import { colors } from "../imports/fmt.ts";
 import { BuildOptions } from "./types.ts";
 import { exists } from "../imports/fs.ts";
 import { less } from "../imports/less.ts";
-
 export async function build(
   path: string,
-  { dev, outDir, isRoot, dist }: BuildOptions
+  { dev, outDir, isRoot, dist, fileOutPut }: BuildOptions
 ) {
   if (!(await exists(path)) && isRoot) {
     throw new Error(
@@ -38,7 +38,7 @@ export async function build(
 
   try {
     const filename = fileName(path);
-    const name = Name(path);
+    const name = fileOutPut ?? Name(path);
     const source = decoder.decode(await Deno.readFile(path));
 
     const out = transform(source);
@@ -61,6 +61,8 @@ export async function build(
               "https://cdn.skypack.dev/svelte@3.31.2/"
             );
 
+            // import map support
+            code = importMapToUrl(code, mapPattern, "@map:");
           }
 
           return {

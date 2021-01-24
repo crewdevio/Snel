@@ -7,13 +7,15 @@
  */
 
 import { walk, WalkEntry } from "../imports/fs.ts";
+import { readJsonSync } from "../imports/jsonio.ts";
 import { basename } from "../imports/path.ts";
+import { existsSync } from "../imports/fs.ts";
 
-export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
 export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
-
-export const sveltePatter = /@svelte\/?/gim;
 export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gim;
+export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
+export const mapPattern = /["']+@map:[a-z(-?)0-9]+["']?/gim;
+export const sveltePatter = /@svelte\/?/gim;
 
 export function siblings(source: string) {
   // get .svelte imports
@@ -130,24 +132,47 @@ export async function getIP() {
   }
 }
 
-export function replaceToUrl(
-  code: string,
-  pattern: RegExp,
-  url: string
-) {
+export function replaceToUrl(code: string, pattern: RegExp, url: string) {
   return code
     .split("\n")
     .map((chunk) => chunk.trim())
     .map((chunk) => {
       if (pattern.test(chunk) || svelteImport.test(chunk)) {
-        return chunk.replaceAll(
-          pattern,
-          url
-        );
+        return chunk.replaceAll(pattern, url);
       }
       return chunk;
     })
     .join("\n");
+}
+
+export function importMapToUrl(
+  source: string,
+  pattern: RegExp,
+  replacer: string
+) {
+  if (existsSync("./import_map.json")) {
+    const matches = source.matchAll(pattern);
+
+    const map = readJsonSync("./import_map.json") as {
+      imports: { [key: string]: string };
+    };
+
+    for (const match of matches) {
+      const lib = match[0]
+        .replace(replacer, "")
+        .replaceAll('"', "")
+        .replaceAll("'", "")
+        .replaceAll(";", "")
+        .toLowerCase();
+
+      const toReplace = match[0];
+      const url = map?.imports[lib];
+
+      source = source.replaceAll(toReplace, url ? `"${url}"` : toReplace);
+    }
+  }
+
+  return source;
 }
 
 export const keyWords = {

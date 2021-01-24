@@ -21,9 +21,6 @@
    <a href="https://deno.land">
      <img src="https://img.shields.io/badge/deno-%5E1.7.0-green?logo=deno"/>
    </a>
-   <a href="http://hits.dwyl.com/crewdevio/Snel">
-     <img src="http://hits.dwyl.com/crewdevio/Snel.svg" />
-   </a>
 </p>
 
 #
@@ -37,6 +34,7 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 - simple setup
 - quick compilation
 - hot reloading
+- [import maps](https://github.com/WICG/import-maps) support
 - support for scss and less out of the box
 - support for typescript and sass out of the box (soon)
 
@@ -104,6 +102,53 @@ deno compile -A --unstable https://deno.land/x/snel/compiler/svlc.ts
 ```
 
 If you are interested in using the low-level compiler tools, you only have to access the [compiler.ts](https://github.com/crewdevio/Snel/blob/main/compiler/compiler.ts) file, which is a bridge between the svelte compiler (already transformed to javascript see [core.js](https://github.com/crewdevio/Snel/blob/main/compiler/core.js)) which provides typing and useful interfaces when using the compiler core.
+
+## Using import maps
+
+You can use import maps to reference the dependencies you use, to use import maps from bes have an `import_map.json` file with the following structure:
+
+```json
+{
+  "imports": {
+    "[package name]": "[package url]"
+  }
+}
+```
+
+In order for the compiler to know that you are using import maps, you need to import the dependencies as follows:
+
+```javascript
+import moment from "@map:moment";
+import axios from "@map:axios";
+```
+
+> **note** this syntax is inspired by how [node js 15](https://nodejs.org/api/esm.html#esm_node_imports) built in modules are imported
+
+### Manage import maps dependencies via [trex](https://github.com/crewdevio/Trex)
+
+if you don't have an import map.json file you can create it using the `trex install` command, trex is mainly focused on handling dependencies for `deno` but this doesn't prevent you from being able to use it to handle your dependencies for `snel/svelte`. to install any dependency you just have to use the [custom command](https://github.com/crewdevio/Trex#adding-custom-packages) from trex:
+
+```console
+trex --custom axios=https://cdn.skypack.dev/axios
+```
+
+this will install axios and it will make it accessible in the import map file:
+
+```json
+{
+  "imports": {
+    "axios": "https://cdn.skypack.dev/axios"
+  }
+}
+```
+
+> **note**: You should know that your dependencies must be compatible with [es modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and with the browser, if you refer to some import maps package and it is not found by the compiler, it will not be transformed, so an error will appear in your browser.
+
+we recommend these sites for you to install your dependencies
+
+- [skypack.dev](https://www.skypack.dev/)
+- [esm.sh](https://esm.sh/)
+- [jsdelivr.com](https://www.jsdelivr.com/)
 
 ## Hot Reloading
 

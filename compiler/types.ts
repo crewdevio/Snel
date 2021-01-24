@@ -102,4 +102,5 @@ export interface BuildOptions {
   outDir?: string;
   dev?: boolean;
   dist?: boolean;
+  fileOutPut?: string;
 }
