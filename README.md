@@ -1,7 +1,7 @@
 <h1 align="center">Snel 🦕</h1>
 
 <p align="center">
-  <img src="./static/svelte-logo.svg" width="250">
+  <img src="https://raw.githubusercontent.com/crewdevio/Snel/main/static/svelte-logo.svg" width="250">
   <p align="center">A Cybernetical compiler for svelte applications in deno (Snel = fast in Nederlands) </p>
 </p>
 
