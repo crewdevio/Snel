@@ -9,12 +9,10 @@
 export interface snelConfig {
   root: string;
   port: string;
-  buildDir: string;
 }
 
 export interface CreateProjectOptions {
   root: string;
   port: string;
   projectName: string;
-  buildDir: string;
 }

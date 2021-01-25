@@ -22,7 +22,7 @@ async function Main() {
   try {
     await install("snel", "https://deno.land/x/snel/cli.ts");
     await install("trex", "https://deno.land/x/trex/cli.ts");
-    await install("bundler", "https://deno.land/x/bundler/cli.ts");
+    await install("bundler", "https://deno.land/x/bundler@0.5.1/cli.ts");
   } catch (error: any) {
     console.log(error?.message);
   }

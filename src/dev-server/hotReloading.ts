@@ -24,7 +24,7 @@ export async function HotReload(
 
 export function clientConnection(port: number, onNet: string | null | undefined) {
   return `
-    <script>
+    <script role="hot-reload">
       (() => {
         const socket = new WebSocket("ws://${onNet ?? "localhost"}:${port}");
 

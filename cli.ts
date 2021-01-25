@@ -12,6 +12,7 @@ import { HelpCommand, CommandNotFound } from "./shared/log.ts";
 import { HotReload } from "./src/dev-server/hotReloading.ts";
 import type { snelConfig } from "./src/shared/types.ts";
 import { CreateProject } from "./src/cli/create.ts";
+import { prepareDist } from "./src/cli/prepare.ts";
 import server from "./src/dev-server/server.ts";
 import { readJson } from "./imports/jsonio.ts";
 import { build } from "./compiler/build.ts";
@@ -50,11 +51,12 @@ async function Main() {
     }
 
     else if (await exists(resolve("snel.config.json"))) {
-      const { root, buildDir } = (await readJson(
+      const { root } = (await readJson(
         "./snel.config.json"
       )) as snelConfig;
 
-      await build(root, { dev: false, isRoot: true, outDir: `./${buildDir}/`, dist: true });
+      await build(root, { dev: false, isRoot: true, dist: true, outDir: "./public/build/" });
+      await prepareDist(root);
     }
 
     else {

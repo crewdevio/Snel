@@ -47,6 +47,10 @@
     "clean-css": {
       "url": "https://esm.sh/clean-css@4.2.3?no-check",
       "hash": "6d4758390abcd7aaf12432b1e144a4be6e7ec82bd75704ec0c74c5dbee820f78"
+    },
+    "run": {
+      "url": "https://deno.land/x/trex@v1.4.0/commands/run.ts",
+      "hash": "d021ee2ba3373e4d07e92637536079852582cc55dfa72ad3b966f0a45890f875"
     }
   }
 }

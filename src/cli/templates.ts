@@ -24,11 +24,7 @@ export const indexHtml = async (
   <body>
     <script type="module" src="${script}"></script>
     <!-- injected by snel don't remove it -->
-        ${clientConnection(
-          port,
-          Deno.build.os === "windows" ? await getIP() : null
-        )}
-    <!-- injected by snel don't remove it -->
+${clientConnection(port, Deno.build.os === "windows" ? await getIP() : null)}
   </body>
 </html>
 `;
@@ -243,8 +239,7 @@ export const Home = `<script>
 </style>
 `;
 
-export const gitIgnore = (dir: string) => `
-/public/build/
+export const gitIgnore = (dir: string) =>
+  `/public/build/
 .DS_Store
-/${dir}
-`;
+/${dir}`;

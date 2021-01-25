@@ -23,12 +23,6 @@ export function PromptConfig(): Omit<CreateProjectOptions, "projectName"> {
       message: "which port do you want the development server to run on?",
       default: "3000",
     },
-    {
-      name: "buildDir",
-      message:
-        "in which directory do you want your app to be compiled for production?",
-      default: "dist",
-    },
   ];
 
   for (const question of questions) {

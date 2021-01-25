@@ -22,7 +22,6 @@ export async function CreateProject({
   root,
   port,
   projectName,
-  buildDir,
 }: CreateProjectOptions) {
   const startTime = Date.now();
   const projectRoot = `${Deno.cwd()}/${projectName}`;
@@ -60,11 +59,7 @@ export async function CreateProject({
     {
       name: "snel.config.json",
       path: projectRoot,
-      source: JSON.stringify(
-        { root: `./src/${root}.svelte`, port, buildDir },
-        null,
-        2
-      ),
+      source: JSON.stringify({ root: `./src/${root}.svelte`, port }, null, 2),
     },
     {
       name: `${root}.svelte`,
@@ -79,7 +74,7 @@ export async function CreateProject({
     {
       name: ".gitignore",
       path: projectRoot,
-      source: gitIgnore(buildDir),
+      source: gitIgnore("dist"),
     },
     {
       name: "run.json",
@@ -88,6 +83,7 @@ export async function CreateProject({
         {
           scripts: {
             __internal__: "snel dev",
+            bundle: "bundler bundle ./public/__index.html=index.html",
             dev: "trex run __internal__",
             watch: "trex run __internal__ --watch",
             start: "snel serve",
