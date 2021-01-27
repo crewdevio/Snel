@@ -10,6 +10,7 @@ import { walk, WalkEntry } from "../imports/fs.ts";
 import { readJsonSync } from "../imports/jsonio.ts";
 import { basename } from "../imports/path.ts";
 import { existsSync } from "../imports/fs.ts";
+import { colors } from "../imports/fmt.ts";
 
 export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
 export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gim;
@@ -179,6 +180,28 @@ export function importMapToUrl(
   }
 
   return source;
+}
+export function showHelp() {
+  console.log(
+    colors.green(
+`A Cybernetical compiler for svelte applications
+
+USAGE:
+  ${colors.white("snel")} ${colors.yellow("[SUBCOMMAND] [OPTIONS]")}
+
+OPTIONS:
+  ${colors.yellow("-h, --help")}      ${colors.white("print help info")}
+  ${colors.yellow("-v, --version")}   ${colors.white("print version")}
+
+SUBCOMMANDS:
+  ${colors.yellow("create")}    ${colors.white("create a template project")}
+  ${colors.yellow("dev")}       ${colors.white("build application in dev mode")}
+  ${colors.yellow("serve")}     ${colors.white("build and server in a dev server")}
+  ${colors.yellow("build")}     ${colors.white("build application for production")}
+
+you can see the different options available for each command using:
+  snel  ${colors.yellow("[command] --help or -h")}
+`));
 }
 
 export const keyWords = {
