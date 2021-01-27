@@ -22,44 +22,75 @@ export async function HotReload(
   }
 }
 
-export function clientConnection(port: number, onNet: string | null | undefined) {
-  return `
-    <script role="hot-reload">
+export function clientConnection(
+  port: number,
+  onNet: string | null | undefined
+) {
+  return `    <script role="hot-reload">
       (() => {
-        const socket = new WebSocket("ws://${onNet ?? "localhost"}:${port}");
+        if ("WebSocket" in window) {
+          const socket = new WebSocket("ws://${onNet ?? "localhost"}:${port}");
 
-        socket.addEventListener("open", () => {
+          socket.addEventListener("open", () => {
+            console.log(
+              "%c Snel %c Hot Reloading %c",
+              "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
+              "background:#ff3e00 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
+              "background:transparent"
+            );
+
+            socket.send(
+              JSON.stringify({
+                connect_to: ["Reload"],
+              })
+            );
+          });
+
+          socket.addEventListener("close", () => {
+            console.log(
+              "%c Hot Reloading %c connection cut off 🔌 %c",
+              "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
+              "background:#ff3e00 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
+              "background:transparent"
+            );
+          });
+
+          socket.addEventListener("error", () => {
+            console.log(
+              "%c Hot Reloading %c connection error %c",
+              "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
+              "background:#ff3e00 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
+              "background:transparent"
+            );
+          });
+
+          const Reload = () => setTimeout(() => window.location.reload(), 500);
+
+          socket.addEventListener("message", (event) => {
+            try {
+              const { message } = JSON.parse(event.data);
+
+              if (message === "reload") {
+                console.log(
+                  "%c 🔥 %c Reloading... %c",
+                  "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
+                  "background:#ff3e00 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
+                  "background:transparent"
+                );
+                Reload();
+              }
+            } catch (error) {
+              /* nothing here */
+            }
+          });
+        } else {
           console.log(
-            "%c Snel %c Hot Reloading %c",
+            "%c Hot Reloading %c your browser not support websockets :( %c",
             "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
             "background:#ff3e00 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
             "background:transparent"
           );
-
-          socket.send(
-            JSON.stringify({
-              connect_to: ["Reload"],
-            })
-          );
-        });
-
-        const Reload = () => setTimeout(() => window.location.reload(), 500);
-
-        socket.addEventListener("message", (event) => {
-          try {
-            const { message } = JSON.parse(event.data);
-
-            if (message === "reload") {
-              console.log(
-                "%c 🔥 %c Reloading... %c",
-                "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
-                "background:#ff3e00 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
-                "background:transparent"
-              );
-              Reload();
-            }
-          } catch (error) {}
-        });
+        }
       })();
     </script>`;
 }

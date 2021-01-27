@@ -24,7 +24,7 @@ export const indexHtml = async (
   <body>
     <script type="module" src="${script}"></script>
     <!-- injected by snel don't remove it -->
-${clientConnection(port, Deno.build.os === "windows" ? await getIP() : null)}
+${clientConnection(port, await getIP())}
   </body>
 </html>
 `;

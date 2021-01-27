@@ -78,9 +78,7 @@ export async function open(url: string): Promise<void> {
     };
     const process = Deno.run({ cmd: [programAliases[Deno.build.os], url] });
     await process.status();
-  } catch (error: unknown) {
-    console.log(error);
-  }
+  } catch (error: unknown) {/* nothing here */}
 }
 
 export const Name = (path: string) => fileName(path).split(".").shift();
@@ -91,44 +89,52 @@ export const flags = {
 };
 
 export async function getIP() {
-  if (Deno.build.os === "linux") {
-    const process = Deno.run({
-      cmd: ["hostname", "-I"],
-      stdout: "piped",
-    });
-
-    const ip = new TextDecoder().decode(await process.output()).trim();
-
-    return ip.length ? ip : null;
-  } else if (Deno.build.os === "windows") {
-    const process = Deno.run({
-      cmd: ["ipconfig"],
-      stdout: "piped",
-    });
-
-    const ip = new TextDecoder()
-      .decode(await process.output())
-      .split("\n")
-      .filter((chunk) => chunk.includes("IPv4 Address"))
-      .map((ip) => {
-        return ip
-          .trim()
-          .replaceAll("\r", "")
-          .replaceAll("IPv4 Address.", "")
-          .replaceAll(" .", "")
-          .replaceAll(" : ", "");
+  try {
+    if (Deno.build.os === "linux") {
+      const process = Deno.run({
+        cmd: ["hostname", "-I"],
+        stdout: "piped",
       });
 
-    return ip.length ? ip[0] : null;
-  } else {
-    const process = Deno.run({
-      cmd: ["ipconfig", "getifaddr", "en0"],
-      stdout: "piped",
-    });
+      const ip = new TextDecoder().decode(await process.output()).trim();
 
-    const ip = new TextDecoder().decode(await process.output()).trim();
+      return ip.length ? ip : null;
+    }
 
-    return ip.length ? ip : null;
+    else if (Deno.build.os === "windows") {
+      const process = Deno.run({
+        cmd: ["ipconfig"],
+        stdout: "piped",
+      });
+
+      const ip = new TextDecoder()
+        .decode(await process.output())
+        .split("\n")
+        .filter((chunk) => chunk.includes("IPv4 Address"))
+        .map((ip) => {
+          return ip
+            .trim()
+            .replaceAll("\r", "")
+            .replaceAll("IPv4 Address.", "")
+            .replaceAll(" .", "")
+            .replaceAll(" : ", "");
+        });
+
+      return ip.length ? ip[0] : null;
+    }
+
+    else {
+      const process = Deno.run({
+        cmd: ["ipconfig", "getifaddr", "en0"],
+        stdout: "piped",
+      });
+
+      const ip = new TextDecoder().decode(await process.output()).trim();
+
+      return ip.length ? ip : null;
+    }
+  } catch (error) {
+    return null;
   }
 }
 

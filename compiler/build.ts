@@ -24,6 +24,7 @@ import { colors } from "../imports/fmt.ts";
 import { BuildOptions } from "./types.ts";
 import { exists } from "../imports/fs.ts";
 import { less } from "../imports/less.ts";
+
 export async function build(
   path: string,
   { dev, outDir, isRoot, dist, fileOutPut }: BuildOptions
@@ -46,7 +47,13 @@ export async function build(
     const { code } = await preprocess(
       source,
       {
-        script({ content }) {
+        script({ content, attributes }) {
+
+          // transpile to javascript
+          if (attributes?.lang === "ts") {
+            throw new Error("no typescript support yet.");
+          }
+
           let code = content;
           for (let index = 0; index < out.paths.length; index++) {
             code = code.replace(

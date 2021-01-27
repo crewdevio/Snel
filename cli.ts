@@ -22,140 +22,141 @@ import { exists } from "./imports/fs.ts";
 
 async function Main() {
   const { args } = Deno;
+  try {
+    if (args[0] === keyWords.create) {
+      if (flags.help.includes(args[1])) {
+        return HelpCommand({
+          command: {
+            alias: [`${keyWords.create} App`],
+            description: "create a template project",
+          },
+          flags: [{ alias: flags.help, description: "show command help" }],
+        });
+      }
 
-  if (args[0] === keyWords.create) {
-    if (flags.help.includes(args[1])) {
-      return HelpCommand({
-        command: {
-          alias: [`${keyWords.create} App`],
-          description: "create a template project",
-        },
-        flags: [{ alias: flags.help, description: "show command help" }],
-      });
+      else {
+        await CreateProject({ ...PromptConfig(), projectName: Deno.args[1] });
+      }
     }
 
-    else {
-      await CreateProject({ ...PromptConfig(), projectName: Deno.args[1] });
-    }
-  }
+    else if (args[0] === keyWords.build) {
+      if (flags.help.includes(args[1])) {
+        return HelpCommand({
+          command: {
+            alias: [keyWords.build],
+            description: "build application for production",
+          },
+          flags: [{ alias: flags.help, description: "show command help" }],
+        });
+      }
 
-  else if (args[0] === keyWords.build) {
-    if (flags.help.includes(args[1])) {
-      return HelpCommand({
-        command: {
-          alias: [keyWords.build],
-          description: "build application for production",
-        },
-        flags: [{ alias: flags.help, description: "show command help" }],
-      });
-    }
+      else if (await exists(resolve("snel.config.json"))) {
+        const { root } = (await readJson(
+          "./snel.config.json"
+        )) as snelConfig;
+        await build(root, { dev: false, isRoot: true, dist: true, outDir: "./public/build/" });
+        await prepareDist(root);
+      }
 
-    else if (await exists(resolve("snel.config.json"))) {
-      const { root } = (await readJson(
-        "./snel.config.json"
-      )) as snelConfig;
-
-      await build(root, { dev: false, isRoot: true, dist: true, outDir: "./public/build/" });
-      await prepareDist(root);
-    }
-
-    else {
-      notFoundConfig();
-    }
-  }
-
-  else if (args[0] === keyWords.dev) {
-    if (flags.help.includes(args[1])) {
-      return HelpCommand({
-        command: {
-          alias: [keyWords.build],
-          description: "build application in dev mode",
-        },
-        flags: [{ alias: flags.help, description: "show command help" }],
-      });
+      else {
+        notFoundConfig();
+      }
     }
 
-    else if (await exists(resolve("snel.config.json"))) {
-      const { root } = (await readJson("./snel.config.json")) as snelConfig;
+    else if (args[0] === keyWords.dev) {
+      if (flags.help.includes(args[1])) {
+        return HelpCommand({
+          command: {
+            alias: [keyWords.build],
+            description: "build application in dev mode",
+          },
+          flags: [{ alias: flags.help, description: "show command help" }],
+        });
+      }
 
-      console.time(colors.green("Compiled successfully in"));
-      await build(root, {
-        isRoot: true,
-        outDir: "./public/build/",
-      });
-      console.timeEnd(colors.green("Compiled successfully in"));
+      else if (await exists(resolve("snel.config.json"))) {
+        const { root } = (await readJson("./snel.config.json")) as snelConfig;
+
+        console.time(colors.green("Compiled successfully in"));
+        await build(root, {
+          isRoot: true,
+          outDir: "./public/build/",
+        });
+        console.timeEnd(colors.green("Compiled successfully in"));
+      }
+
+      else {
+        notFoundConfig();
+      }
     }
 
-    else {
-      notFoundConfig();
-    }
-  }
+    else if (args[0] === keyWords.serve) {
+      if (flags.help.includes(args[1])) {
+        return HelpCommand({
+          command: {
+            alias: [keyWords.serve],
+            description: "build and server in a dev server",
+          },
+          flags: [{ alias: flags.help, description: "show command help" }],
+        });
+      }
 
-  else if (args[0] === keyWords.serve) {
-    if (flags.help.includes(args[1])) {
-      return HelpCommand({
-        command: {
-          alias: [keyWords.serve],
-          description: "build and server in a dev server",
-        },
-        flags: [{ alias: flags.help, description: "show command help" }],
-      });
-    }
+      else if (await exists(resolve("snel.config.json"))) {
+        const { root, port } = (await readJson(
+          "./snel.config.json"
+        )) as snelConfig;
 
-    else if (await exists(resolve("snel.config.json"))) {
-      const { root, port } = (await readJson(
-        "./snel.config.json"
-      )) as snelConfig;
-
-      await build(root, {
-        isRoot: true,
-        outDir: "./public/build/",
-        dev: true,
-      });
-
-      const ipv4 = await getIP();
-
-      const dirName = Deno.cwd()
-      .split(Deno.build.os === "windows" ? "\\" : "/")
-      .pop()!;
-
-      // run dev server in localhost
-      server(parseInt(port), "./public");
-      /// run  dev server in network
-      server(parseInt(port), "./public", true);
-
-      const localNet =
-          ipv4
-            ? `${colors.bold(
-                "On Your Network:"
-              )}  http://${ipv4}:${colors.bold(port)}`
-            : "";
-
-      // server logs
-      serverLog({ port, dirName, localNet });
-      // open in browser
-      setTimeout(async () => await open(`http://localhost:${port}`), 500);
-
-      // hot reloading
-      await HotReload("./src", parseInt(port) + 1, async () => {
         await build(root, {
           isRoot: true,
           outDir: "./public/build/",
           dev: true,
         });
-      });
+
+        const ipv4 = await getIP();
+
+        const dirName = Deno.cwd()
+        .split(Deno.build.os === "windows" ? "\\" : "/")
+        .pop()!;
+
+        // run dev server in localhost
+        server(parseInt(port), "./public");
+        /// run  dev server in network
+        server(parseInt(port), "./public", true);
+
+        const localNet =
+            ipv4
+              ? `${colors.bold(
+                  "On Your Network:"
+                )}  http://${ipv4}:${colors.bold(port)}`
+              : "";
+
+        // server logs
+        serverLog({ port, dirName, localNet });
+        // open in browser
+        setTimeout(async () => await open(`http://localhost:${port}`), 500);
+        // hot reloading
+        await HotReload("./src", parseInt(port) + 1, async () => {
+          await build(root, {
+            isRoot: true,
+            outDir: "./public/build/",
+            dev: true,
+          });
+        });
+      }
+
+      else {
+        notFoundConfig();
+      }
     }
 
     else {
-      notFoundConfig();
+      CommandNotFound({
+        commands: [keyWords.build, keyWords.create, keyWords.dev, keyWords.serve],
+        flags: [...flags.help, ...flags.version],
+      });
     }
-  }
-
-  else {
-    CommandNotFound({
-      commands: [keyWords.build, keyWords.create, keyWords.dev, keyWords.serve],
-      flags: [...flags.help, ...flags.version],
-    });
+  } catch (error: any) {
+    console.log(colors.red(error?.message));
   }
 }
 
