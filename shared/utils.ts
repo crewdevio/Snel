@@ -6,8 +6,9 @@
  *
  */
 
-import { walk, WalkEntry } from "../imports/fs.ts";
 import { readJsonSync } from "../imports/jsonio.ts";
+import { walk, WalkEntry } from "../imports/fs.ts";
+import { VERSION } from "../src/shared/version.ts";
 import { basename } from "../imports/path.ts";
 import { existsSync } from "../imports/fs.ts";
 import { colors } from "../imports/fmt.ts";
@@ -196,7 +197,7 @@ export function coreToUrl(source: string) {
 
     source = source.replace(
       match.shift()!,
-      `"https://deno.land/x/snel/core/${pkg}/mod.js"`
+      `"https://deno.land/x/snel@v${VERSION}/core/${pkg}/mod.js"`
     );
   }
 

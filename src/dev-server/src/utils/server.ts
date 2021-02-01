@@ -63,6 +63,7 @@ async function serveFile(
   ]);
   const headers = new Headers();
   headers.set("content-length", fileInfo.size.toString());
+  headers.set("access-control-allow-origin", "*");
   const contentTypeValue = contentType(filePath);
   if (contentTypeValue) {
     headers.set("content-type", contentTypeValue);
@@ -112,6 +113,7 @@ async function serveDir(
 
   const headers = new Headers();
   headers.set("content-type", "text/html");
+  headers.set("access-control-allow-origin", "*");
 
   const res = {
     status: 200,
