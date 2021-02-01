@@ -12,7 +12,7 @@ import {
   findComponentPath,
   Name,
 } from "../shared/utils.ts";
-import { replaceToUrl, importMapToUrl } from "../shared/utils.ts";
+import { replaceToUrl, importMapToUrl, coreToUrl } from "../shared/utils.ts";
 import { mapPattern, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
@@ -27,7 +27,7 @@ import { less } from "../imports/less.ts";
 
 export async function build(
   path: string,
-  { dev, outDir, isRoot, dist, fileOutPut }: BuildOptions
+  { dev, outDir, isRoot, dist, fileOutPut, generate }: BuildOptions
 ) {
   if (!(await exists(path)) && isRoot) {
     throw new Error(
@@ -55,6 +55,10 @@ export async function build(
           }
 
           let code = content;
+
+          // build in replace imports
+          code = coreToUrl(code);
+
           for (let index = 0; index < out.paths.length; index++) {
             code = code.replace(
               out.paths[index],
@@ -136,10 +140,11 @@ export async function build(
 
     const compiled = compile(code, {
       filename: filename,
-      generate: "dom",
+      generate: generate ?? "dom",
       name,
       dev: dev ?? false,
       sveltePath: "https://cdn.skypack.dev/svelte@3.31.2",
+      hydratable: generate === "ssr"
     });
 
     // replace internal lib
@@ -151,7 +156,7 @@ export async function build(
     if (isRoot) {
       compiled.js.code = compiled.js.code.replace(
         `export default ${name};`,
-        `new ${name}({ target: document.body });`
+        `new ${name}({ target: document.body, ${generate === "ssr" ? "hydrate: true," : ""} });`
       );
     }
 

@@ -16,6 +16,7 @@ export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\
 export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gim;
 export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
 export const mapPattern = /["']+@map:[a-z(-?)0-9]+["']?/gim;
+export const corePattern = /["']+@core\s*:\s*[a-z(-?)0-9]+["']?/gim;
 export const sveltePatter = /@svelte\/?/gim;
 
 export function siblings(source: string) {
@@ -181,6 +182,27 @@ export function importMapToUrl(
 
   return source;
 }
+
+export function coreToUrl(source: string) {
+  const matches = source.matchAll(corePattern);
+
+  for (const match of matches) {
+    const pkg = [...match]
+      .shift()!
+      .replace(/@core:/, "")
+      .replaceAll("'", "")
+      .replaceAll('"', "")
+      .trim();
+
+    source = source.replace(
+      match.shift()!,
+      `"https://deno.land/x/snel/core/${pkg}/mod.js"`
+    );
+  }
+
+  return source;
+}
+
 export function showHelp() {
   console.log(
     colors.green(
