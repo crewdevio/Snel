@@ -103,4 +103,5 @@ export interface BuildOptions {
   dev?: boolean;
   dist?: boolean;
   fileOutPut?: string;
+  generate?: "dom" | "ssr"
 }
