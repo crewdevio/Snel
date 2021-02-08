@@ -15,6 +15,7 @@ import {
 import { replaceToUrl, importMapToUrl, coreToUrl } from "../shared/utils.ts";
 import { mapPattern, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
+import { tsTranspiler } from "../src/shared/transpiler.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
 import { CleanCSS } from "../imports/clean-css.ts";
@@ -47,14 +48,12 @@ export async function build(
     const { code } = await preprocess(
       source,
       {
-        script({ content, attributes }) {
-
+        async script({ content, attributes, filename }) {
+          let code = content;
           // transpile to javascript
           if (attributes?.lang === "ts") {
-            throw new Error("no typescript support yet.");
+            code = await tsTranspiler(code, filename ?? "");
           }
-
-          let code = content;
 
           // build in replace imports
           code = coreToUrl(code);
@@ -69,7 +68,7 @@ export async function build(
             code = replaceToUrl(
               code,
               sveltePatter,
-              "https://cdn.skypack.dev/svelte@3.31.2/"
+              "https://cdn.skypack.dev/svelte@3.32.1/"
             );
 
             // import map support
@@ -143,20 +142,20 @@ export async function build(
       generate: generate ?? "dom",
       name,
       dev: dev ?? false,
-      sveltePath: "https://cdn.skypack.dev/svelte@3.31.2",
+      sveltePath: "https://cdn.skypack.dev/svelte@3.32.1",
       hydratable: generate === "ssr"
     });
 
     // replace internal lib
     compiled.js.code = compiled.js.code.replace(
       sveltePatter,
-      "https://cdn.skypack.dev/svelte@3.31.2/"
+      "https://cdn.skypack.dev/svelte@3.32.1/"
     );
 
     if (isRoot) {
       compiled.js.code = compiled.js.code.replace(
         `export default ${name};`,
-        `new ${name}({ target: document.body, ${generate === "ssr" ? "hydrate: true," : ""} });`
+        `new ${name}({ target: document.body });`
       );
     }
 
