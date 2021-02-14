@@ -51,6 +51,14 @@
     "run": {
       "url": "https://deno.land/x/trex@v1.4.0/commands/run.ts",
       "hash": "d021ee2ba3373e4d07e92637536079852582cc55dfa72ad3b966f0a45890f875"
+    },
+    "drollup": {
+      "url": "https://deno.land/x/drollup@2.39.0+0.14.0/mod.ts",
+      "hash": "327974a37cb0d0d2c1ddc29acc0dc09d74e2d2b699a41fa383e384c03eb449f1"
+    },
+    "drollup-util": {
+      "url": "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup/createFilter.ts",
+      "hash": "eb0f039e3b65cebb0ee3a299f212c53cdf7ff8ec1c328b9995c6768703c06e48"
     }
   }
 }

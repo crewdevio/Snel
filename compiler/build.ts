@@ -17,6 +17,7 @@ import { mapPattern, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { tsTranspiler } from "../src/shared/transpiler.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
+import { URL_SVELTE_CDN } from "../src/shared/version.ts";
 import { compile, preprocess } from "./compiler.ts";
 import { CleanCSS } from "../imports/clean-css.ts";
 import { minify } from "../imports/terser.ts";
@@ -65,11 +66,7 @@ export async function build(
             );
 
             // replace svelte core
-            code = replaceToUrl(
-              code,
-              sveltePatter,
-              "https://cdn.skypack.dev/svelte@3.32.1/"
-            );
+            code = replaceToUrl(code, sveltePatter, `${URL_SVELTE_CDN}/`);
 
             // import map support
             code = importMapToUrl(code, mapPattern, "@map:");
@@ -142,14 +139,14 @@ export async function build(
       generate: generate ?? "dom",
       name,
       dev: dev ?? false,
-      sveltePath: "https://cdn.skypack.dev/svelte@3.32.1",
-      hydratable: generate === "ssr"
+      sveltePath: URL_SVELTE_CDN,
+      hydratable: generate === "ssr",
     });
 
     // replace internal lib
     compiled.js.code = compiled.js.code.replace(
       sveltePatter,
-      "https://cdn.skypack.dev/svelte@3.32.1/"
+      `${URL_SVELTE_CDN}/`
     );
 
     if (isRoot) {
