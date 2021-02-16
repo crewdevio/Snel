@@ -22,10 +22,6 @@ function preprocess(source: string, root: string) {
   for (const match of matches) {
     source = source.replace(match[0], "");
     source = source.replace(commetPattern, "");
-    source = source.replace(
-      `<script type="module" src="./build/${root}"></script>`,
-      `<script src="./build/${root}"></script>`
-    );
   }
 
   return source;

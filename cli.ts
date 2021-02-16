@@ -15,9 +15,9 @@ import { HotReload } from "./src/dev-server/hotReloading.ts";
 import type { snelConfig } from "./src/shared/types.ts";
 import { CreateProject } from "./src/cli/create.ts";
 import { prepareDist } from "./src/cli/prepare.ts";
+import { RollupBuild } from "./compiler/build.ts";
 import server from "./src/dev-server/server.ts";
 import { readJson } from "./imports/jsonio.ts";
-import { build } from "./compiler/build.ts";
 import { resolve } from "./imports/path.ts";
 import { colors } from "./imports/fmt.ts";
 import { exists } from "./imports/fs.ts";
@@ -54,10 +54,8 @@ async function Main() {
       }
 
       else if (await exists(resolve("snel.config.json"))) {
-        const { root } = (await readJson(
-          "./snel.config.json"
-        )) as snelConfig;
-        await build(root, { dev: false, isRoot: true, dist: true, outDir: "./public/build/" });
+        const { root } = (await readJson("./snel.config.json")) as snelConfig;
+        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
         await prepareDist(root);
       }
 
@@ -78,13 +76,8 @@ async function Main() {
       }
 
       else if (await exists(resolve("snel.config.json"))) {
-        const { root } = (await readJson("./snel.config.json")) as snelConfig;
-
         console.time(colors.green("Compiled successfully in"));
-        await build(root, {
-          isRoot: true,
-          outDir: "./public/build/",
-        });
+        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
         console.timeEnd(colors.green("Compiled successfully in"));
       }
 
@@ -105,15 +98,9 @@ async function Main() {
       }
 
       else if (await exists(resolve("snel.config.json"))) {
-        const { root, port } = (await readJson(
-          "./snel.config.json"
-        )) as snelConfig;
+        const { port } = (await readJson("./snel.config.json")) as snelConfig;
 
-        await build(root, {
-          isRoot: true,
-          outDir: "./public/build/",
-          dev: true,
-        });
+        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
 
         const ipv4 = await getIP();
 
@@ -137,11 +124,7 @@ async function Main() {
         setTimeout(async () => await open(`http://localhost:${port}`), 500);
         // hot reloading
         await HotReload("./src", parseInt(port) + 1, async () => {
-          await build(root, {
-            isRoot: true,
-            outDir: "./public/build/",
-            dev: true,
-          });
+          await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
         });
       }
 

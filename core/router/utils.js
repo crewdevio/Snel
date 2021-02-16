@@ -2,8 +2,7 @@
  * Adapted from https://github.com/reach/router/blob/b60e6dd781d5d3a4bdaaf4de665649c0f6a7e78d/src/lib/utils.js
  *
  * https://github.com/reach/router/blob/master/LICENSE
- *
- */
+ * */
 
 const paramRe = /^:(.+)/;
 
@@ -12,6 +11,7 @@ const STATIC_POINTS = 3;
 const DYNAMIC_POINTS = 2;
 const SPLAT_PENALTY = 1;
 const ROOT_POINTS = 1;
+
 /**
  * Check if `string` starts with `search`
  * @param {string} string
@@ -21,6 +21,7 @@ const ROOT_POINTS = 1;
 export function startsWith(string, search) {
   return string.substr(0, search.length) === search;
 }
+
 /**
  * Check if `segment` is a root segment
  * @param {string} segment
@@ -29,6 +30,7 @@ export function startsWith(string, search) {
 function isRootSegment(segment) {
   return segment === "";
 }
+
 /**
  * Check if `segment` is a dynamic segment
  * @param {string} segment
@@ -37,6 +39,7 @@ function isRootSegment(segment) {
 function isDynamic(segment) {
   return paramRe.test(segment);
 }
+
 /**
  * Check if `segment` is a splat
  * @param {string} segment
@@ -45,6 +48,7 @@ function isDynamic(segment) {
 function isSplat(segment) {
   return segment[0] === "*";
 }
+
 /**
  * Split up the URI into segments delimited by `/`
  * @param {string} uri
@@ -58,6 +62,7 @@ function segmentize(uri) {
       .split("/")
   );
 }
+
 /**
  * Strip `str` of potential start and end `/`
  * @param {string} str
@@ -66,6 +71,7 @@ function segmentize(uri) {
 function stripSlashes(str) {
   return str.replace(/(^\/+|\/+$)/g, "");
 }
+
 /**
  * Score a route depending on how its individual segments look
  * @param {object} route
@@ -93,6 +99,7 @@ function rankRoute(route, index) {
 
   return { route, score, index };
 }
+
 /**
  * Give a score to all routes and sort them on that
  * @param {object[]} routes
@@ -108,6 +115,7 @@ function rankRoutes(routes) {
       )
   );
 }
+
 /**
  * Ranks and picks the best route to match. Each segment gets the highest
  * amount of points, then the type of segment gets an additional amount of
@@ -208,6 +216,7 @@ function pick(routes, uri) {
 
   return match || default_ || null;
 }
+
 /**
  * Check if the `path` matches the `uri`.
  * @param {string} path
@@ -217,6 +226,7 @@ function pick(routes, uri) {
 function match(route, uri) {
   return pick([route], uri);
 }
+
 /**
  * Add the query to the pathname if a query is given
  * @param {string} pathname
@@ -226,6 +236,7 @@ function match(route, uri) {
 function addQuery(pathname, query) {
   return pathname + (query ? `?${query}` : "");
 }
+
 /**
  * Resolve URIs as though every path is a directory, no files. Relative URIs
  * in the browser can feel awkward because not only can you be "in a directory",
@@ -295,6 +306,7 @@ function resolve(to, base) {
 
   return addQuery("/" + segments.join("/"), toQuery);
 }
+
 /**
  * Combines the `basepath` and the `path` into one path.
  * @param {string} basepath
@@ -305,6 +317,7 @@ function combinePaths(basepath, path) {
     path === "/" ? basepath : `${stripSlashes(basepath)}/${stripSlashes(path)}`
   )}/`;
 }
+
 /**
  * Decides whether a given `event` should result in a navigation or not.
  * @param {object} event

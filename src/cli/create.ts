@@ -12,6 +12,7 @@ import {
   rootSvelte,
   gitIgnore,
   Home,
+  mainjs,
 } from "./templates.ts";
 import type { CreateProjectOptions } from "../shared/types.ts";
 import { createDir, createFile } from "./io.ts";
@@ -49,7 +50,7 @@ export async function CreateProject({
     {
       name: "index.html",
       path: `${projectRoot}/public`,
-      source: await indexHtml(`./build/${root}.js`, parseInt(port) + 1),
+      source: await indexHtml(`./dist/main.js`, parseInt(port) + 1),
     },
     {
       name: "global.css",
@@ -94,6 +95,11 @@ export async function CreateProject({
         null,
         2
       ),
+    },
+    {
+      name: "main.js",
+      path: `${projectRoot}/src/`,
+      source: mainjs(root),
     },
   ];
 

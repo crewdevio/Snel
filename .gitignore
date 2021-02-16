@@ -1,3 +1,4 @@
 .vscode/
 compiler/example/App.js
 tests/
+App/

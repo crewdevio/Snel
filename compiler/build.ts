@@ -16,12 +16,14 @@ import { replaceToUrl, importMapToUrl, coreToUrl } from "../shared/utils.ts";
 import { mapPattern, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { tsTranspiler } from "../src/shared/transpiler.ts";
-import { decoder, encoder } from "../shared/encoder.ts";
 import { URL_SVELTE_CDN } from "../src/shared/version.ts";
+import { resolve, toFileUrl } from "../imports/path.ts";
+import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
 import { CleanCSS } from "../imports/clean-css.ts";
+import { rollup } from "../imports/drollup.ts";
 import { minify } from "../imports/terser.ts";
-import { resolve } from "../imports/path.ts";
+import svelte from "../src/shared/bundler.js";
 import { colors } from "../imports/fmt.ts";
 import { BuildOptions } from "./types.ts";
 import { exists } from "../imports/fs.ts";
@@ -193,4 +195,25 @@ export async function build(
   } catch (error: any) {
     throw new Error(colors.red(error.message));
   }
+}
+
+export async function RollupBuild({
+  dir = "./public/dist",
+  entryFile = "./src/main.js",
+}) {
+  const base = toFileUrl(Deno.cwd()).href;
+
+  const options = {
+    input: new URL(entryFile, `${base}/`).href,
+    plugins: [svelte()],
+    output: {
+      dir,
+      format: "es" as const,
+      sourcemap: true,
+    },
+  };
+
+  const bundle = await rollup(options);
+  await bundle.write(options.output);
+  await bundle.close();
 }

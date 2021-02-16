@@ -1,5 +1,6 @@
-import { navigate } from "./history.js";
 import { shouldNavigate, hostMatches } from "./utils.js";
+import { navigate } from "./history.js";
+
 /**
  * A link action that can be added to <a href=""> tags rather
  * than using the <Link> component.
@@ -29,6 +30,7 @@ function link(node) {
     },
   };
 }
+
 /**
  * An action to be added at a root element of your application to
  * capture all relative links and push them onto the history stack.

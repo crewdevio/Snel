@@ -79,12 +79,12 @@ this starts your application on a development server in the port you entered in 
 to use svelte core libraries such as transition, store, motion etc. must be called using the following syntax:
 
 ```javascript
-import { onMount } from "@svelte";
-import { tweened } from "@svelte/motion";
-import { cubicOut } from "@svelte/easing";
+import { cubicOut } from "svelte/easing";
+import { tweened } from "svelte/motion";
+import { onMount } from "svelte";
 ```
 
-`@svelte` tells the compiler that svelte core resources are being accessed.
+`svelte` tells the compiler that svelte core resources are being accessed.
 
 ## Using svlc/svelte compiler
 

@@ -16,9 +16,19 @@ export async function HotReload(
     server.to("Reload", packet.message);
   });
 
-  for await (const _ of Deno.watchFs(toWatch)) {
-    await action();
-    server.to("Reload", "reload");
+  let kind = "";
+  const events = ["remove", "modify"];
+  for await (const { kind: eventKind } of Deno.watchFs(toWatch)) {
+    if (events.includes(eventKind)) {
+      if (kind !== eventKind) {
+        server.to("Reload", "compiling");
+        await action();
+        server.to("Reload", "reload");
+        kind = eventKind;
+      }
+      // debounce recompile
+      setTimeout(() => (kind = ""), 5000);
+    }
   }
 }
 

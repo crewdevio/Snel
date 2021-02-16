@@ -127,6 +127,7 @@ export default (options = {}) => {
         generate: "dom",
         dev: true,
         sveltePath: URL_SVELTE_CDN,
+        hydratable: true
       });
 
       if (this.addWatchFile) {
