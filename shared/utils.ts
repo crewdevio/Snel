@@ -8,7 +8,6 @@
 
 import { readJsonSync } from "../imports/jsonio.ts";
 import { walk, WalkEntry } from "../imports/fs.ts";
-import { VERSION } from "../src/shared/version.ts";
 import { basename } from "../imports/path.ts";
 import { existsSync } from "../imports/fs.ts";
 import { colors } from "../imports/fmt.ts";
@@ -154,7 +153,7 @@ export function replaceToUrl(code: string, pattern: RegExp, url: string) {
     .join("\n");
 }
 
-export function importMapToUrl(
+export function importToUrl(
   source: string,
   pattern: RegExp,
   replacer: string
@@ -172,33 +171,14 @@ export function importMapToUrl(
         .replaceAll('"', "")
         .replaceAll("'", "")
         .replaceAll(";", "")
-        .toLowerCase();
+        .toLowerCase()
+        .trim();
 
       const toReplace = match[0];
       const url = map?.imports[lib];
 
       source = source.replaceAll(toReplace, url ? `"${url}"` : toReplace);
     }
-  }
-
-  return source;
-}
-
-export function coreToUrl(source: string) {
-  const matches = source.matchAll(corePattern);
-
-  for (const match of matches) {
-    const pkg = [...match]
-      .shift()!
-      .replace(/core:/, "")
-      .replaceAll("'", "")
-      .replaceAll('"', "")
-      .trim();
-
-    source = source.replace(
-      match.shift()!,
-      `"https://deno.land/x/snel@v${VERSION}/core/${pkg}/mod.js"`
-    );
   }
 
   return source;

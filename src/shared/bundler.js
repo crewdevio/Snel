@@ -1,6 +1,6 @@
-import { importMapToUrl, mapPattern } from "../../shared/utils.ts";
 import { compile, preprocess } from "../../compiler/compiler.ts";
 import { compile as scssCompiler } from "../../imports/scss.ts";
+import { importToUrl, mapPattern } from "../../shared/utils.ts";
 import { createFilter } from "../../imports/drollup-util.ts";
 import { tsTranspiler } from "../shared/transpiler.ts";
 import { URL_SVELTE_CDN } from "../shared/version.ts";
@@ -80,7 +80,7 @@ export default (options = {}) => {
               code = await tsTranspiler(code, filename ?? "");
             }
             // resolve import map calls
-            code = importMapToUrl(content, mapPattern, "map:");
+            code = importToUrl(content, mapPattern, "map:");
 
             return {
               code,

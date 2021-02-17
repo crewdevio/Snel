@@ -100,6 +100,8 @@ async function Main() {
       else if (await exists(resolve("snel.config.json"))) {
         const { port } = (await readJson("./snel.config.json")) as snelConfig;
 
+        console.log(colors.bold(colors.cyan("starting development server.")));
+
         await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
 
         const ipv4 = await getIP();

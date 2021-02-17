@@ -11,8 +11,8 @@ import {
   transform,
   findComponentPath,
   Name,
+  replaceToUrl,
 } from "../shared/utils.ts";
-import { replaceToUrl, importMapToUrl, coreToUrl } from "../shared/utils.ts";
 import { mapPattern, sveltePatter } from "../shared/utils.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
 import { tsTranspiler } from "../src/shared/transpiler.ts";
@@ -21,6 +21,7 @@ import { resolve, toFileUrl } from "../imports/path.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
 import { CleanCSS } from "../imports/clean-css.ts";
+import { importToUrl } from "../shared/utils.ts";
 import { rollup } from "../imports/drollup.ts";
 import { minify } from "../imports/terser.ts";
 import svelte from "../src/shared/bundler.js";
@@ -58,9 +59,6 @@ export async function build(
             code = await tsTranspiler(code, filename ?? "");
           }
 
-          // build in replace imports
-          code = coreToUrl(code);
-
           for (let index = 0; index < out.paths.length; index++) {
             code = code.replace(
               out.paths[index],
@@ -71,7 +69,7 @@ export async function build(
             code = replaceToUrl(code, sveltePatter, `${URL_SVELTE_CDN}/`);
 
             // import map support
-            code = importMapToUrl(code, mapPattern, "map:");
+            code = importToUrl(code, mapPattern, "map:");
           }
 
           return {

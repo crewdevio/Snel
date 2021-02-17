@@ -15,7 +15,7 @@ export function PromptConfig(): Omit<CreateProjectOptions, "projectName"> {
   const questions = [
     {
       name: "root",
-      message: "what do you want the main file to be called?",
+      message: "what do you want the main component file to be called?",
       default: "App",
     },
     {
