@@ -14,11 +14,11 @@ import { existsSync } from "../imports/fs.ts";
 import { colors } from "../imports/fmt.ts";
 
 export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
-export const svelteImport = /from\s*?["'\s]*([@\wsvelte\/?/]+)["'\s]/gim;
+export const svelteImport = /from\s*?["'\s]*([\wsvelte\/?/]+)["'\s]/gim;
 export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
-export const mapPattern = /["']+@map:[a-z(-?)0-9]+["']?/gim;
-export const corePattern = /["']+@core\s*:\s*[a-z(-?)0-9]+["']?/gim;
-export const sveltePatter = /@svelte\/?/gim;
+export const mapPattern = /["']+map\s*:\s*[a-z(-?)0-9]+["']?/gim;
+export const corePattern = /["']+core\s*:\s*[a-z(-?)0-9]+["']?/gim;
+export const sveltePatter = /svelte\/?/gim;
 
 export function siblings(source: string) {
   // get .svelte imports
@@ -28,7 +28,7 @@ export function siblings(source: string) {
     .filter(
       (line) =>
         (line.includes(".svelte") && importPattern.test(line)) ||
-        (/import/gm.test(line) && !line.includes("@svelte"))
+        (/import/gm.test(line) && !line.includes("svelte"))
     );
 }
 
@@ -190,7 +190,7 @@ export function coreToUrl(source: string) {
   for (const match of matches) {
     const pkg = [...match]
       .shift()!
-      .replace(/@core:/, "")
+      .replace(/core:/, "")
       .replaceAll("'", "")
       .replaceAll('"', "")
       .trim();

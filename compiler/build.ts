@@ -71,7 +71,7 @@ export async function build(
             code = replaceToUrl(code, sveltePatter, `${URL_SVELTE_CDN}/`);
 
             // import map support
-            code = importMapToUrl(code, mapPattern, "@map:");
+            code = importMapToUrl(code, mapPattern, "map:");
           }
 
           return {

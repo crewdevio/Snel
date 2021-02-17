@@ -1,3 +1,4 @@
+import { importMapToUrl, mapPattern } from "../../shared/utils.ts";
 import { compile, preprocess } from "../../compiler/compiler.ts";
 import { compile as scssCompiler } from "../../imports/scss.ts";
 import { createFilter } from "../../imports/drollup-util.ts";
@@ -78,6 +79,8 @@ export default (options = {}) => {
             if (attributes?.lang === "ts") {
               code = await tsTranspiler(code, filename ?? "");
             }
+            // resolve import map calls
+            code = importMapToUrl(content, mapPattern, "map:");
 
             return {
               code,
@@ -85,7 +88,6 @@ export default (options = {}) => {
           },
           async style({ attributes, filename, content }) {
             let css = null;
-            // const clear = new CleanCSS({ compatibility: "*" });
 
             try {
               // transform scss to css
@@ -127,7 +129,7 @@ export default (options = {}) => {
         generate: "dom",
         dev: true,
         sveltePath: URL_SVELTE_CDN,
-        hydratable: true
+        hydratable: true,
       });
 
       if (this.addWatchFile) {
