@@ -1,28 +1,28 @@
 {
   "meta": {
     "fs": {
-      "url": "https://deno.land/std@0.83.0/fs/mod.ts",
-      "hash": "85a1cd0294c2d5e2c24179cdc55d02cab53309751860a4bd46333c0f155cd0e8"
+      "url": "https://deno.land/std@0.88.0/fs/mod.ts",
+      "hash": "160840c03025e78d4512362c0d8d15ba41b10594a61a5456949f63c1a1797d49"
     },
     "path": {
-      "url": "https://deno.land/std@0.83.0/path/mod.ts",
-      "hash": "3e6ec3fad1569ba1705463995f141af35ee28d5c65c3ef1c067fcddbbd70b1a6"
+      "url": "https://deno.land/std@0.88.0/path/mod.ts",
+      "hash": "a1a1e12dc34c12ec63e519a81782e3bdb5a2eedd21a82dafad8ee5291646f449"
     },
     "fmt": {
       "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
       "hash": "5b4388adfdc1f5ad8a727f95a91c3f255cb36f430b6b4503f8f3ddacc162db53"
     },
     "flags": {
-      "url": "https://deno.land/std@0.83.0/flags/mod.ts",
-      "hash": "fac9f4fe61ffabfb819c54b43b0d493374a2e320a34302b80322360cf27565b1"
+      "url": "https://deno.land/std@0.88.0/flags/mod.ts",
+      "hash": "1ba1d570e2571a1b1d8783136cfa6f092669d1de82f45295a7963972fca6f279"
     },
     "http": {
-      "url": "https://deno.land/std@0.83.0/http/mod.ts",
-      "hash": "225d18ed8516402006d979f5ef8de97a347a182fdee3b694d67d13c93c171142"
+      "url": "https://deno.land/std@0.88.0/http/mod.ts",
+      "hash": "ea4daf62b6c032db8a931fd4741c7edc60b489a8405062740fce23c4371bd257"
     },
     "assert_util": {
-      "url": "https://deno.land/std@0.74.0/_util/assert.ts",
-      "hash": "4126b9159f64da5c3afc0a505a01ddbccf4b735ba64bd1e9e108992fd4c312e1"
+      "url": "https://deno.land/std@0.88.0/_util/assert.ts",
+      "hash": "c36f07520c10aa6c234985615ff7f46e8997f50aed2f58d4e43456d2f436d4f4"
     },
     "jsonio": {
       "url": "https://raw.githubusercontent.com/crewdevio/Trex/master/temp_deps/writeJson.ts",

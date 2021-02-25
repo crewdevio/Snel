@@ -6,6 +6,6 @@
  *
  */
 
-export const VERSION = "0.0.5";
+export const VERSION = "0.1.0";
 
 export const URL_SVELTE_CDN = "https://cdn.skypack.dev/svelte@3.32.1";
