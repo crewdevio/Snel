@@ -12,7 +12,7 @@ import {
   parse as svelteParse,
   preprocess as sveltePreprocess,
   walk as svelteWalk,
-} from "./core.js";
+} from "https://cdn.jsdelivr.net/npm/svelte@3.34.0/compiler.mjs";
 
 import type { compileOptions, compileOut, PreprocessorGroup } from "./types.ts";
 
