@@ -1,1 +1,1 @@
-export * from "https://deno.land/x/trex@v1.4.0/commands/run.ts";
+export * from "https://deno.land/x/trex/commands/run.ts";

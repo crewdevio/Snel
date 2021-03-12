@@ -20,10 +20,8 @@ import { URL_SVELTE_CDN } from "../src/shared/version.ts";
 import { resolve, toFileUrl } from "../imports/path.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
-import { CleanCSS } from "../imports/clean-css.ts";
 import { importToUrl } from "../shared/utils.ts";
 import { rollup } from "../imports/drollup.ts";
-import { minify } from "../imports/terser.ts";
 import svelte from "../src/shared/bundler.js";
 import { colors } from "../imports/fmt.ts";
 import { BuildOptions } from "./types.ts";
@@ -79,7 +77,6 @@ export async function build(
 
         async style({ attributes, filename, content }) {
           let css: string | null = null;
-          const clear = new CleanCSS({ compatibility: "*" });
 
           try {
             // transform scss to css
@@ -93,24 +90,8 @@ export async function build(
               css = code;
             }
 
-            // minify css
-            const { styles, errors, warnings } = clear.minify(css ?? content);
-
-            if (warnings?.length) {
-              warnings.forEach((warning: string) => {
-                console.warn(colors.yellow(warning));
-              });
-            }
-
-            if (errors?.length) {
-              errors.forEach((errors: string) => {
-                console.error(colors.red(errors));
-              });
-              throw new SyntaxError(colors.red("css error")).message;
-            }
-
             // asign styles
-            css = styles;
+            css = css ?? content;
           } catch (error: any) {
             throw new Error(
               colors.red(`compiling to css ${colors.yellow(filename!)}`)
@@ -118,7 +99,7 @@ export async function build(
           }
 
           return {
-            code: css ?? content,
+            code: css,
           };
         },
       },
@@ -154,21 +135,6 @@ export async function build(
         `export default ${name};`,
         `new ${name}({ target: document.body });`
       );
-    }
-
-    // compress javascript to production
-    if (dist) {
-      const { code: minCode } = await minify(compiled.js.code, {
-        compress: false,
-        ecma: 2020,
-        mangle: true,
-        keep_classnames: true,
-        keep_fnames: true,
-      });
-
-      if (minCode) {
-        compiled.js.code = minCode;
-      }
     }
 
     await file.write(encoder.encode(compiled.js.code));

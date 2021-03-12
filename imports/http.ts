@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.88.0/http/mod.ts";
+export * from "https://deno.land/std@0.90.0/http/mod.ts";

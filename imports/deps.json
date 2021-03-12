@@ -1,24 +1,24 @@
 {
   "meta": {
     "fs": {
-      "url": "https://deno.land/std@0.88.0/fs/mod.ts",
-      "hash": "160840c03025e78d4512362c0d8d15ba41b10594a61a5456949f63c1a1797d49"
+      "url": "https://deno.land/std@0.90.0/fs/mod.ts",
+      "hash": "5c12ca0952c454e2be474b5ac65cc49288f307dbcd0360f1ae523125f4d05965"
     },
     "path": {
-      "url": "https://deno.land/std@0.88.0/path/mod.ts",
-      "hash": "a1a1e12dc34c12ec63e519a81782e3bdb5a2eedd21a82dafad8ee5291646f449"
+      "url": "https://deno.land/std@0.90.0/path/mod.ts",
+      "hash": "fba81713aa6df38478273602c0cdec1744234416d9c1ebc56400daf81b8977b4"
     },
     "fmt": {
       "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
       "hash": "5b4388adfdc1f5ad8a727f95a91c3f255cb36f430b6b4503f8f3ddacc162db53"
     },
     "flags": {
-      "url": "https://deno.land/std@0.88.0/flags/mod.ts",
-      "hash": "1ba1d570e2571a1b1d8783136cfa6f092669d1de82f45295a7963972fca6f279"
+      "url": "https://deno.land/std@0.90.0/flags/mod.ts",
+      "hash": "9f7cba7424af3947d05b9b24b304c40edd9f74f3a4580d54f6bbf367b241b30d"
     },
     "http": {
-      "url": "https://deno.land/std@0.88.0/http/mod.ts",
-      "hash": "ea4daf62b6c032db8a931fd4741c7edc60b489a8405062740fce23c4371bd257"
+      "url": "https://deno.land/std@0.90.0/http/mod.ts",
+      "hash": "573fbf4d2576d6a329d11289e2d4ea09f500eca7d84c80963fa13d57e88a22d1"
     },
     "assert_util": {
       "url": "https://deno.land/std@0.88.0/_util/assert.ts",
@@ -40,17 +40,9 @@
       "url": "https://deno.land/x/aleph@v0.2.28/vendor/less/less.js",
       "hash": "2142d07ff2b26f4044bf29ae41d85ef4c6e19f09f7156c530c414e9554a9b12e"
     },
-    "terser": {
-      "url": "https://esm.sh/terser@5.3.2",
-      "hash": "eaa64ba1f10950c38e11df2fc8dd2291b0f367d596bc89652318691c6b071a2d"
-    },
-    "clean-css": {
-      "url": "https://esm.sh/clean-css@4.2.3?no-check",
-      "hash": "6d4758390abcd7aaf12432b1e144a4be6e7ec82bd75704ec0c74c5dbee820f78"
-    },
     "run": {
-      "url": "https://deno.land/x/trex@v1.4.0/commands/run.ts",
-      "hash": "d021ee2ba3373e4d07e92637536079852582cc55dfa72ad3b966f0a45890f875"
+      "url": "https://deno.land/x/trex/commands/run.ts",
+      "hash": "60709d493cd22794bf66cb3ff3cb391f6f208ce2d8b2b64b854295e15509475d"
     },
     "drollup": {
       "url": "https://deno.land/x/drollup@2.39.0+0.14.0/mod.ts",

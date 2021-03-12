@@ -9,7 +9,7 @@
 const install = async (name: string, url: string) => {
   const process = Deno.run({
     cmd: [
-      ...`deno install -A -f -r --no-check --unstable -n ${name} ${url}`.split(
+      ...`${Deno.execPath()} install -A -f -r --no-check --unstable -n ${name} ${url}`.split(
         " "
       ),
     ],
@@ -22,7 +22,7 @@ async function Main() {
   try {
     await install("snel", "https://deno.land/x/snel/cli.ts");
     await install("trex", "https://deno.land/x/trex/cli.ts");
-    await install("bundler", "https://deno.land/x/bundler@0.5.1/cli.ts");
+    await install("bundler", "https://deno.land/x/bundler@0.6.0/cli.ts");
   } catch (error: any) {
     console.log(error?.message);
   }

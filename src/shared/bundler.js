@@ -75,15 +75,14 @@ export default (options = {}) => {
         {
           async script({ content, attributes, filename }) {
             let code = content;
+            let isTs = false;
             // transpile to javascript
-            if (attributes?.lang === "ts") {
-              code = await tsTranspiler(code, filename ?? "");
-            }
+            if (attributes?.lang === "ts") isTs = true;
             // resolve import map calls
             code = importToUrl(content, mapPattern, "map:");
 
             return {
-              code,
+              code: isTs ? await tsTranspiler(code, filename) : code,
             };
           },
           async style({ attributes, filename, content }) {

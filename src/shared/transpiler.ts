@@ -13,7 +13,7 @@ function stract(source: string) {
   const pattern = /import(?:["'\s]*([\w\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gim;
 
   const isSvelte = (chunk: string) =>
-    pattern.test(chunk) && chunk.includes(".svelte");
+    pattern.test(chunk) && (chunk.includes(".svelte") || chunk.includes("svelte/"));
 
   const chunks = source.split("\n");
   // get .svelte import statement
