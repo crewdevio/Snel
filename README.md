@@ -44,7 +44,7 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 the only thing you need is to run the installation command.
 
 ```console
-deno run --allow-run https://deno.land/x/snel/install.ts
+deno run --allow-run --allow-read https://deno.land/x/snel/install.ts
 ```
 
 > wait wait! Why should I run a script instead of using deno install to install Snel?
