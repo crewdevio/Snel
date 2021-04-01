@@ -1,28 +1,28 @@
 {
   "meta": {
     "fs": {
-      "url": "https://deno.land/std@0.90.0/fs/mod.ts",
-      "hash": "5c12ca0952c454e2be474b5ac65cc49288f307dbcd0360f1ae523125f4d05965"
+      "url": "https://deno.land/std@0.91.0/fs/mod.ts",
+      "hash": "268618a69588423e741ffdbdcbcbf635d9111411c448c9ca61ef069808f5b253"
     },
     "path": {
-      "url": "https://deno.land/std@0.90.0/path/mod.ts",
-      "hash": "fba81713aa6df38478273602c0cdec1744234416d9c1ebc56400daf81b8977b4"
+      "url": "https://deno.land/std@0.91.0/path/mod.ts",
+      "hash": "101c1188697acfe14751c446956a0bddf8e53d3b6256ff3d5dd4480ed0240667"
     },
     "fmt": {
       "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
       "hash": "5b4388adfdc1f5ad8a727f95a91c3f255cb36f430b6b4503f8f3ddacc162db53"
     },
     "flags": {
-      "url": "https://deno.land/std@0.90.0/flags/mod.ts",
-      "hash": "9f7cba7424af3947d05b9b24b304c40edd9f74f3a4580d54f6bbf367b241b30d"
+      "url": "https://deno.land/std@0.91.0/flags/mod.ts",
+      "hash": "2db079ef19f21d328ca517b963e04de2cb0894d1fade9cfe502bf5fa1fe439cf"
     },
     "http": {
-      "url": "https://deno.land/std@0.90.0/http/mod.ts",
-      "hash": "573fbf4d2576d6a329d11289e2d4ea09f500eca7d84c80963fa13d57e88a22d1"
+      "url": "https://deno.land/std@0.91.0/http/mod.ts",
+      "hash": "41c92507878fbfc9dbdba6fa29244087a4133a5812af6db2c776de47380366cd"
     },
     "assert_util": {
-      "url": "https://deno.land/std@0.88.0/_util/assert.ts",
-      "hash": "c36f07520c10aa6c234985615ff7f46e8997f50aed2f58d4e43456d2f436d4f4"
+      "url": "https://deno.land/std@0.91.0/_util/assert.ts",
+      "hash": "ed3e9056f12852544de97879b804471f97722b8f6bdad45c3017e629799520c7"
     },
     "jsonio": {
       "url": "https://raw.githubusercontent.com/crewdevio/Trex/master/temp_deps/writeJson.ts",
@@ -45,12 +45,16 @@
       "hash": "60709d493cd22794bf66cb3ff3cb391f6f208ce2d8b2b64b854295e15509475d"
     },
     "drollup": {
-      "url": "https://deno.land/x/drollup@2.39.0+0.14.0/mod.ts",
-      "hash": "327974a37cb0d0d2c1ddc29acc0dc09d74e2d2b699a41fa383e384c03eb449f1"
+      "url": "https://deno.land/x/drollup@2.42.3+0.17.1/mod.ts",
+      "hash": "826eb5d84f870027e09cc99dc7334cd0f17849f7f48cad96b8272e7615225286"
     },
     "drollup-util": {
       "url": "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup/createFilter.ts",
       "hash": "eb0f039e3b65cebb0ee3a299f212c53cdf7ff8ec1c328b9995c6768703c06e48"
+    },
+    "compiler": {
+      "url": "https://cdn.jsdelivr.net/npm/svelte@3.37.0/compiler.mjs",
+      "hash": "c5ce28122f0bd22b612b5acde7aa9620a66b6b94bc05d0e966f9ba0c10231351"
     }
   }
 }
