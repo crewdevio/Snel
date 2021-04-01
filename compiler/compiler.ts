@@ -6,13 +6,14 @@
  *
  */
 
+//@ts-ignore
 import {
   VERSION,
   compile as svelteCompile,
   parse as svelteParse,
   preprocess as sveltePreprocess,
   walk as svelteWalk,
-} from "./core.js";
+} from "../imports/compiler.ts";
 
 import type { compileOptions, compileOut, PreprocessorGroup } from "./types.ts";
 

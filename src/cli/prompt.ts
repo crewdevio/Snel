@@ -54,12 +54,12 @@ export function serverLog({ dirName, port, localNet }: any) {
   console.log(`
   ${colors.green("Compiled successfully!")}
 
-  You can now view ${colors.yellow(dirName)} in the browser.
+  You can now view ${colors.bold(colors.yellow(dirName))} in the browser.
 
       ${colors.bold("Local:")}            http://localhost:${colors.bold(port)}
       ${localNet}
 
   Note that the development build is not optimized.
-  To create a production build, use ${colors.blue("trex run build")}.
+  To create a production build, use ${colors.bold(colors.blue("trex run build"))}.
   `);
 }
