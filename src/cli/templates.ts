@@ -98,7 +98,7 @@ button:focus {
 }`;
 
 export const rootSvelte = `<script>
-  import Home from "./components/Home.svelte";
+  import Home from "@/components/Home.svelte";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
 

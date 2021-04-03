@@ -156,7 +156,10 @@ async function Main() {
       });
     }
   } catch (error: any) {
-    console.log(colors.red(error?.message));
+    if (!(error instanceof Deno.errors.NotFound)) {
+      console.log(colors.red(error?.message));
+      console.log(error.stack);
+    }
   }
 }
 

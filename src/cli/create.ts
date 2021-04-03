@@ -84,7 +84,7 @@ export async function CreateProject({
         {
           scripts: {
             __internal__: "snel dev",
-            bundle: "bundler bundle ./public/__index.html=index.html",
+            bundle: "bundler bundle --optimize ./public/__index.html=index.html",
             dev: "trex run __internal__",
             watch: "trex run __internal__ --watch",
             start: "snel serve",

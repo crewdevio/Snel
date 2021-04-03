@@ -119,11 +119,11 @@ You can use import maps to reference the dependencies you use, to use import map
 In order for the compiler to know that you are using import maps, you need to import the dependencies as follows:
 
 ```javascript
-import moment from "map:moment";
-import axios from "map:axios";
+import moment from "moment";
+import axios from "axios";
 ```
 
-> **note** this syntax is inspired by how [node js 15](https://nodejs.org/api/esm.html#esm_node_imports) built in modules are imported
+> **note** you can use import maps inside svelte components
 
 ### Manage import maps dependencies via [trex](https://github.com/crewdevio/Trex)
 

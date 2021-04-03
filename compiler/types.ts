@@ -103,5 +103,11 @@ export interface BuildOptions {
   dev?: boolean;
   dist?: boolean;
   fileOutPut?: string;
-  generate?: "dom" | "ssr"
+  generate?: "dom" | "ssr";
+}
+
+export interface PreprocessorFunctionProps {
+  content: string;
+  attributes: Record<string, string | boolean>;
+  filename?: string;
 }

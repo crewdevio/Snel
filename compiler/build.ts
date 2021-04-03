@@ -11,21 +11,21 @@ import {
   transform,
   findComponentPath,
   Name,
-  replaceToUrl,
 } from "../shared/utils.ts";
-import { mapPattern, sveltePatter } from "../shared/utils.ts";
+import { ImportMapPlugin } from "../src/shared/import_map.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
+import type { PreprocessorFunctionProps } from "./types.ts";
 import { tsTranspiler } from "../src/shared/transpiler.ts";
 import { URL_SVELTE_CDN } from "../src/shared/version.ts";
 import { resolve, toFileUrl } from "../imports/path.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { compile, preprocess } from "./compiler.ts";
-import { importToUrl } from "../shared/utils.ts";
+import { sveltePatter } from "../shared/utils.ts";
 import { rollup } from "../imports/drollup.ts";
 import svelte from "../src/shared/bundler.js";
 import { colors } from "../imports/fmt.ts";
-import { BuildOptions } from "./types.ts";
 import { exists } from "../imports/fs.ts";
+import { BuildOptions } from "./types.ts";
 import { less } from "../imports/less.ts";
 
 export async function build(
@@ -50,7 +50,11 @@ export async function build(
     const { code } = await preprocess(
       source,
       {
-        async script({ content, attributes, filename }) {
+        async script({
+          content,
+          attributes,
+          filename,
+        }: PreprocessorFunctionProps) {
           let code = content;
           // transpile to javascript
           if (attributes?.lang === "ts") {
@@ -62,12 +66,6 @@ export async function build(
               out.paths[index],
               `./${fileName(out.jsPaths[index])}`
             );
-
-            // replace svelte core
-            code = replaceToUrl(code, sveltePatter, `${URL_SVELTE_CDN}/`);
-
-            // import map support
-            code = importToUrl(code, mapPattern, "map:");
           }
 
           return {
@@ -75,7 +73,11 @@ export async function build(
           };
         },
 
-        async style({ attributes, filename, content }) {
+        async style({
+          attributes,
+          filename,
+          content,
+        }: PreprocessorFunctionProps) {
           let css: string | null = null;
 
           try {
@@ -169,7 +171,12 @@ export async function RollupBuild({
 
   const options = {
     input: new URL(entryFile, `${base}/`).href,
-    plugins: [svelte()],
+    plugins: [
+      ImportMapPlugin({
+        maps: "./import_map.json",
+      }),
+      svelte(),
+    ],
     output: {
       dir,
       format: "es" as const,
