@@ -1,6 +1,5 @@
 import { compile, preprocess } from "../../compiler/compiler.ts";
 import { compile as scssCompiler } from "../../imports/scss.ts";
-import { importToUrl, mapPattern } from "../../shared/utils.ts";
 import { createFilter } from "../../imports/drollup-util.ts";
 import { tsTranspiler } from "../shared/transpiler.ts";
 import { URL_SVELTE_CDN } from "../shared/version.ts";
@@ -78,8 +77,6 @@ export default (options = {}) => {
             let isTs = false;
             // transpile to javascript
             if (attributes?.lang === "ts") isTs = true;
-            // resolve import map calls
-            code = importToUrl(content, mapPattern, "map:");
 
             return {
               code: isTs ? await tsTranspiler(code, filename) : code,
@@ -125,10 +122,11 @@ export default (options = {}) => {
 
       const compiled = compile(code, {
         filename: filename,
-        generate: "dom",
+        generate: options?.generate ?? "dom",
         dev: true,
         sveltePath: URL_SVELTE_CDN,
         hydratable: true,
+        preserveComments: false,
       });
 
       if (this.addWatchFile) {

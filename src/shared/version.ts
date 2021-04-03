@@ -8,4 +8,4 @@
 
 export const VERSION = "0.3.0";
 
-export const URL_SVELTE_CDN = "https://cdn.skypack.dev/svelte@3.32.1";
+export const URL_SVELTE_CDN = "https://cdn.skypack.dev/svelte@3.37.0";
