@@ -38,7 +38,7 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 - support for scss and less out of the box
 - support for typescript and sass out of the box (soon)
 - SSR (soon)
-- SSG(soon)
+- SSG (soon)
 
 ## What do I need to start using Snel?
 
