@@ -158,4 +158,4 @@ Snel provides hot reload capability, it compiles and updates the application whe
 
 `example`
 
-![img hot reload](./static/hotreloading.gif)
+![img hot reload](https://raw.githubusercontent.com/crewdevio/Snel/main/static/hotreloading.gif)
