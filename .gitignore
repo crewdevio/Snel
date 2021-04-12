@@ -2,3 +2,5 @@
 compiler/example/App.js
 tests/
 App/
+test.ts
+useFetch.ts

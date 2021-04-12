@@ -6,13 +6,13 @@
  *
  */
 
-export interface snelConfig {
-  root: string;
-  port: string;
-}
-
 export interface CreateProjectOptions {
   root: string;
   port: string;
   projectName: string;
+  mode: "ssr" | "dom" | "ssg";
+}
+
+export interface snelConfig extends Omit<CreateProjectOptions, "projectName"> {
+  plugins: any[];
 }

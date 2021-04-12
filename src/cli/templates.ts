@@ -244,10 +244,20 @@ export const gitIgnore = (dir: string) =>
 .DS_Store
 /${dir}`;
 
-export const mainjs = (root: string) => `import ${root} from "./${root}.svelte";
+export const mainjs = (
+  root: string,
+  mode: "dom" | "ssr" | "ssg"
+) => `import ${root} from "./${root}.svelte";
 
-const ${root.toLowerCase()} = new ${root}({
+${
+  mode === "dom"
+    ? `const ${root.toLowerCase()} = new ${root}({
   target: document.body,
   props: {},
 });
+`
+    : `export default ${root};`
+}
 `;
+
+export const config = (object: string) => `export default ${object};\n`;

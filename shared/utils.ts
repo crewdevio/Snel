@@ -6,17 +6,12 @@
  *
  */
 
-import { readJsonSync } from "../imports/jsonio.ts";
+import { basename, join, toFileUrl } from "../imports/path.ts";
 import { walk, WalkEntry } from "../imports/fs.ts";
-import { basename } from "../imports/path.ts";
-import { existsSync } from "../imports/fs.ts";
 import { colors } from "../imports/fmt.ts";
 
 export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
-export const svelteImport = /from\s*?["'\s]*([\wsvelte\/?/]+)["'\s]/gim;
 export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
-export const mapPattern = /["']+map\s*:\s*[a-z(-?)0-9]+["']?/gim;
-export const corePattern = /["']+core\s*:\s*[a-z(-?)0-9]+["']?/gim;
 export const sveltePatter = /svelte\/?/gim;
 
 export function siblings(source: string) {
@@ -80,7 +75,9 @@ export async function open(url: string): Promise<void> {
     };
     const process = Deno.run({ cmd: [programAliases[Deno.build.os], url] });
     await process.status();
-  } catch (error: unknown) {/* nothing here */}
+  } catch (error: unknown) {
+    /* nothing here */
+  }
 }
 
 export const Name = (path: string) => fileName(path).split(".").shift();
@@ -101,9 +98,7 @@ export async function getIP() {
       const ip = new TextDecoder().decode(await process.output()).trim();
 
       return ip.length ? ip : null;
-    }
-
-    else if (Deno.build.os === "windows") {
+    } else if (Deno.build.os === "windows") {
       const process = Deno.run({
         cmd: ["ipconfig"],
         stdout: "piped",
@@ -123,9 +118,7 @@ export async function getIP() {
         });
 
       return ip.length ? ip[0] : null;
-    }
-
-    else {
+    } else {
       const process = Deno.run({
         cmd: ["ipconfig", "getifaddr", "en0"],
         stdout: "piped",
@@ -140,54 +133,10 @@ export async function getIP() {
   }
 }
 
-export function replaceToUrl(code: string, pattern: RegExp, url: string) {
-  return code
-    .split("\n")
-    .map((chunk) => chunk.trim())
-    .map((chunk) => {
-      if (pattern.test(chunk) || svelteImport.test(chunk)) {
-        return chunk.replaceAll(pattern, url);
-      }
-      return chunk;
-    })
-    .join("\n");
-}
-
-export function importToUrl(
-  source: string,
-  pattern: RegExp,
-  replacer: string
-) {
-  if (existsSync("./import_map.json")) {
-    const matches = source.matchAll(pattern);
-
-    const map = readJsonSync("./import_map.json") as {
-      imports: { [key: string]: string };
-    };
-
-    for (const match of matches) {
-      const lib = match[0]
-        .replace(replacer, "")
-        .replaceAll('"', "")
-        .replaceAll("'", "")
-        .replaceAll(";", "")
-        .toLowerCase()
-        .trim();
-
-      const toReplace = match[0];
-      const url = map?.imports[lib];
-
-      source = source.replaceAll(toReplace, url ? `"${url}"` : toReplace);
-    }
-  }
-
-  return source;
-}
-
 export function showHelp() {
   console.log(
     colors.green(
-`A Cybernetical compiler for svelte applications
+      `A Cybernetical compiler for svelte applications
 
 USAGE:
   ${colors.white("snel")} ${colors.yellow("[SUBCOMMAND] [OPTIONS]")}
@@ -199,12 +148,18 @@ OPTIONS:
 SUBCOMMANDS:
   ${colors.yellow("create")}    ${colors.white("create a template project")}
   ${colors.yellow("dev")}       ${colors.white("build application in dev mode")}
-  ${colors.yellow("serve")}     ${colors.white("build and server in a dev server")}
-  ${colors.yellow("build")}     ${colors.white("build application for production")}
+  ${colors.yellow("serve")}     ${colors.white(
+        "build and server in a dev server"
+      )}
+  ${colors.yellow("build")}     ${colors.white(
+        "build application for production"
+      )}
 
 you can see the different options available for each command using:
   snel  ${colors.yellow("[command] --help or -h")}
-`));
+`
+    )
+  );
 }
 
 export const keyWords = {
@@ -213,3 +168,53 @@ export const keyWords = {
   dev: "dev",
   serve: "serve",
 };
+
+export async function loadConfig<T extends any>(
+  path: string
+): Promise<T> {
+  const module = await import(toFileUrl(join(Deno.cwd(), path)).href);
+
+  return module?.default;
+}
+
+export function ToString(object: object, deep = 1) {
+  let str = `{\n`;
+
+  for (const [key, value] of Object.entries(object)) {
+    str += `${" ".repeat(deep * 2)}${key}: ${parser(value, deep)},\n`;
+  }
+
+  str += `${deep === 1 ? "" : " ".repeat(deep)}}`;
+
+  return str;
+}
+
+function parser(type: any, deep: number): string {
+  switch (typeof type) {
+    case "string":
+      return `"${type}"`;
+
+    case "number":
+      return `${type}`;
+
+    case "boolean":
+      return `${type}`;
+
+    case "bigint":
+      return `${type}n`;
+
+    case "function":
+      return `${type.toString()}`;
+
+    case "object":
+      if (type instanceof Object && !Array.isArray(type)) {
+        return ToString(type, deep * 2);
+      } else if (Array.isArray(type)) {
+        return `[${type.map(
+          (element) => `\n${" ".repeat(deep * 3)} ${parser(element, 2)}\n`
+        )}]`;
+      }
+    default:
+      return `${type}`;
+  }
+}

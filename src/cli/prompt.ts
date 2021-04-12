@@ -23,6 +23,11 @@ export function PromptConfig(): Omit<CreateProjectOptions, "projectName"> {
       message: "which port do you want the development server to run on?",
       default: "3000",
     },
+    {
+      name: "mode",
+      message: "What kind of project do you want to do? (ssg, dom)",
+      default: "dom"
+    }
   ];
 
   for (const question of questions) {

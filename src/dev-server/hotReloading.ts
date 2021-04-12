@@ -40,7 +40,7 @@ export async function HotReload(
         kind = eventKind;
       }
       // debounce recompile
-      setTimeout(() => (kind = ""), 5000);
+      setTimeout(() => (kind = ""), 3000);
     }
   }
 }
@@ -92,7 +92,7 @@ export function clientConnection(
           const Reload = () => {
             const badge = document.querySelector("#msg");
             if (badge) badge.setAttribute("style", "margin-top: 30px;");
-            setTimeout(() => window.location.reload(), 500);
+            setTimeout(() => window.location.reload(), 50);
           }
 
           socket.addEventListener("message", (event) => {

@@ -166,8 +166,11 @@ export async function build(
 export async function RollupBuild({
   dir = "./public/dist",
   entryFile = "./src/main.js",
+  generate = "dom",
 }) {
   const base = toFileUrl(Deno.cwd()).href;
+
+  generate = (generate === "ssg" || generate === "ssr") ? "ssr" : "dom";
 
   const options = {
     input: new URL(entryFile, `${base}/`).href,
@@ -175,7 +178,7 @@ export async function RollupBuild({
       ImportMapPlugin({
         maps: "./import_map.json",
       }),
-      svelte(),
+      svelte({ generate }),
     ],
     output: {
       dir,
