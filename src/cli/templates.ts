@@ -24,7 +24,7 @@ export const indexHtml = async (
   <body>
     <script src="${script}"></script>
     <!-- injected by snel don't remove it -->
-${clientConnection(port, await getIP())}
+${clientConnection(port, (await getIP())?.split(" ")[0])}
   </body>
 </html>
 `;

@@ -120,12 +120,13 @@ async function Main() {
         await RollupBuild({
           dir: mode === "dom" ? "./public/dist" : "./__snel__",
           entryFile: "./src/main.js",
-          generate: mode
+          generate: mode,
         });
 
         const ipv4 = await getIP();
 
-        if (mode === "ssg") await Server("./__snel__/main.js", null, mode, parseInt(port));
+        if (mode === "ssg")
+          await Server("./__snel__/main.js", null, mode, parseInt(port));
 
         const dirName = Deno.cwd()
           .split(Deno.build.os === "windows" ? "\\" : "/")
@@ -134,10 +135,16 @@ async function Main() {
         // run dev server in localhost and net work
         if (mode === "dom") fileServer(parseInt(port), "./public", true);
 
+        const ip =
+          ipv4?.split(" ").length === 1
+            ? `http://${ipv4}`
+            : ipv4
+                ?.split(" ")
+                .map((ip) =>`http://${ip}:${port}`)
+                .join(" or ");
+
         const localNet = ipv4
-          ? `${colors.bold("On Your Network:")}  http://${ipv4}:${colors.bold(
-              port
-            )}`
+          ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port)}`
           : "";
 
         // server logs

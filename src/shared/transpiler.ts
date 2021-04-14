@@ -10,7 +10,7 @@ import { toFileUrl } from "../../imports/path.ts";
 import { colors } from "../../imports/fmt.ts";
 
 export function stract(source: string) {
-  const svelteComponentPattern = /import(?:["'\s]*([\w\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gim;
+  const chunks = source.split("\n").map((chunk) => chunk.trim());
 
   const ends = (chunk: string) =>
     chunk.endsWith(".svelte'") ||
@@ -18,20 +18,12 @@ export function stract(source: string) {
     chunk.endsWith('.svelte"') ||
     chunk.endsWith('.svelte";');
 
-  const start = (chunk: string) => chunk.startsWith("import");
-  const has = (chunk: string) => chunk.includes(".svelte") || chunk.includes("svelte/");
-
-  const isSvelte = (chunk: string) => svelteComponentPattern.test(chunk) && has(chunk) && start(chunk) && ends(chunk);
-
-  const matchs = source.matchAll(svelteComponentPattern);
-
-  const imports: any[] = [];
-
-  for (const mtc of matchs) imports.push(mtc);
+  const start = (chunk: string) =>
+    chunk.startsWith("import ") || chunk.startsWith("import");
 
   return {
-    code: source,
-    imports: imports.flat(2).filter(isSvelte).join("\n"),
+    code: chunks.filter((chunk) => !(start(chunk) && ends(chunk))).join("\n"),
+    imports: chunks.filter((chunk) => start(chunk) && ends(chunk)).join("\n"),
   };
 }
 
