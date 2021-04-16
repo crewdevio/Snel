@@ -98,8 +98,7 @@ export async function getIP() {
         stdout: "piped",
       });
 
-      const ip = new TextDecoder().decode(await process.output()).trim();
-
+      const ip = new TextDecoder().decode(await process.output()).trim().split(" ")[0];
       return ip.length ? ip : null;
     }
 
