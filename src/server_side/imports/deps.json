@@ -1,8 +1,8 @@
 {
   "meta": {
     "oak": {
-      "url": "https://deno.land/x/oak@v6.5.0/mod.ts",
-      "hash": "97151da7c939479f3dbb7f4f68fda0f2ad77b6b2d71659afe89648233ff78cce"
+      "url": "https://deno.land/x/oak@v7.2.0/mod.ts",
+      "hash": "af05b973661dc9d0f44b1379a599675ee7d260dd51eb66e0bda9741103bc94c2"
     }
   }
 }

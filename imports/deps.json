@@ -1,24 +1,24 @@
 {
   "meta": {
     "fs": {
-      "url": "https://deno.land/std@0.91.0/fs/mod.ts",
-      "hash": "268618a69588423e741ffdbdcbcbf635d9111411c448c9ca61ef069808f5b253"
+      "url": "https://deno.land/std@0.93.0/fs/mod.ts",
+      "hash": "bce6f026a9e4730897ef7ce3eaaf73be681e6c0d5abdb2e04d6a5408bb369a4d"
     },
     "path": {
-      "url": "https://deno.land/std@0.91.0/path/mod.ts",
-      "hash": "101c1188697acfe14751c446956a0bddf8e53d3b6256ff3d5dd4480ed0240667"
+      "url": "https://deno.land/std@0.93.0/path/mod.ts",
+      "hash": "3b0ba1d75e824a4ece7cc13b98bdd1bb371f48690b04ef996f03d77106b438bb"
     },
     "fmt": {
       "url": "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts",
       "hash": "5b4388adfdc1f5ad8a727f95a91c3f255cb36f430b6b4503f8f3ddacc162db53"
     },
     "flags": {
-      "url": "https://deno.land/std@0.91.0/flags/mod.ts",
-      "hash": "2db079ef19f21d328ca517b963e04de2cb0894d1fade9cfe502bf5fa1fe439cf"
+      "url": "https://deno.land/std@0.93.0/flags/mod.ts",
+      "hash": "5c7e37e7e0de8ab2e424de11f5f5a2caa0a3e21fb54ff15d0bf61803c28b1ece"
     },
     "http": {
-      "url": "https://deno.land/std@0.91.0/http/mod.ts",
-      "hash": "41c92507878fbfc9dbdba6fa29244087a4133a5812af6db2c776de47380366cd"
+      "url": "https://deno.land/std@0.93.0/http/mod.ts",
+      "hash": "aaf4e5420d7521746d8b43aa7ab3f3244be9aafddc33bbaa3093701460de6321"
     },
     "assert_util": {
       "url": "https://deno.land/std@0.91.0/_util/assert.ts",
@@ -49,8 +49,8 @@
       "hash": "826eb5d84f870027e09cc99dc7334cd0f17849f7f48cad96b8272e7615225286"
     },
     "drollup-util": {
-      "url": "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup/createFilter.ts",
-      "hash": "eb0f039e3b65cebb0ee3a299f212c53cdf7ff8ec1c328b9995c6768703c06e48"
+      "url": "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup/createFilter.ts",
+      "hash": "ea671ea22dfd262b5c1d32869a497f8b836202e721b106a1a4f2b12f77c18b44"
     },
     "compiler": {
       "url": "https://cdn.jsdelivr.net/npm/svelte@3.37.0/compiler.mjs",

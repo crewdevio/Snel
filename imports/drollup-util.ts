@@ -1,1 +1,1 @@
-export * from "https://deno.land/x/drollup@2.39.0+0.14.0/src/rollup/createFilter.ts";
+export * from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup/createFilter.ts";
