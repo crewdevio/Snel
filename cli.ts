@@ -6,38 +6,45 @@
  *
  */
 
-import {
-  flags,
-  keyWords,
-  open,
-  getIP,
-  showHelp,
-  loadConfig,
-} from "./shared/utils.ts";
 import { PromptConfig, notFoundConfig, serverLog } from "./src/cli/prompt.ts";
+import { open, ipv4, showHelp,loadConfig } from "./src/shared/utils.ts";
+import { HelpCommand, CommandNotFound } from "./src/shared/log.ts";
 import { VERSION as svelteVersion } from "./compiler/compiler.ts";
 import { VERSION as cliVersion } from "./src/shared/version.ts";
-import { HelpCommand, CommandNotFound } from "./shared/log.ts";
 import { HotReload } from "./src/dev-server/hotReloading.ts";
 import type { snelConfig } from "./src/shared/types.ts";
+import { flags, keyWords } from "./src/shared/utils.ts";
 import { Server } from "./src/server_side/server.ts";
+import fileServer from "./src/dev-server/server.ts";
 import { CreateProject } from "./src/cli/create.ts";
 import { prepareDist } from "./src/cli/prepare.ts";
 import { RollupBuild } from "./compiler/build.ts";
-import fileServer from "./src/dev-server/server.ts";
 import { resolve } from "./imports/path.ts";
 import { colors } from "./imports/fmt.ts";
 import { exists } from "./imports/fs.ts";
 
 async function Main() {
   const { args } = Deno;
+
+  // output files and dirs
+  const common = {
+    entryFile: "./src/main.js",
+    dom: {
+      dir: "./public/dist",
+    },
+    ssg: {
+      dir: "./__snel__",
+      serverFile: "./__snel__/main.js"
+    }
+  }
+
   try {
     // create a template project
     if (args[0] === keyWords.create) {
       if (flags.help.includes(args[1])) {
         return HelpCommand({
           command: {
-            alias: [`${keyWords.create} App`],
+            alias: [keyWords.create],
             description: "create a template project",
           },
           flags: [{ alias: flags.help, description: "show command help" }],
@@ -61,15 +68,19 @@ async function Main() {
       }
 
       else if (await exists(resolve("snel.config.js"))) {
-        const { root, mode } = await loadConfig<snelConfig>(
+        const { root, mode, plugins } = await loadConfig<snelConfig>(
           "./snel.config.js"
         )!;
-        await RollupBuild({
-          dir: "./public/dist",
-          entryFile: "./src/main.js",
-          generate: mode,
-        });
-        await prepareDist(root);
+
+        if (mode === "dom") {
+          await RollupBuild({
+            dir: common.dom.dir,
+            entryFile: common.entryFile,
+            generate: mode,
+            plugins,
+          });
+          await prepareDist(root);
+        }
       }
 
       else {
@@ -90,7 +101,7 @@ async function Main() {
 
       else if (await exists(resolve("snel.config.js"))) {
         console.time(colors.green("Compiled successfully in"));
-        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
+        await RollupBuild({ dir: common.dom.dir, entryFile: common.entryFile });
         console.timeEnd(colors.green("Compiled successfully in"));
       }
 
@@ -111,22 +122,25 @@ async function Main() {
       }
 
       else if (await exists(resolve("snel.config.js"))) {
-        const { port, mode } = await loadConfig<snelConfig>(
+        const { port, mode, plugins } = await loadConfig<snelConfig>(
           "./snel.config.js"
         )!;
 
         console.log(colors.bold(colors.cyan("starting development server.")));
 
+        const outDir = mode === "dom" ? common.dom.dir : common.ssg.dir;
+
         await RollupBuild({
-          dir: mode === "dom" ? "./public/dist" : "./__snel__",
-          entryFile: "./src/main.js",
+          dir: outDir,
+          entryFile: common.entryFile,
           generate: mode,
+          plugins,
         });
 
-        const ipv4 = await getIP();
+        const ip = await ipv4(port);
 
         if (mode === "ssg")
-          await Server("./__snel__/main.js", null, mode, parseInt(port));
+          await Server(common.ssg.serverFile, null, mode, parseInt(port));
 
         const dirName = Deno.cwd()
           .split(Deno.build.os === "windows" ? "\\" : "/")
@@ -135,15 +149,7 @@ async function Main() {
         // run dev server in localhost and net work
         if (mode === "dom") fileServer(parseInt(port), "./public", true);
 
-        const ip =
-          ipv4?.split(" ").length === 1
-            ? `http://${ipv4}`
-            : ipv4
-                ?.split(" ")
-                .map((ip) =>`http://${ip}:${port}`)
-                .join(" or ");
-
-        const localNet = ipv4
+        const localNet = ip
           ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port)}`
           : "";
 
@@ -154,9 +160,10 @@ async function Main() {
         // hot reloading
         await HotReload("./src", parseInt(port) + 1, async () => {
           await RollupBuild({
-            dir: mode === "dom" ? "./public/dist" : "./__snel__",
-            entryFile: "./src/main.js",
+            dir: outDir,
+            entryFile: common.entryFile,
             generate: mode,
+            plugins,
           });
         });
       }

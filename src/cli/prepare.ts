@@ -6,8 +6,8 @@
  *
  */
 
-import { svelteToJs, fileName } from "../../shared/utils.ts";
-import { decoder, encoder } from "../../shared/encoder.ts";
+import { svelteToJs, fileName } from "../shared/utils.ts";
+import { decoder, encoder } from "../shared/encoder.ts";
 import { exists } from "../../imports/fs.ts";
 import { Run } from "../../imports/run.ts";
 

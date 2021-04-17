@@ -35,6 +35,8 @@ const MEDIA_TYPES: Record<string, string> = {
   ".gz": "application/gzip",
   ".css": "text/css",
   ".wasm": "application/wasm",
+  ".svelte": "text/svelte",
+  ".vue": "text/vue",
 };
 
 /** Returns the content-type based on the extension of a path. */

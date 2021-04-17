@@ -106,7 +106,7 @@ export interface BuildOptions {
   generate?: "dom" | "ssr";
 }
 
-export interface PreprocessorFunctionProps {
+export interface PreprocessorProps {
   content: string;
   attributes: Record<string, string | boolean>;
   filename?: string;

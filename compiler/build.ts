@@ -6,22 +6,18 @@
  *
  */
 
-import {
-  fileName,
-  transform,
-  findComponentPath,
-  Name,
-} from "../shared/utils.ts";
-import type { PreprocessorFunctionProps, RollupBuildProps } from "./types.ts";
+import type { PreprocessorProps, RollupBuildProps } from "./types.ts";
+import { findComponentPath, Name } from "../src/shared/utils.ts";
 import { ImportMapPlugin } from "../src/shared/import_map.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
+import { fileName, transform } from "../src/shared/utils.ts";
+import { decoder, encoder } from "../src/shared/encoder.ts";
 import { tsTranspiler } from "../src/shared/transpiler.ts";
 import { URL_SVELTE_CDN } from "../src/shared/version.ts";
 import { resolve, toFileUrl } from "../imports/path.ts";
-import { decoder, encoder } from "../shared/encoder.ts";
+import { sveltePatter } from "../src/shared/utils.ts";
 import SVELTECOMPILER from "../src/shared/bundler.js";
 import { compile, preprocess } from "./compiler.ts";
-import { sveltePatter } from "../shared/utils.ts";
 import type { BuildOptions } from "./types.ts";
 import { rollup } from "../imports/drollup.ts";
 import { colors } from "../imports/fmt.ts";
@@ -50,11 +46,7 @@ export async function build(
     const { code } = await preprocess(
       source,
       {
-        async script({
-          content,
-          attributes,
-          filename,
-        }: PreprocessorFunctionProps) {
+        async script({ content, attributes, filename }: PreprocessorProps) {
           let code = content;
           // transpile to javascript
           if (attributes?.lang === "ts") {
@@ -73,11 +65,7 @@ export async function build(
           };
         },
 
-        async style({
-          attributes,
-          filename,
-          content,
-        }: PreprocessorFunctionProps) {
+        async style({ attributes, filename, content }: PreprocessorProps) {
           let css: string | null = null;
 
           try {

@@ -38,26 +38,63 @@ export async function Server(
 
           response.body = client;
         } else {
+          response.headers.set("content-type", "text/html");
+          response.status = 200;
+          let sendData = false;
+
           const { css, head, html } = App.render({
-            PathName: pathname,
-            Search: search,
-            SearchParams: searchParams,
+            Request: {
+              PathName: pathname,
+              Search: search,
+              SearchParams: searchParams,
+            },
+            Response: {
+              status(code = 200) {
+                response.status = code;
+                return this;
+              },
+              json(data: any = {}) {
+                response.body = JSON.stringify(data, null, 2);
+                response.headers.set("content-type", "application/json");
+                sendData = true;
+                return this;
+              },
+              send(data: any = "") {
+                response.body = data;
+                sendData = true;
+                return this;
+              },
+              headers: {
+                set(name = "", value = "") {
+                  response.headers.set(name, value);
+                  return this;
+                },
+                get(name = "") {
+                  return response.headers.get(name);
+                },
+              },
+            },
           });
 
-          response.headers.set("content-type", "text/html");
-          response.body = htmlBody({
-            html,
-            head,
-            css: css.code,
-            client: mode === "ssr" ? "Snel/client" : null,
-          });
+          if (!sendData) {
+            response.body = htmlBody({
+              html,
+              head,
+              css: css.code,
+              client: mode === "ssr" ? "Snel/client" : null,
+            });
+          }
         }
       } else {
+        response.status = 405;
         response.headers.set("content-type", "text/html");
-        response.body = `<h1>this method is not allowed, only GET method</h1>`;
+        response.body = "<h1>this method is not allowed, only GET method</h1>";
       }
     } catch (error) {
       console.log(error);
+      response.status = 500;
+      response.headers.set("content-type", "text/html");
+      response.body = "<h1>Snel internal server Error</h1>";
     }
   });
 

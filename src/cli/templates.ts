@@ -7,12 +7,13 @@
  */
 
 import { clientConnection } from "../dev-server/hotReloading.ts";
-import { getIP } from "../../shared/utils.ts";
+import html from "../dev-server/src/utils/html.ts";
+import { getIP } from "../shared/utils.ts";
 
 export const indexHtml = async (
   script: string,
   port: number
-) => `<!DOCTYPE html>
+) => html`<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
