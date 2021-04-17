@@ -12,20 +12,20 @@ import {
   findComponentPath,
   Name,
 } from "../shared/utils.ts";
+import type { PreprocessorFunctionProps, RollupBuildProps } from "./types.ts";
 import { ImportMapPlugin } from "../src/shared/import_map.ts";
 import { compile as scssCompiler } from "../imports/scss.ts";
-import type { PreprocessorFunctionProps } from "./types.ts";
 import { tsTranspiler } from "../src/shared/transpiler.ts";
 import { URL_SVELTE_CDN } from "../src/shared/version.ts";
 import { resolve, toFileUrl } from "../imports/path.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
+import SVELTECOMPILER from "../src/shared/bundler.js";
 import { compile, preprocess } from "./compiler.ts";
 import { sveltePatter } from "../shared/utils.ts";
+import type { BuildOptions } from "./types.ts";
 import { rollup } from "../imports/drollup.ts";
-import svelte from "../src/shared/bundler.js";
 import { colors } from "../imports/fmt.ts";
 import { exists } from "../imports/fs.ts";
-import { BuildOptions } from "./types.ts";
 import { less } from "../imports/less.ts";
 
 export async function build(
@@ -167,7 +167,8 @@ export async function RollupBuild({
   dir = "./public/dist",
   entryFile = "./src/main.js",
   generate = "dom",
-}) {
+  plugins = [],
+}: RollupBuildProps) {
   const base = toFileUrl(Deno.cwd()).href;
 
   generate = (generate === "ssg" || generate === "ssr") ? "ssr" : "dom";
@@ -178,7 +179,8 @@ export async function RollupBuild({
       ImportMapPlugin({
         maps: "./import_map.json",
       }),
-      svelte({ generate }),
+      ...plugins,
+      SVELTECOMPILER({ generate }),
     ],
     output: {
       dir,

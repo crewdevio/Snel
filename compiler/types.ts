@@ -111,3 +111,10 @@ export interface PreprocessorFunctionProps {
   attributes: Record<string, string | boolean>;
   filename?: string;
 }
+
+export interface RollupBuildProps {
+  dir?: string;
+  entryFile?: string;
+  generate?: "dom" | "ssg" | "ssr";
+  plugins?: any[];
+}
