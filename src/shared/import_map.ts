@@ -1,4 +1,12 @@
 /**
+ * Copyright (c) Crew Dev.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+/**
  * Derived from <https://github.com/trygve-lie/rollup-plugin-import-map>
  *
  * Licensed as follows:
