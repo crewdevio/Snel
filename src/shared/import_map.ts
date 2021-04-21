@@ -39,6 +39,7 @@ import type { NormalizedInputOptions, Plugin } from "../../imports/drollup.ts";
 import { ensureArray } from "./imports/ensureArray.ts";
 import { resolveId } from "./imports/resolveId.ts";
 import { exists } from "../../imports/fs.ts";
+import { VERSION } from "./version.ts";
 
 /**
  * @public
@@ -161,6 +162,7 @@ const readFile = async (
   baseUrl?: string
 ) => {
   const defaultImports = {
+    "snel": `https://deno.land/x/snel@v${VERSION}/mod.ts`,
     "@/": "./",
     "/": "./",
   };

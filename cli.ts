@@ -10,6 +10,7 @@ import { PromptConfig, notFoundConfig, serverLog } from "./src/cli/prompt.ts";
 import { open, ipv4, showHelp,loadConfig } from "./src/shared/utils.ts";
 import { HelpCommand, CommandNotFound } from "./src/shared/log.ts";
 import { VERSION as svelteVersion } from "./compiler/compiler.ts";
+import { serverTemplate } from "./src/server_side/templates.ts";
 import { VERSION as cliVersion } from "./src/shared/version.ts";
 import { HotReload } from "./src/dev-server/hotReloading.ts";
 import type { snelConfig } from "./src/shared/types.ts";
@@ -18,6 +19,7 @@ import { Server } from "./src/server_side/server.ts";
 import fileServer from "./src/dev-server/server.ts";
 import { CreateProject } from "./src/cli/create.ts";
 import { prepareDist } from "./src/cli/prepare.ts";
+import { encoder } from "./src/shared/encoder.ts";
 import { RollupBuild } from "./compiler/build.ts";
 import { resolve } from "./imports/path.ts";
 import { colors } from "./imports/fmt.ts";
@@ -81,6 +83,14 @@ async function Main() {
           });
           await prepareDist(root);
         }
+
+        if (mode === "ssg") {
+          const ServerFile = await Deno.create(`${common.ssg.dir}/Server.js`);
+          const ServerCode = serverTemplate(Server.toString(), common.ssg.serverFile, null,"ssg", 3000);
+
+          ServerFile.write(encoder.encode(ServerCode));
+          console.log(colors.green("build done."));
+        }
       }
 
       else {
@@ -139,8 +149,14 @@ async function Main() {
 
         const ip = await ipv4(port);
 
-        if (mode === "ssg")
-          await Server(common.ssg.serverFile, null, mode, parseInt(port));
+        if (mode === "ssg") {
+          await Server({
+              path: common.ssg.serverFile,
+              clientPath: null,
+              mode: "ssg",
+              port: parseInt(port)
+          });
+        }
 
         const dirName = Deno.cwd()
           .split(Deno.build.os === "windows" ? "\\" : "/")
