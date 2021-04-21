@@ -7,6 +7,7 @@
  */
 
 import type { HtmlBodyProps } from "./types.ts";
+import { VERSION } from "../shared/version.ts";
 
 export function htmlBody({
   css = "",
@@ -99,3 +100,28 @@ export const ssgHome = `<script>
   }
 </style>
 `;
+
+export const serverTemplate = (
+  source: string,
+  path: string,
+  clientPath: string | null | undefined,
+  mode: "ssr" | "ssg",
+  port = 3000
+) => {
+  return `
+import { VERSION } from "../../src/shared/version.ts";
+import { htmlBody } from "../../src/server_side/templates.ts";
+import { join, toFileUrl } from "https://deno.land/std@0.93.0/path/mod.ts";
+import { Application } from "https://deno.land/x/oak@v7.3.0/mod.ts";
+
+${source}
+
+await Server({
+  path: "${path}",
+  clientPath: ${mode === "ssr" ? `"${clientPath}"` : null},
+  mode: "${mode}",
+  port: ${Number(port)},
+  dist: true
+});
+`;
+};

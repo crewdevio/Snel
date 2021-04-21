@@ -12,3 +12,11 @@ export interface HtmlBodyProps {
   head?: string;
   client?: string | null | undefined;
 }
+
+export interface ServerProps {
+  path: string;
+  clientPath: string | null | undefined;
+  mode: "ssr" | "ssg";
+  port?: number | string;
+  dist?: boolean;
+}

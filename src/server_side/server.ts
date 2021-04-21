@@ -9,14 +9,16 @@
 import { join, toFileUrl } from "../../imports/path.ts";
 import { VERSION } from "../shared/version.ts";
 import { Application } from "./imports/oak.ts";
+import type { ServerProps } from "./types.ts";
 import { htmlBody } from "./templates.ts";
 
-export async function Server(
-  path: string,
-  clientPath: string | null | undefined,
-  mode: "ssr" | "ssg",
-  port = 3000
-) {
+export async function Server({
+  path,
+  clientPath,
+  mode,
+  port = 3000,
+  dist = false,
+}: ServerProps) {
   const serverSide = new Application();
 
   serverSide.use(async ({ response, request }) => {
@@ -98,5 +100,9 @@ export async function Server(
     }
   });
 
-  await serverSide.listen({ port, hostname: "0.0.0.0" });
+  if (dist) {
+    console.log(`Server running on: http://localhost:${port}`);
+  }
+
+  await serverSide.listen({ port: Number(port), hostname: "0.0.0.0" });
 }
