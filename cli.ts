@@ -12,10 +12,10 @@ import { HelpCommand, CommandNotFound } from "./src/shared/log.ts";
 import { VERSION as svelteVersion } from "./compiler/compiler.ts";
 import { serverTemplate } from "./src/server_side/templates.ts";
 import { VERSION as cliVersion } from "./src/shared/version.ts";
+import { DevServer, Server } from "./src/server_side/server.ts";
 import { HotReload } from "./src/dev-server/hotReloading.ts";
 import type { snelConfig } from "./src/shared/types.ts";
 import { flags, keyWords } from "./src/shared/utils.ts";
-import { Server } from "./src/server_side/server.ts";
 import fileServer from "./src/dev-server/server.ts";
 import { CreateProject } from "./src/cli/create.ts";
 import { prepareDist } from "./src/cli/prepare.ts";
@@ -140,6 +140,15 @@ async function Main() {
 
         const outDir = mode === "dom" ? common.dom.dir : common.ssg.dir;
 
+        const dirName = Deno.cwd()
+          .split(Deno.build.os === "windows" ? "\\" : "/")
+          .pop()!;
+
+        const ip = await ipv4(port);
+        const localNet = ip
+            ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port)}`
+            : "";
+
         await RollupBuild({
           dir: outDir,
           entryFile: common.entryFile,
@@ -147,41 +156,38 @@ async function Main() {
           plugins,
         });
 
-        const ip = await ipv4(port);
-
-        if (mode === "ssg") {
-          await Server({
+        if (mode === "ssg" || mode === "ssr") {
+          // SSG/SSR development server
+          await DevServer({
               path: common.ssg.serverFile,
               clientPath: null,
               mode: "ssg",
-              port: parseInt(port)
+              port: parseInt(port),
+              entryFile: common.entryFile,
+              outDir,
+              plugins,
+              dirName,
+              localNet
           });
         }
 
-        const dirName = Deno.cwd()
-          .split(Deno.build.os === "windows" ? "\\" : "/")
-          .pop()!;
-
-        // run dev server in localhost and net work
-        if (mode === "dom") fileServer(parseInt(port), "./public", true);
-
-        const localNet = ip
-          ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port)}`
-          : "";
-
-        // server logs
-        serverLog({ port, dirName, localNet });
-        // open in browser
-        setTimeout(async () => await open(`http://localhost:${port}`), 500);
-        // hot reloading
-        await HotReload("./src", parseInt(port) + 1, async () => {
-          await RollupBuild({
-            dir: outDir,
-            entryFile: common.entryFile,
-            generate: mode,
-            plugins,
+        // run dev server in localhost and network in dom mode
+        if (mode === "dom") {
+          fileServer(parseInt(port), "./public", true);
+          // server logs
+          serverLog({ port, dirName, localNet });
+          // open in browser
+          setTimeout(async () => await open(`http://localhost:${port}`), 500);
+          // hot reloading
+          await HotReload("./src", parseInt(port) + 1, async () => {
+            await RollupBuild({
+              dir: outDir,
+              entryFile: common.entryFile,
+              generate: mode,
+              plugins,
+            });
           });
-        });
+        }
       }
 
       else {

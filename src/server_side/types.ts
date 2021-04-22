@@ -11,6 +11,7 @@ export interface HtmlBodyProps {
   html?: string;
   head?: string;
   client?: string | null | undefined;
+  hotReloading?: string | null | undefined;
 }
 
 export interface ServerProps {
@@ -19,4 +20,13 @@ export interface ServerProps {
   mode: "ssr" | "ssg";
   port?: number | string;
   dist?: boolean;
+}
+
+
+export interface DevServerProps extends Omit<ServerProps, "dist">{
+  outDir: string;
+  entryFile: string;
+  plugins: any[];
+  dirName: string;
+  localNet: string;
 }

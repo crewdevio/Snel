@@ -14,22 +14,27 @@ export function htmlBody({
   html = "",
   head = "",
   client = null,
+  hotReloading = null
 }: HtmlBodyProps) {
-  return `
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        ${head}
-      <style>${css}</style>
-      ${client ? `<script defer src="${client}"></script>` : ""}
-    </head>
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      ${head}
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      } ${css}
+    </style>
+    ${client ? `<script defer src="${client}"></script>` : ""}
+  </head>
   <body>
     ${html}
+    ${hotReloading ? hotReloading : ""}
   </body>
-  </html>`;
+</html>`;
 }
 
 export const ssgMain = `<script>

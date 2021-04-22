@@ -6,11 +6,15 @@
  *
  */
 
+import type { ServerProps, DevServerProps } from "./types.ts";
+import { HotReload } from "../dev-server/hotReloading.ts";
 import { join, toFileUrl } from "../../imports/path.ts";
+import { RollupBuild } from "../../compiler/build.ts";
 import { VERSION } from "../shared/version.ts";
 import { Application } from "./imports/oak.ts";
-import type { ServerProps } from "./types.ts";
+import { serverLog } from "../cli/prompt.ts";
 import { htmlBody } from "./templates.ts";
+import { open } from "../shared/utils.ts";
 
 export async function Server({
   path,
@@ -105,4 +109,72 @@ export async function Server({
   }
 
   await serverSide.listen({ port: Number(port), hostname: "0.0.0.0" });
+}
+
+export async function DevServer({
+  path,
+  clientPath,
+  mode,
+  port = 3000,
+  entryFile,
+  outDir,
+  plugins,
+  dirName,
+   localNet
+}: DevServerProps) {
+
+  const compiler = new Worker(
+    new URL("./BuilderWorker.js", import.meta.url).href,
+    {
+      type: "module",
+      deno: {
+        namespace: true,
+        permissions: {
+          write: true,
+          read: true,
+          env: true,
+          net: true,
+        },
+      },
+    }
+  );
+
+  compiler.postMessage({
+    clientPath,
+    port: Number(port),
+    path,
+    mode,
+    start: true
+  });
+
+  serverLog({ port, dirName, localNet });
+
+  setTimeout(async () => await open(`http://localhost:${port}`), 500);
+
+  window.addEventListener("unload", () => {
+    compiler.postMessage({
+      end: true,
+    });
+  });
+
+  await HotReload("./src", Number(port) + 1, async () => {
+    compiler.postMessage({
+      end: true,
+    });
+
+    await RollupBuild({
+      dir: outDir,
+      entryFile: entryFile,
+      generate: mode,
+      plugins,
+    });
+
+    compiler.postMessage({
+      clientPath,
+      port: Number(port),
+      path,
+      mode,
+      start: true
+    });
+  });
 }

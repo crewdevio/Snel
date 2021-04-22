@@ -26,6 +26,9 @@ export async function HotReload(
 
   let kind = "";
   const events = ["remove", "modify"];
+  // execute action in the first load
+  await action();
+
   for await (const { kind: eventKind } of Deno.watchFs(toWatch)) {
     if (events.includes(eventKind)) {
       if (kind !== eventKind) {

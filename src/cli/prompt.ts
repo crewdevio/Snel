@@ -61,7 +61,7 @@ export function serverLog({ dirName, port, localNet }: any) {
 
   You can now view ${colors.bold(colors.yellow(dirName))} in the browser.
 
-      ${colors.bold("Local:")}            http://localhost:${colors.bold(port)}
+      ${colors.bold("Local:")}            http://localhost:${colors.bold(port.toString())}
       ${localNet}
 
   Note that the development build is not optimized.

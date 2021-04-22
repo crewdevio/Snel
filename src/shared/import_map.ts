@@ -37,9 +37,9 @@
 import { dirname, fromFileUrl, normalize, relative } from "../../imports/path.ts";
 import type { NormalizedInputOptions, Plugin } from "../../imports/drollup.ts";
 import { ensureArray } from "./imports/ensureArray.ts";
+import { VERSION, URL_SVELTE_CDN } from "./version.ts";
 import { resolveId } from "./imports/resolveId.ts";
 import { exists } from "../../imports/fs.ts";
-import { VERSION } from "./version.ts";
 
 /**
  * @public
@@ -163,6 +163,9 @@ const readFile = async (
 ) => {
   const defaultImports = {
     "snel": `https://deno.land/x/snel@v${VERSION}/mod.ts`,
+    "snel/": `https://deno.land/x/snel@v${VERSION}/`,
+    "svelte": URL_SVELTE_CDN,
+    "svelte/": `${URL_SVELTE_CDN}/`,
     "@/": "./",
     "/": "./",
   };
