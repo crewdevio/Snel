@@ -20,10 +20,13 @@ export const indexHtml = async (
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="./global.css" />
     <link rel="icon" type="image/png" href="https://svelte.dev/favicon.png">
+    <!-- hot reloading util -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>
     <title>Svelte app</title>
   </head>
   <body>
-    <script src="${script}"></script>
+    <script type="module" src="${script}"></script>
     <!-- injected by snel don't remove it -->
 ${clientConnection(port, await getIP())}
   </body>

@@ -33,9 +33,9 @@ self.onmessage = async (event) => {
             let sendData = false;
 
             const moduleRaw = await Deno.readTextFile(toFileUrl(join(Deno.cwd(), path)));
-            const base64Moule = `data:application/javascript;base64,${btoa(unescape(encodeURIComponent(moduleRaw)))}`;
+            const base64Module = `data:application/javascript;base64,${btoa(unescape(encodeURIComponent(moduleRaw)))}`;
 
-            const module = await import(base64Moule);
+            const module = await import(base64Module);
             const App = module?.default;
 
             const { css, head, html } = App.render({

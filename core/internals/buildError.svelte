@@ -1,7 +1,7 @@
 <script>
-  import { onMount } from "svelte";
-  import "https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js";
   import "https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js";
+  import "https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js";
+  import { onMount } from "svelte";
 
   export let type = "";
   export let message = "";
@@ -42,7 +42,7 @@
   <br />
   <div>
     <pre>
-      <code class="language-js" id="highlighting-content" bind:this={codeElement}></code>
+      <code class="language-js" id="highlighting-content" bind:this={codeElement}>{code}</code>
     </pre>
   </div>
 
