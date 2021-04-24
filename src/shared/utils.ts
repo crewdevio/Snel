@@ -7,64 +7,10 @@
  */
 
 import { basename, join, toFileUrl } from "../../imports/path.ts";
-import { walk, WalkEntry } from "../../imports/fs.ts";
 import { colors } from "../../imports/fmt.ts";
-
-export const importPattern = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/gm;
-export const quotesPattern = /(["'])((?:\\\1|(?:(?!\1)).)*)(\1)/gm;
-export const sveltePatter = /svelte\/?/gim;
-
-export function siblings(source: string) {
-  // get .svelte imports
-  return source
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(
-      (line) =>
-        (line.includes(".svelte") && importPattern.test(line)) ||
-        (/import/gm.test(line) && !line.includes("svelte"))
-    );
-}
-
-export function getPaths(imports: string[]) {
-  return imports.map((route) => {
-    let path: string = "";
-    route.replace(quotesPattern, (match: string) => (path = match));
-
-    // remove quotes
-    return path.replace(/'/gm, "").replace(/"/gm, "");
-  });
-}
 
 export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
 export const fileName = (path: string) => basename(path);
-export function transform(source: string) {
-  const paths = getPaths(siblings(source));
-  const jsPaths = [...paths].map((path) => svelteToJs(path));
-
-  return {
-    paths,
-    jsPaths,
-  };
-}
-
-export async function findComponentPath(pathToFind: string) {
-  const files: WalkEntry[] = [];
-  for await (const file of walk(Deno.cwd(), { exts: ["svelte"] })) {
-    files.push(file);
-  }
-
-  // remove relative paths
-  const paths = pathToFind
-    .split("/")
-    .filter((path) => path !== "." && path !== "..");
-
-  // join for unix or windows
-  const normalize =
-    Deno.build.os === "windows" ? paths.join("\\") : paths.join("/");
-
-  return files.filter((file) => file.path.includes(normalize)).shift();
-}
 
 export async function open(url: string): Promise<void> {
   try {

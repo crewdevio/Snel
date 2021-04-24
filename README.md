@@ -23,8 +23,6 @@
    </a>
 </p>
 
-#
-
 ## What is Snel?
 
 It is a `tool/framework` to compile .svelte component to javascript files to create web application using deno and svelte
@@ -86,24 +84,6 @@ import { onMount } from "svelte";
 ```
 
 `svelte` tells the compiler that svelte core resources are being accessed.
-
-## Using svlc/svelte compiler
-
-Snel uses the svelte compiler to transform the components to javacript, if you just want to use the compiler separately, we provide a compiler wrapper within a simple cli that you can install using deno install or transform it to an executable using deno compile.
-
-`install compiler`
-
-```
-deno install -A --unstable https://deno.land/x/snel/compiler/svlc.ts
-```
-
-`transform to executable`
-
-```
-deno compile -A --unstable https://deno.land/x/snel/compiler/svlc.ts
-```
-
-If you are interested in using the low-level compiler tools, you only have to access the [compiler.ts](https://github.com/crewdevio/Snel/blob/main/compiler/compiler.ts) file, which is a bridge between the svelte compiler (already transformed to javascript see [core.js](https://github.com/crewdevio/Snel/blob/main/compiler/core.js)) which provides typing and useful interfaces when using the compiler core.
 
 ## Using import maps
 

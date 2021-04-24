@@ -97,15 +97,6 @@ export interface PreprocessorGroup {
   script?: Preprocessor;
 }
 
-export interface BuildOptions {
-  isRoot?: boolean;
-  outDir?: string;
-  dev?: boolean;
-  dist?: boolean;
-  fileOutPut?: string;
-  generate?: "dom" | "ssr";
-}
-
 export interface PreprocessorProps {
   content: string;
   attributes: Record<string, string | boolean>;
