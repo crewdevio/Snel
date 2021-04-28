@@ -164,6 +164,11 @@ const readFile = async (
   const defaultImports = {
     "snel": `https://deno.land/x/snel@v${VERSION}/mod.ts`,
     "snel/": `https://deno.land/x/snel@v${VERSION}/`,
+    "snel/core/": `https://deno.land/x/snel@v${VERSION}/core/`,
+    "snel/router/": `https://deno.land/x/snel@v${VERSION}/core/router/mod.ts`,
+    "snel/router": `https://deno.land/x/snel@v${VERSION}/core/router/`,
+    "snel/utils/": `https://deno.land/x/snel@v${VERSION}/core/utils/`,
+    "snel/utils": `https://deno.land/x/snel@v${VERSION}/core/utils/mod.ts`,
     "svelte": URL_SVELTE_CDN,
     "svelte/": `${URL_SVELTE_CDN}/`,
     "@/": "./",

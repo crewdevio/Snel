@@ -11,19 +11,31 @@ import { colors } from "../../imports/fmt.ts";
 
 export function stract(source: string) {
   const chunks = source.split("\n").map((chunk) => chunk.trim());
+  const sveltePattern = /svelte(([^/]*\/)*)(.*)/gim;
 
   const ends = (chunk: string) =>
     chunk.endsWith(".svelte'") ||
     chunk.endsWith(".svelte';") ||
     chunk.endsWith('.svelte"') ||
-    chunk.endsWith('.svelte";');
+    chunk.endsWith('.svelte";') ||
+    sveltePattern.test(chunk);
 
   const start = (chunk: string) =>
     chunk.startsWith("import ") || chunk.startsWith("import");
 
+  const From = (chunk: string) =>
+    chunk.includes(" from ") ||
+    chunk.includes(" from") ||
+    chunk.includes("from ");
+
+  const filter = (chunk: string) => start(chunk) && From(chunk) && ends(chunk);
+
+  const imports = chunks.filter((chunk) => filter(chunk)).join("\n");
+  const code = chunks.filter((chunk) => !filter(chunk)).join("\n");
+
   return {
-    code: chunks.filter((chunk) => !(start(chunk) && ends(chunk))).join("\n"),
-    imports: chunks.filter((chunk) => start(chunk) && ends(chunk)).join("\n"),
+    code,
+    imports,
   };
 }
 
