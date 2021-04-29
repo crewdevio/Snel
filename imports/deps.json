@@ -55,6 +55,10 @@
     "compiler": {
       "url": "https://cdn.jsdelivr.net/npm/svelte@3.37.0/compiler.mjs",
       "hash": "c5ce28122f0bd22b612b5acde7aa9620a66b6b94bc05d0e966f9ba0c10231351"
+    },
+    "esbuild": {
+      "url": "https://deno.land/x/esbuild@v0.11.16/mod.js",
+      "hash": "f1f1be600ec4cbf05ae46045d3bf71dd28883fab68a167570e3622709dced26f"
     }
   }
 }

@@ -82,11 +82,10 @@ export default (options = {}) => {
         {
           async script({ content, attributes, filename }) {
             let code = content;
-            let isTs = false;
-            // transpile to javascript
-            if (attributes?.lang === "ts") isTs = true;
+            let isTs = attributes?.lang === "ts";
 
             return {
+              // transpile to javascript
               code: isTs ? await tsTranspiler(code, filename) : code,
             };
           },

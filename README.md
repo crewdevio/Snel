@@ -34,7 +34,7 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 - hot reloading
 - [import maps](https://github.com/WICG/import-maps) support
 - support for scss and less out of the box
-- support for typescript and sass out of the box (soon)
+- support for typescript and sass out of the box
 - SSR (soon)
 - SSG (soon)
 
@@ -104,9 +104,9 @@ import moment from "moment";
 import axios from "axios";
 ```
 
-> **note** you can use import maps inside svelte components
+> **note**: you can use import maps inside svelte components
 
-### Manage import maps dependencies via [trex](https://github.com/crewdevio/Trex)
+### Manage import maps dependencies using [trex](https://github.com/crewdevio/Trex)
 
 if you don't have an import map.json file you can create it using the `trex install` command, trex is mainly focused on handling dependencies for `deno` but this doesn't prevent you from being able to use it to handle your dependencies for `snel/svelte`. to install any dependency you just have to use the [custom command](https://github.com/crewdevio/Trex#adding-custom-packages) from trex:
 
@@ -131,6 +131,93 @@ we recommend these sites for you to install your dependencies
 - [skypack.dev](https://www.skypack.dev/)
 - [esm.sh](https://esm.sh/)
 - [jsdelivr.com](https://www.jsdelivr.com/)
+
+## Typescript, Sass and Less support
+
+snel supports typescript out the box, so you can import typescript files into `.svelte` components without specifying the use of typescript within the component.
+
+`App.svelte`
+
+```html
+<script>
+  import { PI } from "./pi.ts";
+</script>
+
+<h1>PI is = {PI}</h1>
+
+<style>
+  h1 {
+    color: #ff3e00;
+  }
+</style>
+```
+
+`pi.ts`
+
+```typescript
+export const PI: number = Math.PI;
+```
+
+Something important to know is that if you are going to import from typescript files without specifying the use of typescript within the component, you can only import non-types elements, example:
+
+- types
+- interfaces
+
+in case you want to use the typescript inside the components, you just have to specify it in the `lang` attribute:
+
+```html
+<script lang="ts">
+  import { PI } from "./pi.ts";
+
+  const message: string = "hello world";
+
+  interface User {
+    name: string;
+    passworld: string;
+  }
+
+  let user: User = { name: "jhon", passworld: "1234" };
+</script>
+```
+
+to import types and interfaces into components these must be specified using the following syntax:
+
+```html
+<script lang="ts">
+  import type { .... } from "./types.ts";
+</script>
+```
+
+and you should only import types using this syntax and not combine imports with other elements.
+
+```html
+<script lang="ts">
+  // bad
+  import type { UserInterface, myFunction } from "./user.ts";
+
+  // good
+  import type { UserInterface } from "./user.ts";
+  import { myFunction } from "./user.ts";
+</script>
+```
+
+> **note**: typescript support within components is not stable and compilation errors or hot reloading may appear.
+
+in the same way you can use the syntax of sass and less inside the components to define the styles.
+
+```html
+<style lang="scss">
+  /* .... */
+</style>
+
+<!-- or -->
+
+<style lang="less">
+  /* .... */
+</style>
+```
+
+> **note**: for now importing external styles is not available for css, sass and less.
 
 ## Hot Reloading
 
