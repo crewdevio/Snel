@@ -53,8 +53,8 @@
       "hash": "ea671ea22dfd262b5c1d32869a497f8b836202e721b106a1a4f2b12f77c18b44"
     },
     "compiler": {
-      "url": "https://cdn.jsdelivr.net/npm/svelte@3.37.0/compiler.mjs",
-      "hash": "c5ce28122f0bd22b612b5acde7aa9620a66b6b94bc05d0e966f9ba0c10231351"
+      "url": "https://cdn.jsdelivr.net/npm/svelte@3.38.1/compiler.mjs",
+      "hash": "7f428c676114f272c1cc99330eb24b296780abe9c58e4eeb01913d4938c4e540"
     },
     "esbuild": {
       "url": "https://deno.land/x/esbuild@v0.11.16/mod.js",
