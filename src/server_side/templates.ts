@@ -42,10 +42,10 @@ ${hotReloading ? `<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23
 export const ssgMain = `<script>
   import Home from "@/components/Home.svelte";
 
-  export let PathName = "/";
+  export let Request = {};
 </script>
 
-{#if PathName === "/"}
+{#if Request?.PathName === "/"}
   <Home name={"World"} />
 {:else}
   <main>
@@ -115,6 +115,9 @@ export const serverTemplate = (
   mode: "ssr" | "ssg",
   port = 3000
 ) => {
+  //TODO(buttercubz) change this en the next release
+  //import { VERSION } from "https://deno.land/x/snel@v${VERSION}/src/shared/version.ts";
+ //import { htmlBody } from "https://deno.land/x/snel@v${VERSION}/src/server_side/templates.ts";
   return `
 import { VERSION } from "../../src/shared/version.ts";
 import { htmlBody } from "../../src/server_side/templates.ts";

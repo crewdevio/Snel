@@ -19,18 +19,16 @@ const install = async (name: string, url: string) => {
 };
 
 async function Main() {
-  try {
-    await install("snel", "https://deno.land/x/snel/cli.ts");
-    await install("trex", "https://deno.land/x/trex/cli.ts");
-    await install("bundler", "https://deno.land/x/bundler@0.7.0/cli.ts");
-  } catch (error: any) {
-    console.log(error?.message);
-    console.log(error?.stack);
-  }
+  await install("snel", "https://deno.land/x/snel/cli.ts");
+  await install("trex", "https://deno.land/x/trex/cli.ts");
 }
 
 if (import.meta.main) {
-  await Main();
-  console.clear();
-  console.log("installation complete");
+  Main().then(() => {
+    console.clear();
+    console.log("installation complete.");
+  }).catch((error: any) => {
+    console.log(error?.message);
+    console.log(error?.stack);
+  });
 }

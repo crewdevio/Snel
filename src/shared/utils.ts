@@ -82,11 +82,11 @@ export async function ipv4(port: string | number) {
   const ipv4 = await getIP()!;
 
   return ipv4?.split(" ").length === 1
-  ? `http://${ipv4}`
-  : ipv4
-      ?.split(" ")
-      .map((ip) =>`http://${ip}:${port}`)
-      .join(" or ");
+    ? `http://${ipv4}`
+    : ipv4
+        ?.split(" ")
+        .map((ip) => `http://${ip}:${port}`)
+        .join(" or ");
 }
 
 export function showHelp() {
@@ -125,9 +125,7 @@ export const keyWords = {
   serve: "serve",
 };
 
-export async function loadConfig<T extends any>(
-  path: string
-): Promise<T> {
+export async function loadConfig<T extends any>(path: string): Promise<T> {
   const module = await import(toFileUrl(join(Deno.cwd(), path)).href);
 
   return module?.default;
@@ -173,4 +171,23 @@ function parser(type: any, deep: number): string {
     default:
       return `${type}`;
   }
+}
+
+// output files and dirs
+export const common = {
+  entryFile: "./src/main.js",
+  dom: {
+    dir: "./public/dist",
+  },
+  ssg: {
+    dir: "./__snel__",
+    serverFile: "./__snel__/main.js",
+  },
+};
+
+export function HTMLMinify(code: string) {
+  return code
+    .split("\n")
+    .map((chunk) => chunk.trim())
+    .join("");
 }

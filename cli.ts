@@ -6,39 +6,22 @@
  *
  */
 
-import { PromptConfig, notFoundConfig, serverLog } from "./src/cli/prompt.ts";
-import { open, ipv4, showHelp,loadConfig } from "./src/shared/utils.ts";
 import { HelpCommand, CommandNotFound } from "./src/shared/log.ts";
+import { PromptConfig, notFoundConfig } from "./src/cli/prompt.ts";
 import { VERSION as svelteVersion } from "./compiler/compiler.ts";
-import { serverTemplate } from "./src/server_side/templates.ts";
 import { VERSION as cliVersion } from "./src/shared/version.ts";
-import { DevServer, Server } from "./src/server_side/server.ts";
-import { HotReload } from "./src/dev-server/hotReloading.ts";
-import type { snelConfig } from "./src/shared/types.ts";
+import { showHelp, common } from "./src/shared/utils.ts";
 import { flags, keyWords } from "./src/shared/utils.ts";
-import fileServer from "./src/dev-server/server.ts";
 import { CreateProject } from "./src/cli/create.ts";
-import { prepareDist } from "./src/cli/prepare.ts";
-import { encoder } from "./src/shared/encoder.ts";
+import StartDev from "./src/cli/commands/start.ts";
 import { RollupBuild } from "./compiler/build.ts";
+import Build from "./src/cli/commands/build.ts";
 import { resolve } from "./imports/path.ts";
 import { colors } from "./imports/fmt.ts";
 import { exists } from "./imports/fs.ts";
 
 async function Main() {
   const { args } = Deno;
-
-  // output files and dirs
-  const common = {
-    entryFile: "./src/main.js",
-    dom: {
-      dir: "./public/dist",
-    },
-    ssg: {
-      dir: "./__snel__",
-      serverFile: "./__snel__/main.js"
-    }
-  }
 
   try {
     // create a template project
@@ -69,33 +52,9 @@ async function Main() {
         });
       }
 
-      else if (await exists(resolve("snel.config.js"))) {
-        const { root, mode, plugins } = await loadConfig<snelConfig>(
-          "./snel.config.js"
-        )!;
+      else if (await exists(resolve("snel.config.js"))) await Build();
 
-        if (mode === "dom") {
-          await RollupBuild({
-            dir: common.dom.dir,
-            entryFile: common.entryFile,
-            generate: mode,
-            plugins,
-          });
-          await prepareDist(root);
-        }
-
-        if (mode === "ssg") {
-          const ServerFile = await Deno.create(`${common.ssg.dir}/Server.js`);
-          const ServerCode = serverTemplate(Server.toString(), common.ssg.serverFile, null,"ssg", 3000);
-
-          ServerFile.write(encoder.encode(ServerCode));
-          console.log(colors.green("build done."));
-        }
-      }
-
-      else {
-        notFoundConfig();
-      }
+      else notFoundConfig();
     }
     // compile in dev mode
     else if (args[0] === keyWords.dev) {
@@ -132,62 +91,7 @@ async function Main() {
       }
 
       else if (await exists(resolve("snel.config.js"))) {
-        const { port, mode, plugins } = await loadConfig<snelConfig>(
-          "./snel.config.js"
-        )!;
-
-        console.log(colors.bold(colors.cyan("starting development server.")));
-
-        const outDir = mode === "dom" ? common.dom.dir : common.ssg.dir;
-
-        const dirName = Deno.cwd()
-          .split(Deno.build.os === "windows" ? "\\" : "/")
-          .pop()!;
-
-        const ip = await ipv4(port);
-        const localNet = ip
-            ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port)}`
-            : "";
-
-        await RollupBuild({
-          dir: outDir,
-          entryFile: common.entryFile,
-          generate: mode,
-          plugins,
-        });
-
-        if (mode === "ssg" || mode === "ssr") {
-          // SSG/SSR development server
-          await DevServer({
-              path: common.ssg.serverFile,
-              clientPath: null,
-              mode: "ssg",
-              port: parseInt(port),
-              entryFile: common.entryFile,
-              outDir,
-              plugins,
-              dirName,
-              localNet
-          });
-        }
-
-        // run dev server in localhost and network in dom mode
-        if (mode === "dom") {
-          fileServer(parseInt(port), "./public", true);
-          // server logs
-          serverLog({ port, dirName, localNet });
-          // open in browser
-          setTimeout(async () => await open(`http://localhost:${port}`), 500);
-          // hot reloading
-          await HotReload("./src", parseInt(port) + 1, async () => {
-            await RollupBuild({
-              dir: outDir,
-              entryFile: common.entryFile,
-              generate: mode,
-              plugins,
-            });
-          });
-        }
+        await StartDev();
       }
 
       else {

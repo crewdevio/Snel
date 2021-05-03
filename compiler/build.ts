@@ -11,6 +11,7 @@ import SVELTECOMPILER from "../src/shared/bundler.js";
 import type { RollupBuildProps } from "./types.ts";
 import { toFileUrl } from "../imports/path.ts";
 import { rollup } from "../imports/drollup.ts";
+
 export async function RollupBuild({
   dir = "./public/dist",
   entryFile = "./src/main.js",
