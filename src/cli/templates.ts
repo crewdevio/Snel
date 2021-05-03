@@ -26,7 +26,7 @@ export const indexHtml = async (
     <title>Svelte app</title>
   </head>
   <body>
-    <script type="module" src="${script}"></script>
+    <script src="${script}"></script>
     <!-- injected by snel don't remove it -->
 ${clientConnection(port, await getIP())}
   </body>

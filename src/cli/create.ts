@@ -31,7 +31,6 @@ export async function CreateProject(options: CreateProjectOptions) {
   const scripts = {
     domScript: {
       __internal__: "snel dev",
-      bundle: "bundler bundle --optimize ./public/__index.html=index.html",
       dev: "trex run __internal__",
       watch: "trex run __internal__ --watch",
     },

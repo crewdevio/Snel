@@ -40,10 +40,6 @@
       "url": "https://deno.land/x/aleph@v0.2.28/vendor/less/less.js",
       "hash": "2142d07ff2b26f4044bf29ae41d85ef4c6e19f09f7156c530c414e9554a9b12e"
     },
-    "run": {
-      "url": "https://deno.land/x/trex/commands/run.ts",
-      "hash": "60709d493cd22794bf66cb3ff3cb391f6f208ce2d8b2b64b854295e15509475d"
-    },
     "drollup": {
       "url": "https://deno.land/x/drollup@2.42.3+0.17.1/mod.ts",
       "hash": "826eb5d84f870027e09cc99dc7334cd0f17849f7f48cad96b8272e7615225286"
@@ -59,6 +55,14 @@
     "esbuild": {
       "url": "https://deno.land/x/esbuild@v0.11.16/mod.js",
       "hash": "f1f1be600ec4cbf05ae46045d3bf71dd28883fab68a167570e3622709dced26f"
+    },
+    "bundler": {
+      "url": "https://deno.land/x/bundler@0.7.0/bundler.ts",
+      "hash": "79d1d15c174ad9ed0fbe8726a101011cd5b31d780e75e0fc56e3c22d4b08a1b5"
+    },
+    "bundler_defaults": {
+      "url": "https://deno.land/x/bundler@0.7.0/defaults.ts",
+      "hash": "61ad988c853dbbf0b0eb99660acb7d0f93fbdc62b8b4ccd49f3725b8b6931fc9"
     }
   }
 }

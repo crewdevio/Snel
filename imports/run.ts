@@ -1,1 +1,0 @@
-export * from "https://deno.land/x/trex/commands/run.ts";
