@@ -34,7 +34,7 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 - hot reloading
 - [import maps](https://github.com/WICG/import-maps) support
 - support for scss and less out of the box
-- support for typescript and sass out of the box
+- support for typescript
 - SSR (soon)
 - SSG (soon)
 
