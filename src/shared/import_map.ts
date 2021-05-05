@@ -34,7 +34,14 @@
  * SOFTWARE.
  */
 
-import { dirname, fromFileUrl, normalize, relative } from "../../imports/path.ts";
+import {
+  dirname,
+  fromFileUrl,
+  normalize,
+  relative,
+  toFileUrl,
+  join,
+} from "../../imports/path.ts";
 import type { NormalizedInputOptions, Plugin } from "../../imports/drollup.ts";
 import { ensureArray } from "./imports/ensureArray.ts";
 import { VERSION, URL_SVELTE_CDN } from "./version.ts";
@@ -162,17 +169,18 @@ const readFile = async (
   baseUrl?: string
 ) => {
   const defaultImports = {
-    "snel": `https://deno.land/x/snel@v${VERSION}/mod.ts`,
+    snel: `https://deno.land/x/snel@v${VERSION}/mod.ts`,
     "snel/": `https://deno.land/x/snel@v${VERSION}/`,
     "snel/core/": `https://deno.land/x/snel@v${VERSION}/core/`,
     "snel/router/": `https://deno.land/x/snel@v${VERSION}/core/router/mod.ts`,
     "snel/router": `https://deno.land/x/snel@v${VERSION}/core/router/`,
     "snel/utils/": `https://deno.land/x/snel@v${VERSION}/core/utils/`,
     "snel/utils": `https://deno.land/x/snel@v${VERSION}/core/utils/mod.ts`,
-    "svelte": URL_SVELTE_CDN,
+    svelte: URL_SVELTE_CDN,
     "svelte/": `${URL_SVELTE_CDN}/`,
     "@/": "./",
-    "/": "./",
+    "~/": `${toFileUrl(join(Deno.cwd(), "src")).href}/`,
+    "$/": `${toFileUrl(Deno.cwd()).href}/`,
   };
 
   const importMapPath = normalize(path);

@@ -19,7 +19,7 @@
      <img alt="GitHub license" src="https://img.shields.io/github/license/crewdevio/Snel">
    </a>
    <a href="https://deno.land">
-     <img src="https://img.shields.io/badge/deno-%5E1.7.0-green?logo=deno"/>
+     <img src="https://img.shields.io/badge/deno-%5E1.9.0-green?logo=deno"/>
    </a>
 </p>
 
@@ -201,7 +201,7 @@ and you should only import types using this syntax and not combine imports with 
 </script>
 ```
 
-> **note**: typescript support within components is not stable and compilation errors or hot reloading may appear.
+> **note**: typescript support within components is not stable and compilation errors in hot reloading may appear.
 
 in the same way you can use the syntax of sass and less inside the components to define the styles.
 
@@ -218,6 +218,52 @@ in the same way you can use the syntax of sass and less inside the components to
 ```
 
 > **note**: for now importing external styles is not available for css, sass and less.
+
+## Import components and files
+
+when you create a project with snel you will notice that the components are imported as follows:
+
+`example`
+
+```javascript
+// App.svelte
+import Home from "@/components/Home.svelte";
+```
+
+`@/` It is equivalent to `./`, Similarly, if you need to access any component or file that is inside the src folder, you can use the following syntax:
+
+`example`
+
+```javascript
+// src/Users.ts
+export default class Users {
+  ...
+}
+```
+
+```javascript
+// src/components/views/content/User.svelte
+import Users from "~/Users.ts";
+```
+
+this would be equivalent to:
+
+```javascript
+import Users from "../../../Users.ts";
+```
+
+summary:
+
+- `@/`
+  - equivalent to `./`
+- `~/`
+  - equivalent to `[current work directory]/src/`
+- `$/`
+  - equivalent to `[current work directory]/`
+
+this syntax can be used in javascript, typescript files and components.
+
+> **note**: you can change the behavior by rewriting the pattern inside the import_map.json file, although be careful when doing this.
 
 ## Hot Reloading
 

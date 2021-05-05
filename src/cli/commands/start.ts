@@ -7,11 +7,11 @@
  */
 
 import { loadConfig, common, ipv4, open } from "../../shared/utils.ts";
-import { HotReload } from "../../dev-server/hotReloading.ts";
+import { HotReload } from "../../dev_server/hotReloading.ts";
 import { RollupBuild } from "../../../compiler/build.ts";
 import { DevServer } from "../../server_side/server.ts";
 import type { snelConfig } from "../../shared/types.ts";
-import fileServer from "../../dev-server/server.ts";
+import fileServer from "../../dev_server/server.ts";
 import { colors } from "../../../imports/fmt.ts";
 import { serverLog } from "../prompt.ts";
 

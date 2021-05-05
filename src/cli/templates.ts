@@ -6,8 +6,8 @@
  *
  */
 
-import { clientConnection } from "../dev-server/hotReloading.ts";
-import html from "../dev-server/src/utils/html.ts";
+import { clientConnection } from "../dev_server/hotReloading.ts";
+import html from "../dev_server/src/utils/html.ts";
 import { getIP } from "../shared/utils.ts";
 
 export const indexHtml = async (
