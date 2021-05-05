@@ -62,7 +62,7 @@ export async function getIP() {
             .replaceAll(" .", "")
             .replaceAll(" : ", "");
         });
-      return ip.length ? ip[1] : null;
+      return ip.length ? ip[0] : null;
     } else {
       const process = Deno.run({
         cmd: ["ipconfig", "getifaddr", "en0"],
