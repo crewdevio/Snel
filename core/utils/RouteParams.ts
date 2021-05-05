@@ -6,7 +6,7 @@
  *
  */
 
-import { match } from "./imports/path_to_regexp.ts";
+import { match } from "path_to_regexp";
 
 /**
  * Match route from path name.

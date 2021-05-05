@@ -6,8 +6,8 @@
  *
  */
 
-import { basename, join, toFileUrl } from "../../imports/path.ts";
-import { colors } from "../../imports/fmt.ts";
+import { basename, join, toFileUrl } from "path/mod.ts";
+import * as colors from "fmt/colors.ts";
 
 export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
 export const fileName = (path: string) => basename(path);

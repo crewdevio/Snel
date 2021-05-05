@@ -8,13 +8,13 @@
 
 import type { ServerProps, DevServerProps } from "./types.ts";
 import { HotReload } from "../dev_server/hotReloading.ts";
-import { join, toFileUrl } from "../../imports/path.ts";
 import { RollupBuild } from "../../compiler/build.ts";
+import { join, toFileUrl } from "path/mod.ts";
 import { VERSION } from "../shared/version.ts";
-import { Application } from "./imports/oak.ts";
 import { serverLog } from "../cli/prompt.ts";
 import { htmlBody } from "./templates.ts";
 import { open } from "../shared/utils.ts";
+import { Application } from "oak";
 
 export async function Server({
   path,

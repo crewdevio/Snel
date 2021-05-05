@@ -1,7 +1,7 @@
 import { clientConnection } from "../dev_server/hotReloading.ts";
-import { join, toFileUrl } from "../../imports/path.ts";
+import { join, toFileUrl } from "path/mod.ts";
 import { VERSION } from "../shared/version.ts";
-import { Application } from "./imports/oak.ts";
+import { Application } from "oak";
 import { getIP } from "../shared/utils.ts";
 import { htmlBody } from "./templates.ts";
 

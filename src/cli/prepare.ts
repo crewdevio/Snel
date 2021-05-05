@@ -6,12 +6,12 @@
  *
  */
 
-import { createDefaultPlugins } from "../../imports/bundler_defaults.ts";
 import { svelteToJs, fileName, HTMLMinify } from "../shared/utils.ts";
-import { ensureFile, exists } from "../../imports/fs.ts";
+import { createDefaultPlugins } from "bundler_defaults";
 import { decoder, encoder } from "../shared/encoder.ts";
-import { basename, join } from "../../imports/path.ts";
-import { Bundler } from "../../imports/bundler.ts";
+import { ensureFile, exists } from "fs/mod.ts";
+import { basename, join } from "path/mod.ts";
+import { Bundler } from "bundler";
 
 const hotReloadPattern = /<script\s*role="hot-reload"\s*>([\s\S]*?)<\/script>/gm;
 const commetPattern = /<!--([\s\S]*?)-->/gm;

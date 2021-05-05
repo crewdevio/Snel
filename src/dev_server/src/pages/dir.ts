@@ -6,8 +6,8 @@
  *
  */
 
-import { extname } from "../../../../imports/path.ts";
 import type { EntryInfo } from "../utils/types.ts";
+import { extname } from "path/mod.ts";
 import html from "../utils/html.ts";
 
 export default (dirname: string, entries: EntryInfo[]): string => {

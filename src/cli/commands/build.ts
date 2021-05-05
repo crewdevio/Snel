@@ -12,7 +12,7 @@ import { RollupBuild } from "../../../compiler/build.ts";
 import type { snelConfig } from "../../shared/types.ts";
 import { Server } from "../../server_side/server.ts";
 import { encoder } from "../../shared/encoder.ts";
-import { colors } from "../../../imports/fmt.ts";
+import * as colors from "fmt/colors.ts";
 import { Dist } from "../prepare.ts";
 
 export default async function Build() {

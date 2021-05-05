@@ -6,8 +6,8 @@
  *
  */
 
-import { colors } from "../../imports/fmt.ts";
 import type { CreateProjectOptions } from "../shared/types.ts";
+import * as colors from "fmt/colors.ts";
 
 export function PromptConfig(): Omit<CreateProjectOptions, "projectName"> {
   const answers: { [key: string]: string } = {};

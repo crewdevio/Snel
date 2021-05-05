@@ -6,7 +6,7 @@
  *
  */
 
-import { join } from "../../imports/path.ts";
+import { join } from "path/mod.ts";
 
 export async function createFile(name: string, path: string, source: string) {
   try {

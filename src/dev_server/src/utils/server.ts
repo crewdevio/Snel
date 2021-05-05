@@ -7,12 +7,12 @@
  */
 
 // deps
-import { posix, extname } from "../../../../imports/path.ts";
-import { listenAndServe } from "../../../../imports/http.ts";
-import { assert } from "../../../../imports/assert_util.ts";
+import { posix, extname } from "path/mod.ts";
+import { listenAndServe } from "http/mod.ts";
+import { assert } from "assert_util";
 
 // types
-import type { Response, ServerRequest } from "../../../../imports/http.ts";
+import type { Response, ServerRequest } from "http/mod.ts";
 import type { EntryInfo } from "./types.ts";
 
 // pages

@@ -6,9 +6,9 @@
  *
  */
 
-import { Server, Packet } from "../../imports/wocket.ts";
-import { join } from "../../imports/path.ts";
 import Client from "./hotReloadingClient.js";
+import { Server, Packet } from "wocket";
+import { join } from "path/mod.ts";
 
 export async function HotReload(
   toWatch: string,

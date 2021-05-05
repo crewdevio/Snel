@@ -1,0 +1,23 @@
+{
+  "imports": {
+    "assert_util": "https://deno.land/std@0.95.0/_util/assert.ts",
+    "bundler": "https://deno.land/x/bundler@0.7.0/bundler.ts",
+    "bundler_defaults": "https://deno.land/x/bundler@0.7.0/defaults.ts",
+    "compiler": "https://cdn.jsdelivr.net/npm/svelte@3.38.1/compiler.mjs",
+    "drollup": "https://deno.land/x/drollup@2.42.3+0.17.1/mod.ts",
+    "drollup-util": "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup/createFilter.ts",
+    "ensurearray": "https://deno.land/x/drollup@2.42.3+0.17.1/src/ensureArray.ts",
+    "esbuild": "https://deno.land/x/esbuild@v0.11.16/mod.js",
+    "flags/": "https://deno.land/std@0.95.0/flags/",
+    "fmt/": "https://deno.land/std/fmt/",
+    "fs/": "https://deno.land/std@0.95.0/fs/",
+    "http/": "https://deno.land/std@0.95.0/http/",
+    "less": "https://deno.land/x/aleph@v0.2.28/vendor/less/less.js",
+    "oak": "https://deno.land/x/oak@v7.3.0/mod.ts",
+    "path/": "https://deno.land/std@0.95.0/path/",
+    "path_to_regexp": "https://cdn.skypack.dev/path-to-regexp@v6.2.0",
+    "resolveid": "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/resolveId.ts",
+    "scss": "https://raw.githubusercontent.com/crewdevio/deno_sass2/master/mod.ts",
+    "wocket": "https://deno.land/x/wocket@v0.6.2/mod.ts"
+  }
+}

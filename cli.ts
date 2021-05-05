@@ -16,9 +16,9 @@ import { CreateProject } from "./src/cli/create.ts";
 import StartDev from "./src/cli/commands/start.ts";
 import { RollupBuild } from "./compiler/build.ts";
 import Build from "./src/cli/commands/build.ts";
-import { resolve } from "./imports/path.ts";
-import { colors } from "./imports/fmt.ts";
-import { exists } from "./imports/fs.ts";
+import * as colors from "fmt/colors.ts";
+import { resolve } from "path/mod.ts";
+import { exists } from "fs/mod.ts";
 
 async function Main() {
   const { args } = Deno;

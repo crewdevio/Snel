@@ -7,12 +7,12 @@
  */
 
 import { compile, preprocess } from "../../compiler/compiler.ts";
-import { compile as scssCompiler } from "../../imports/scss.ts";
-import { createFilter } from "../../imports/drollup-util.ts";
 import { tsTranspiler } from "../shared/transpiler.ts";
 import { URL_SVELTE_CDN } from "../shared/version.ts";
-import * as path from "../../imports/path.ts";
-import { less } from "../../imports/less.ts";
+import { compile as scssCompiler } from "scss";
+import { createFilter } from "drollup-util";
+import * as path from "path/mod.ts";
+import less from "less";
 
 export default (options = {}) => {
   const { compilerOptions = {}, ...rest } = options;

@@ -9,8 +9,8 @@
 import { ImportMapPlugin } from "../src/shared/import_map.ts";
 import SVELTECOMPILER from "../src/shared/bundler.js";
 import type { RollupBuildProps } from "./types.ts";
-import { toFileUrl } from "../imports/path.ts";
-import { rollup } from "../imports/drollup.ts";
+import { toFileUrl } from "path/mod.ts";
+import { rollup } from "drollup";
 
 export async function RollupBuild({
   dir = "./public/dist",

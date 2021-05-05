@@ -19,8 +19,8 @@ import type { CreateProjectOptions } from "../shared/types.ts";
 import { ssgHome, ssgMain } from "../server_side/templates.ts";
 import { createDir, createFile } from "./io.ts";
 import { ToString } from "../shared/utils.ts";
-import { colors } from "../../imports/fmt.ts";
-import { join } from "../../imports/path.ts";
+import * as colors from "fmt/colors.ts";
+import { join } from "path/mod.ts";
 
 export async function CreateProject(options: CreateProjectOptions) {
   const { root, port, projectName, mode } = options;

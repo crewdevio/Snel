@@ -41,12 +41,12 @@ import {
   relative,
   toFileUrl,
   join,
-} from "../../imports/path.ts";
-import type { NormalizedInputOptions, Plugin } from "../../imports/drollup.ts";
-import { ensureArray } from "./imports/ensureArray.ts";
+} from "path/mod.ts";
+import type { NormalizedInputOptions, Plugin } from "drollup";
 import { VERSION, URL_SVELTE_CDN } from "./version.ts";
-import { resolveId } from "./imports/resolveId.ts";
-import { exists } from "../../imports/fs.ts";
+import { ensureArray } from "ensurearray";
+import { resolveId } from "resolveid";
+import { exists } from "fs/mod.ts";
 
 /**
  * @public

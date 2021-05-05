@@ -12,7 +12,7 @@ import { RollupBuild } from "../../../compiler/build.ts";
 import { DevServer } from "../../server_side/server.ts";
 import type { snelConfig } from "../../shared/types.ts";
 import fileServer from "../../dev_server/server.ts";
-import { colors } from "../../../imports/fmt.ts";
+import * as colors from "fmt/colors.ts";
 import { serverLog } from "../prompt.ts";
 
 export default async function StartDev() {

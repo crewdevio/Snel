@@ -1,0 +1,12 @@
+{
+  "deno.enable": true,
+  "deno.codeLens.implementations": true,
+  "deno.codeLens.references": true,
+  "deno.codeLens.referencesAllFunctions": true,
+  "liveServer.settings.port": 5501,
+  "deno.suggest.autoImports": true,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land/": true
+  },
+  "deno.importMap": "./import_map.json",
+}
