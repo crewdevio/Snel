@@ -1,4 +1,4 @@
-import { clientConnection } from "../dev-server/hotReloading.ts";
+import { clientConnection } from "../dev_server/hotReloading.ts";
 import { join, toFileUrl } from "../../imports/path.ts";
 import { VERSION } from "../shared/version.ts";
 import { Application } from "./imports/oak.ts";
