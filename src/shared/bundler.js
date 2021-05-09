@@ -130,10 +130,11 @@ export default (options = {}) => {
       const compiled = compile(code, {
         filename: filename,
         generate: options?.generate ?? "dom",
-        dev: true,
+        dev: false,
         sveltePath: URL_SVELTE_CDN,
         hydratable: true,
         preserveComments: false,
+        preserveWhitespace: false,
       });
 
       if (this.addWatchFile) {
