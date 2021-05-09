@@ -21,6 +21,7 @@ export async function open(url: string): Promise<void> {
     };
     const process = Deno.run({ cmd: [programAliases[Deno.build.os], url] });
     await process.status();
+    process.close();
   } catch (error: unknown) {
     /* nothing here */
   }
@@ -42,6 +43,7 @@ export async function getIP() {
       });
 
       const ip = new TextDecoder().decode(await process.output()).trim();
+      process.close();
 
       return ip.length ? ip : null;
     } else if (Deno.build.os === "windows") {
@@ -62,6 +64,8 @@ export async function getIP() {
             .replaceAll(" .", "")
             .replaceAll(" : ", "");
         });
+        process.close();
+
       return ip.length ? ip[0] : null;
     } else {
       const process = Deno.run({
@@ -70,6 +74,7 @@ export async function getIP() {
       });
 
       const ip = new TextDecoder().decode(await process.output()).trim();
+      process.close();
 
       return ip.length ? ip : null;
     }
