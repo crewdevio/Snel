@@ -122,7 +122,7 @@ export const serverTemplate = (
 import { VERSION } from "../../src/shared/version.ts";
 import { htmlBody } from "../../src/server_side/templates.ts";
 import { join, toFileUrl } from "https://deno.land/std@0.93.0/path/mod.ts";
-import { Application } from "https://deno.land/x/oak@v7.3.0/mod.ts";
+import { Application } from "https://deno.land/x/oak@v7.4.0/mod.ts";
 
 ${source}
 

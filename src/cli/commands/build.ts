@@ -40,7 +40,7 @@ export default async function Build() {
       common.ssg.serverFile,
       null,
       "ssg",
-      Number(port)
+      port
     );
 
     ServerFile.write(encoder.encode(ServerCode));

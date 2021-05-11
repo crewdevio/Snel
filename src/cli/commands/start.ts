@@ -30,7 +30,7 @@ export default async function StartDev() {
 
   const ip = await ipv4(port);
   const localNet = ip
-    ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port)}`
+    ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port.toString())}`
     : "";
 
   await RollupBuild({
@@ -46,7 +46,7 @@ export default async function StartDev() {
       path: common.ssg.serverFile,
       clientPath: null,
       mode: "ssg",
-      port: parseInt(port),
+      port: port,
       entryFile: common.entryFile,
       outDir,
       plugins,
@@ -57,13 +57,13 @@ export default async function StartDev() {
 
   // run dev server in localhost and network in dom mode
   if (mode === "dom") {
-    fileServer(parseInt(port), "./public", true);
+    fileServer(port, "./public", true);
     // server logs
     serverLog({ port, dirName, localNet });
     // open in browser
     setTimeout(async () => await open(`http://localhost:${port}`), 500);
     // hot reloading
-    await HotReload("./src", parseInt(port) + 1, async () => {
+    await HotReload("./src", (port + 1), async () => {
       await RollupBuild({
         dir: outDir,
         entryFile: common.entryFile,

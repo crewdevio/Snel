@@ -8,7 +8,7 @@
 
 export interface CreateProjectOptions {
   root: string;
-  port: string;
+  port: number;
   projectName: string;
   mode: "ssr" | "dom" | "ssg";
 }
