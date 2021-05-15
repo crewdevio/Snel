@@ -1,1 +1,1 @@
-export * from "https://deno.land/x/esbuild@v0.11.16/mod.js";
+export * from "https://deno.land/x/esbuild@v0.11.22/mod.js";
