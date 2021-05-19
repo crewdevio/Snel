@@ -116,11 +116,9 @@ export const serverTemplate = (
   port = 3000
 ) => {
   //TODO(buttercubz) change this en the next release
-  //import { VERSION } from "https://deno.land/x/snel@v${VERSION}/src/shared/version.ts";
- //import { htmlBody } from "https://deno.land/x/snel@v${VERSION}/src/server_side/templates.ts";
   return `
-import { VERSION } from "../../src/shared/version.ts";
-import { htmlBody } from "../../src/server_side/templates.ts";
+import { VERSION } from "https://deno.land/x/snel@v${VERSION}/src/shared/version.ts";
+import { htmlBody } from "https://deno.land/x/snel@v${VERSION}/src/server_side/templates.ts";
 import { join, toFileUrl } from "https://deno.land/std@0.93.0/path/mod.ts";
 import { Application } from "https://deno.land/x/oak@v7.4.0/mod.ts";
 
