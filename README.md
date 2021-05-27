@@ -35,8 +35,8 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 - [import maps](https://github.com/WICG/import-maps) support
 - support for scss and less out of the box
 - support for typescript
+- [SSG](docs/ssg.md) (experimental)
 - SSR (soon)
-- SSG (soon)
 
 ## What do I need to start using Snel?
 
@@ -54,6 +54,26 @@ Snel uses several tools to create a better development experience, some of these
 - [**bundler**](https://deno.land/x/bundler) minify and package all files for production
 
 the [install.ts](https://github.com/crewdevio/Snel/blob/main/install.ts) file is responsible for installing all these tools so that you only worry about creating your application.
+
+if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
+
+```console
+trex exec snel create [project name]
+```
+
+> **note**: if you decide use snel using trex exec you need to change this scripts inside run.json file
+
+```javascript
+{
+  "scripts": {
+    "start": "trex exec snel serve",
+    "build": "trex exec snel build"
+  },
+  "files": [
+    "./src"
+  ]
+}
+```
 
 ## how to create a project with Snel?
 

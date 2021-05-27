@@ -1,1 +1,2 @@
-export * from "https://deno.land/x/esbuild@v0.11.22/mod.js";
+//@deno-types="https://deno.land/x/esbuild@v0.12.4/mod.d.ts"
+export * from "https://deno.land/x/esbuild@v0.12.4/mod.js";

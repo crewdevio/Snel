@@ -164,7 +164,7 @@ export default function serve(port: number, dir: string, net?: boolean) {
 
         setCORS(response);
       } catch (e) {
-        response = await serveFallback(req, e);
+        response = await serveFile(req, "public/index.html");
       } finally {
         assert(response);
         try {

@@ -41,11 +41,14 @@ ${hotReloading ? `<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23
 
 export const ssgMain = `<script>
   import Home from "@/components/Home.svelte";
+  import { Core } from "snel";
 
   export let Request = {};
+
+  const { MatchRoute } = Core;
 </script>
 
-{#if Request?.PathName === "/"}
+{#if MatchRoute(Request?.PathName, "/")}
   <Home name={"World"} />
 {:else}
   <main>

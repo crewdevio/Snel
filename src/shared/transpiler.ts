@@ -20,6 +20,8 @@ export async function tsTranspiler(source: string, filename: string) {
       },
     });
 
+    esbuild.stop();
+
     return code;
   } catch (error: any) {
     throw new Error(
