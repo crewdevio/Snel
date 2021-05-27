@@ -79,7 +79,7 @@ export function PromptConfig(count = 0): Omit<CreateProjectOptions, "projectName
 
 export function notFoundConfig() {
   throw new Error(
-    colors.red(`${colors.yellow("snel.config.json")} file could not be found`)
+    colors.red(`${colors.yellow("snel config")} file could not be found`)
   ).message;
 }
 

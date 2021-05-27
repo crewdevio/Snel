@@ -6,19 +6,17 @@
  *
  */
 
+import { showHelp, common, resolverConfigFile } from "./src/shared/utils.ts";
 import { HelpCommand, CommandNotFound } from "./src/shared/log.ts";
 import { PromptConfig, notFoundConfig } from "./src/cli/prompt.ts";
 import { VERSION as svelteVersion } from "./compiler/compiler.ts";
 import { VERSION as cliVersion } from "./src/shared/version.ts";
-import { showHelp, common } from "./src/shared/utils.ts";
 import { flags, keyWords } from "./src/shared/utils.ts";
 import { CreateProject } from "./src/cli/create.ts";
 import StartDev from "./src/cli/commands/start.ts";
 import { RollupBuild } from "./compiler/build.ts";
 import Build from "./src/cli/commands/build.ts";
-import { resolve } from "./imports/path.ts";
 import { colors } from "./imports/fmt.ts";
-import { exists } from "./imports/fs.ts";
 
 async function Main() {
   const { args } = Deno;
@@ -52,7 +50,7 @@ async function Main() {
         });
       }
 
-      else if (await exists(resolve("snel.config.js"))) await Build();
+      else if (await resolverConfigFile()) await Build();
 
       else notFoundConfig();
     }
@@ -68,7 +66,7 @@ async function Main() {
         });
       }
 
-      else if (await exists(resolve("snel.config.js"))) {
+      else if (await resolverConfigFile()) {
         console.time(colors.green("Compiled successfully in"));
         await RollupBuild({ dir: common.dom.dir, entryFile: common.entryFile });
         console.timeEnd(colors.green("Compiled successfully in"));
@@ -90,7 +88,7 @@ async function Main() {
         });
       }
 
-      else if (await exists(resolve("snel.config.js"))) {
+      else if (await resolverConfigFile()) {
         await StartDev();
       }
 
@@ -104,7 +102,7 @@ async function Main() {
         colors.green(
           `snel: ${colors.yellow(cliVersion)}\nsvelte: ${colors.yellow(
             svelteVersion
-          )}`
+          )}\ndeno: ${colors.yellow(Deno.version.deno)}`
         )
       );
     }
@@ -126,8 +124,7 @@ async function Main() {
     }
   } catch (error: any) {
     if (!(error instanceof Deno.errors.NotFound)) {
-      console.log(colors.red(error?.message));
-      console.log(error.stack);
+      console.log(error);
     }
   }
 }

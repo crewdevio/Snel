@@ -8,6 +8,7 @@
 
 import { basename, join, toFileUrl } from "../../imports/path.ts";
 import { colors } from "../../imports/fmt.ts";
+import { exists } from "../../imports/fs.ts";
 
 export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
 export const fileName = (path: string) => basename(path);
@@ -43,7 +44,8 @@ export async function getIP() {
       });
 
       const ip = new TextDecoder().decode(await process.output()).trim();
-      process.close();
+      // process.close();
+      Deno.close(process.rid);
 
       return ip.length ? ip : null;
     } else if (Deno.build.os === "windows") {
@@ -64,7 +66,9 @@ export async function getIP() {
             .replaceAll(" .", "")
             .replaceAll(" : ", "");
         });
-        process.close();
+
+      Deno.close(process.rid);
+      // process.close();
 
       return ip.length ? ip[0] : null;
     } else {
@@ -74,7 +78,8 @@ export async function getIP() {
       });
 
       const ip = new TextDecoder().decode(await process.output()).trim();
-      process.close();
+      // process.close();
+      Deno.close(process.rid);
 
       return ip.length ? ip : null;
     }
@@ -195,4 +200,25 @@ export function HTMLMinify(code: string) {
     .split("\n")
     .map((chunk) => chunk.trim())
     .join("");
+}
+
+export async function resolverConfigFile(): Promise<string> {
+  const ts = await exists("./snel.config.ts");
+  const js = await exists("./snel.config.js");
+
+  if (js && ts) {
+    throw new Error(colors.red("you only can have one snel config file, snel.config.js or snel.config.ts")).message;
+  }
+
+  else if (js) {
+    return "./snel.config.js";
+  }
+
+  else if (ts) {
+    return "./snel.config.ts";
+  }
+
+  else {
+    throw new Error(colors.red("can't load snel config file, not found in the root project")).message;
+  }
 }

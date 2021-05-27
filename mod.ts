@@ -6,5 +6,6 @@
  *
  */
 
+export type { snelConfig } from "./src/shared/types.ts";
 export * as Compiler from "./compiler/compiler.ts";
 export * as Core from "./core/utils/mod.ts";

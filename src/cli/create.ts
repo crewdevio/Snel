@@ -50,7 +50,7 @@ export async function CreateProject(options: CreateProjectOptions) {
       {
         name: "index.html",
         path: `${projectRoot}/public`,
-        source: await indexHtml(`./dist/main.js`, parseInt(port) + 1),
+        source: await indexHtml(`./dist/main.js`, port + 1),
       },
       {
         name: "global.css",

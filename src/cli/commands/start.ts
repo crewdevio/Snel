@@ -6,7 +6,7 @@
  *
  */
 
-import { loadConfig, common, ipv4, open } from "../../shared/utils.ts";
+import { loadConfig, common, ipv4, open, resolverConfigFile } from "../../shared/utils.ts";
 import { HotReload } from "../../dev_server/hotReloading.ts";
 import { RollupBuild } from "../../../compiler/build.ts";
 import { DevServer } from "../../server_side/server.ts";
@@ -16,9 +16,7 @@ import { colors } from "../../../imports/fmt.ts";
 import { serverLog } from "../prompt.ts";
 
 export default async function StartDev() {
-  const { port, mode, plugins } = await loadConfig<snelConfig>(
-    "./snel.config.js"
-  )!;
+  const { port, mode, plugins } = await loadConfig<snelConfig>(await resolverConfigFile())!;
 
   console.log(colors.bold(colors.cyan("starting development server.")));
 

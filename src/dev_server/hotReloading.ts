@@ -82,7 +82,8 @@ export function clientConnection(
 ) {
   const code = Client.toString()
     .replace("%port%", port.toString())
-    .replace("%onNet%", onNet ? onNet.toString() : "localhost");
+    // TODO(buttercubz): fix private net issues
+    .replace("%onNet%", "localhost");
 
   return `    <script role="hot-reload">
       (${code})();
