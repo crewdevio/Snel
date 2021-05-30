@@ -18,7 +18,7 @@ export const indexHtml = async (
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="/global.css" />
     <link rel="icon" type="image/png" href="https://svelte.dev/favicon.png">
     <!-- hot reloading util -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>

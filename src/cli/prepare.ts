@@ -10,10 +10,11 @@ import { createDefaultPlugins } from "../../imports/bundler_defaults.ts";
 import { svelteToJs, fileName, HTMLMinify } from "../shared/utils.ts";
 import { ensureFile, exists } from "../../imports/fs.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
-import { basename, join } from "../../imports/path.ts";
+import { join, basename } from "../../imports/path.ts";
 import { Bundler } from "../../imports/bundler.ts";
 
-const hotReloadPattern = /<script\s*role="hot-reload"\s*>([\s\S]*?)<\/script>/gm;
+const hotReloadPattern =
+  /<script\s*role="hot-reload"\s*>([\s\S]*?)<\/script>/gm;
 const commetPattern = /<!--([\s\S]*?)-->/gm;
 
 function preprocess(source: string, root: string) {
@@ -55,13 +56,27 @@ export async function Dist(root: string) {
 
   const { bundles } = await bundler.bundle([entryHtml], {
     optimize: true,
-    outputMap: {
-      entryHtml: join(Deno.cwd(), "dist", "index.html"),
-    },
+    outDirPath: "./dist",
+    importMap: { imports: {} },
+    reload: true,
   });
 
+  type Deps = { target: string; replacer: string };
+
+  const transform: Deps[] = [];
+
   for (let [output, source] of Object.entries(bundles)) {
-    output = output.endsWith(".html") ? join("dist", "index.html") : join("dist", basename(output));
+    output = output.endsWith(".html")
+      ? join("dist", "index.html")
+      : join("dist", basename(output));
+
+    // normalize path ./example to /example
+    if (!output.endsWith(".html")) {
+      transform.push({
+        target: `="./${basename(output)}"`,
+        replacer: `="/${basename(output)}"`,
+      });
+    }
 
     await ensureFile(output);
 
@@ -69,5 +84,14 @@ export async function Dist(root: string) {
     else await Deno.writeFile(output, source as Uint8Array);
   }
 
+  const indexHTML = join(Deno.cwd(), "dist", "index.html");
+  const file = await Deno.readTextFile(indexHTML);
+  let content = file;
+
+  transform.forEach(
+    ({ replacer, target }) => (content = content.replace(target, replacer))
+  );
+
+  await Deno.writeTextFile(indexHTML, content);
   await Deno.remove(entryHtml);
 }

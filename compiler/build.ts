@@ -6,8 +6,11 @@
  *
  */
 
-import { ImportMapPlugin } from "../src/shared/import_map.ts";
-import SVELTECOMPILER from "../src/shared/bundler.js";
+import {
+  terser,
+  ImportMapPlugin,
+  Svelte,
+} from "../src/shared/internal_plugins.ts";
 import type { RollupBuildProps } from "./types.ts";
 import { toFileUrl } from "../imports/path.ts";
 import { rollup } from "../imports/drollup.ts";
@@ -20,7 +23,7 @@ export async function RollupBuild({
 }: RollupBuildProps) {
   const base = toFileUrl(Deno.cwd()).href;
 
-  generate = (generate === "ssg" || generate === "ssr") ? "ssr" : "dom";
+  generate = generate === "ssg" || generate === "ssr" ? "ssr" : "dom";
 
   const options = {
     input: new URL(entryFile, `${base}/`).href,
@@ -29,7 +32,8 @@ export async function RollupBuild({
         maps: "./import_map.json",
       }),
       ...plugins,
-      SVELTECOMPILER({ generate }),
+      Svelte({ generate }),
+      terser(),
     ],
     output: {
       dir,
