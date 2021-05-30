@@ -2,29 +2,27 @@
 
 A declarative Svelte routing library with SSR support.
 
-> this is the already compiled version of [svelte-routing](https://github.com/EmilTholin/svelte-routing)
-
 ## Getting started
 
-this package is built in snel just import it using:
-
-```javascript
-import { ... } from "@core:router";
-```
+Look at the [example folder](./example/) for an example project setup.
 
 ## Usage
 
 ```html
+<!-- App.svelte -->
 <script>
-  import { Router, Link, Route } from "@core:router";
-  import Home from "./routes/Home.svelte";
+  import Router from "svelte-routing/Router.svelte";
+  import Route from "svelte-routing/Route.svelte";
+  import Link from "svelte-routing/Link.svelte";
+
   import About from "./routes/About.svelte";
+  import Home from "./routes/Home.svelte";
   import Blog from "./routes/Blog.svelte";
 
   export let url = "";
 </script>
 
-<Router url="{url}">
+<Router {url}>
   <nav>
     <Link to="/">Home</Link>
     <Link to="about">About</Link>
@@ -37,6 +35,16 @@ import { ... } from "@core:router";
     <Route path="/"><Home /></Route>
   </div>
 </Router>
+```
+
+```javascript
+// main.js
+import App from "./App.svelte";
+
+const app = new App({
+  target: document.getElementById("app"),
+  hydrate: true,
+});
 ```
 
 ## API
@@ -98,7 +106,7 @@ The first argument is a string denoting where to navigate to, and the second arg
 
 ```html
 <script>
-  import { navigate } from "@core:router";
+  import { navigate } from "svelte-routing";
 
   function onSubmit() {
     login().then(() => {
@@ -114,7 +122,8 @@ An action used on anchor tags to navigate around the application. You can add an
 
 ```html
 <script>
-  import { link } from "@core:router";
+  import Router from "svelte-routing/Router.svelte";
+  import { link } from "svelte-routing";
 </script>
 
 <Router>
@@ -129,8 +138,10 @@ An action used on anchor tags to navigate around the application. You can add an
 An action used on a root element to make all relative anchor elements navigate around the application. You can add an attribute `replace` on any anchor to replace the current entry in the history stack instead of adding a new one. You can add an attribute `noroute` for this action to skip over the anchor and allow it to use the native browser action.
 
 ```html
+<!-- App.svelte -->
 <script>
-  import { links } from "@core:router";
+  import Router from "svelte-routing/Router.svelte";
+  import { links } from "svelte-routing";
 </script>
 
 <div use:links>
