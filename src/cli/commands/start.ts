@@ -11,7 +11,6 @@ import { HotReload } from "../../dev_server/hotReloading.ts";
 import { RollupBuild } from "../../../compiler/build.ts";
 import { DevServer } from "../../server_side/server.ts";
 import type { snelConfig } from "../../shared/types.ts";
-import fileServer from "../../dev_server/server.ts";
 import { colors } from "../../../imports/fmt.ts";
 import { serverLog } from "../prompt.ts";
 
@@ -55,7 +54,6 @@ export default async function StartDev() {
 
   // run dev server in localhost and network in dom mode
   if (mode === "dom") {
-    fileServer(port, "./public", true);
     // server logs
     serverLog({ port, dirName, localNet });
     // open in browser
