@@ -17,7 +17,7 @@ import { Dist } from "../prepare.ts";
 
 export default async function Build() {
   console.log(colors.green("preparing files for production.\n"));
-  const { root, mode, plugins, port } = await loadConfig<snelConfig>(await resolverConfigFile())!;
+  const { mode, plugins, port } = await loadConfig<snelConfig>(await resolverConfigFile())!;
 
   if (mode === "dom") {
     await RollupBuild({
@@ -27,7 +27,7 @@ export default async function Build() {
       plugins,
     });
 
-    await Dist(root);
+    await Dist();
   }
 
   if (mode === "ssg") {

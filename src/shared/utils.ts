@@ -10,8 +10,8 @@ import { basename, join, toFileUrl } from "../../imports/path.ts";
 import { colors } from "../../imports/fmt.ts";
 import { exists } from "../../imports/fs.ts";
 
-export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
-export const fileName = (path: string) => basename(path);
+// export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
+// export const fileName = (path: string) => basename(path);
 
 export async function open(url: string): Promise<void> {
   try {
@@ -28,7 +28,7 @@ export async function open(url: string): Promise<void> {
   }
 }
 
-export const Name = (path: string) => fileName(path).split(".").shift();
+// export const Name = (path: string) => fileName(path).split(".").shift();
 
 export const flags = {
   help: ["--help", "-h"],

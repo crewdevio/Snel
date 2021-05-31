@@ -6,6 +6,32 @@
  *
  */
 
-export { terser } from "https://deno.land/x/drollup@2.42.3+0.17.1/plugins/terser/mod.ts";
+import { loadConfig, resolverConfigFile } from "./utils.ts";
+import type { snelConfig } from "../shared/types.ts";
+import server from "../dev_server/server.ts";
+
+export { terser } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/terser/mod.ts";
 export { default as Svelte } from "./bundler.js";
 export * from "./import_map.ts";
+
+export async function DevServer() {
+  const { port, mode } = await loadConfig<snelConfig>(
+    await resolverConfigFile()
+  )!;
+
+  if (mode === "dom") {
+    try {
+      return server({
+        contentBase: "public",
+        port,
+        host: "0.0.0.0",
+        verbose: false,
+        historyApiFallback: true,
+      });
+    } catch (error) {
+      if (!(error instanceof Deno.errors.AddrInUse)) {
+        console.log(error);
+      }
+    }
+  }
+}

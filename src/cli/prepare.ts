@@ -7,20 +7,18 @@
  */
 
 import { createDefaultPlugins } from "../../imports/bundler_defaults.ts";
-import { svelteToJs, fileName, HTMLMinify } from "../shared/utils.ts";
 import { ensureFile, exists } from "../../imports/fs.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { join, basename } from "../../imports/path.ts";
 import { Bundler } from "../../imports/bundler.ts";
+import { HTMLMinify } from "../shared/utils.ts";
 
 const hotReloadPattern =
   /<script\s*role="hot-reload"\s*>([\s\S]*?)<\/script>/gm;
 const commetPattern = /<!--([\s\S]*?)-->/gm;
 
-function preprocess(source: string, root: string) {
+function preprocess(source: string) {
   const matches = source.matchAll(hotReloadPattern);
-
-  root = fileName(svelteToJs(root));
 
   for (const match of matches) {
     source = source.replace(match[0], "");
@@ -39,7 +37,7 @@ function preprocess(source: string, root: string) {
   return HTMLMinify(source);
 }
 
-export async function Dist(root: string) {
+export async function Dist() {
   const plugins = createDefaultPlugins();
   const bundler = new Bundler(plugins);
 
@@ -52,7 +50,7 @@ export async function Dist(root: string) {
   const copy = decoder.decode(await Deno.readFile("./public/index.html"));
   const html = await Deno.create(entryHtml);
 
-  await html.write(encoder.encode(preprocess(copy, root)));
+  await html.write(encoder.encode(preprocess(copy)));
 
   const { bundles } = await bundler.bundle([entryHtml], {
     optimize: true,

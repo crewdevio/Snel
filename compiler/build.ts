@@ -10,6 +10,7 @@ import {
   terser,
   ImportMapPlugin,
   Svelte,
+  DevServer
 } from "../src/shared/internal_plugins.ts";
 import type { RollupBuildProps } from "./types.ts";
 import { toFileUrl } from "../imports/path.ts";
@@ -32,6 +33,7 @@ export async function RollupBuild({
         maps: "./import_map.json",
       }),
       ...plugins,
+      await DevServer(),
       Svelte({ generate }),
       terser(),
     ],
