@@ -95,7 +95,7 @@ async function Main() {
   try {
     // execute instructions
     if (instructs[command]) {
-      await instructs[command as Command]();
+      return await instructs[command]();
     }
 
     // show version

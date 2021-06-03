@@ -52,4 +52,5 @@ export default async function Build() {
   }
 
   console.log(colors.green("\nbuild done."));
+  Deno.exit(0);
 }
