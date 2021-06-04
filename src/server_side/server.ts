@@ -59,13 +59,13 @@ export async function Server({
                 response.status = code;
                 return this;
               },
-              json(data: any = {}) {
+              json(data = {}) {
                 response.body = JSON.stringify(data, null, 2);
                 response.headers.set("content-type", "application/json");
                 sendData = true;
                 return this;
               },
-              send(data: any = "") {
+              send(data = "") {
                 response.body = data;
                 sendData = true;
                 return this;

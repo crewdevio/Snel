@@ -6,6 +6,8 @@
  *
  */
 
+import type { Plugin } from "../imports/drollup.ts";
+
 export interface compileOptions {
   filename?: string;
   name?: string;
@@ -107,5 +109,5 @@ export interface RollupBuildProps {
   dir?: string;
   entryFile?: string;
   generate?: "dom" | "ssg" | "ssr";
-  plugins?: any[];
+  plugins?: Plugin[];
 }

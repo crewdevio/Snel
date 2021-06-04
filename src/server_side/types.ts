@@ -6,6 +6,8 @@
  *
  */
 
+import type { Plugin } from "../../imports/drollup.ts";
+
 export interface HtmlBodyProps {
   css?: string;
   html?: string;
@@ -26,7 +28,7 @@ export interface ServerProps {
 export interface DevServerProps extends Omit<ServerProps, "dist">{
   outDir: string;
   entryFile: string;
-  plugins: any[];
+  plugins: Plugin[];
   dirName: string;
   localNet: string;
 }
