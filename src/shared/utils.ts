@@ -6,12 +6,9 @@
  *
  */
 
-import { basename, join, toFileUrl } from "../../imports/path.ts";
+import { join, toFileUrl } from "../../imports/path.ts";
 import { colors } from "../../imports/fmt.ts";
 import { exists } from "../../imports/fs.ts";
-
-// export const svelteToJs = (route: string) => route.replace(".svelte", ".js");
-// export const fileName = (path: string) => basename(path);
 
 export async function open(url: string): Promise<void> {
   try {
@@ -27,8 +24,6 @@ export async function open(url: string): Promise<void> {
     /* nothing here */
   }
 }
-
-// export const Name = (path: string) => fileName(path).split(".").shift();
 
 export const flags = {
   help: ["--help", "-h"],
@@ -68,7 +63,6 @@ export async function getIP() {
         });
 
       Deno.close(process.rid);
-      // process.close();
 
       return ip.length ? ip[0] : null;
     } else {
@@ -78,7 +72,6 @@ export async function getIP() {
       });
 
       const ip = new TextDecoder().decode(await process.output()).trim();
-      // process.close();
       Deno.close(process.rid);
 
       return ip.length ? ip : null;
@@ -195,11 +188,21 @@ export const common = {
   },
 };
 
-export function HTMLMinify(code: string) {
-  return code
-    .split("\n")
-    .map((chunk) => chunk.trim())
-    .join("");
+export function HTMLMinify(code: string): string {
+  const patterns = [
+    /<!--([\s\S]*?)-->/gms,
+    /\>[^\S ]+/gms,
+    /[^\S ]+\</gms,
+    /(\s)+/gms,
+  ];
+
+  const replacers = ["", ">", "<", " "];
+
+  for (let index = 0; index < patterns.length; index++) {
+    code = code.replace(patterns[index], replacers[index]);
+  }
+
+  return code.replaceAll("\n", "");
 }
 
 export async function resolverConfigFile(): Promise<string> {
