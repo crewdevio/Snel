@@ -62,9 +62,7 @@ export async function CreateProject(options: CreateProjectOptions) {
       {
         name: "snel.config.js",
         path: projectRoot,
-        source: config(
-          ToString({ root: `./src/${root}.svelte`, port, mode, plugins: [] })
-        ),
+        source: config(ToString({ port, mode, plugins: [] })),
       },
       {
         name: `${root}.svelte`,
@@ -87,7 +85,10 @@ export async function CreateProject(options: CreateProjectOptions) {
         source: JSON.stringify(
           {
             scripts: scripts.build(),
-            files: ["./src"],
+            files:
+              mode === "dom"
+                ? ["./src", "./public/index.html", "./public/global.css"]
+                : ["./src"],
           },
           null,
           2

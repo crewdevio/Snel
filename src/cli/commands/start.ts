@@ -8,6 +8,7 @@
 
 import { loadConfig, common, ipv4, open, resolverConfigFile } from "../../shared/utils.ts";
 import { HotReload } from "../../dev_server/hotReloading.ts";
+import { exists, existsSync } from "../../../imports/fs.ts";
 import { RollupBuild } from "../../../compiler/build.ts";
 import { DevServer } from "../../server_side/server.ts";
 import type { snelConfig } from "../../shared/types.ts";
@@ -58,8 +59,23 @@ export default async function StartDev() {
     serverLog({ port, dirName, localNet });
     // open in browser
     setTimeout(async () => await open(`http://localhost:${port}`), 500);
+
+    let toWatch: string[] = ["./src", "./public/index.html", "./public/global.css"];
+
+    type Run = { scripts: { [key: string]: string }, files?: string[] };
+
+    if (await exists("./run.json")) {
+      try {
+        const run = JSON.parse(await Deno.readTextFile("./run.json")) as Run;
+
+        if (run?.files && run.files.length > 0) {
+          toWatch = run.files?.filter((file) => existsSync(file));
+        }
+      } catch (e) {/* do nothing  */}
+    }
+
     // hot reloading
-    await HotReload("./src", (port + 1), async () => {
+    await HotReload(toWatch, (port + 1), async () => {
       await RollupBuild({
         dir: outDir,
         entryFile: common.entryFile,

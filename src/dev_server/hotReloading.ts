@@ -11,7 +11,7 @@ import { join } from "../../imports/path.ts";
 import Client from "./hotReloadingClient.js";
 
 export async function HotReload(
-  toWatch: string,
+  toWatch: string | string[],
   port: number,
   action: () => Promise<void> | void
 ) {
@@ -31,7 +31,7 @@ export async function HotReload(
   // execute action in the first load
   await action();
 
-  for await (const { kind: eventKind } of Deno.watchFs(toWatch)) {
+  for await (const { kind: eventKind } of Deno.watchFs([...toWatch])) {
     if (events.includes(eventKind)) {
       if (kind !== eventKind) {
         server.to("Reload", "compiling");
