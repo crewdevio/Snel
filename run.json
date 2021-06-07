@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "exec": "deno run -A --unstable --no-check ./test.ts"
+  }
+}

@@ -9,9 +9,9 @@
 const install = async (name: string, url: string, importmap?: boolean) => {
   const process = Deno.run({
     cmd: [
-      ...`${Deno.execPath()} install -A -f -r --no-check ${
+      ...`${Deno.execPath()} install -A -f -r --no-check${
         importmap
-          ? `--import-map=https://deno.land/x/${name}/import_map.json`
+          ? ` --import-map=https://deno.land/x/trex/import_map.json`
           : ""
       } --unstable -n ${name} ${url}`.split(" "),
     ],
@@ -28,11 +28,9 @@ async function Main() {
 if (import.meta.main) {
   Main()
     .then(() => {
-      console.clear();
       console.log("installation complete.");
     })
     .catch((error: any) => {
-      console.log(error?.message);
-      console.log(error?.stack);
+      console.log(error);
     });
 }

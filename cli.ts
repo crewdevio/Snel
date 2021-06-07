@@ -111,7 +111,7 @@ async function Main() {
       );
     }
     // show help
-    else if (flags.help.includes(Args[0])) {
+    else if (flags.help.includes(Args[0]) || !Args[0]) {
       showHelp();
     }
 

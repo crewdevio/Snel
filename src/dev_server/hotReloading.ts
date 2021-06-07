@@ -31,7 +31,7 @@ export async function HotReload(
   // execute action in the first load
   await action();
 
-  for await (const { kind: eventKind } of Deno.watchFs([...toWatch])) {
+  for await (const { kind: eventKind } of Deno.watchFs(toWatch, { recursive: true })) {
     if (events.includes(eventKind)) {
       if (kind !== eventKind) {
         server.to("Reload", "compiling");
