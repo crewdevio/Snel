@@ -34,7 +34,7 @@ export async function RollupBuild({
         maps: "./import_map.json",
       }),
       ...plugins,
-      await DevServer(),
+      (await DevServer())!,
       Svelte({ generate }),
       postcss(),
       terser(),
