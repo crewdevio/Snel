@@ -35,6 +35,7 @@ interface Map {
   sources: string[];
   sourcesContent: string[];
   mappings: string;
+  toUrl(): string;
 }
 
 interface Vars {
