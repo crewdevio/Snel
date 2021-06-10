@@ -45,7 +45,7 @@ export async function RollupBuild({
         }),
         ...plugins,
         (await DevServer())!,
-        Svelte({ generate }),
+        Svelte({ generate, dev: true }),
         postcss(),
       ];
 

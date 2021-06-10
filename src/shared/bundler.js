@@ -130,7 +130,7 @@ export default (options = {}) => {
       const compiled = compile(code, {
         filename: filename,
         generate: options?.generate ?? "dom",
-        dev: false,
+        dev: options?.dev ?? false,
         sveltePath: URL_SVELTE_CDN,
         hydratable: true,
         preserveComments: false,
