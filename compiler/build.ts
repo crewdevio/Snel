@@ -22,23 +22,36 @@ export async function RollupBuild({
   entryFile = "./src/main.js",
   generate = "dom",
   plugins = [],
+  production = false,
 }: RollupBuildProps) {
   const base = toFileUrl(Deno.cwd()).href;
 
   generate = generate === "ssg" || generate === "ssr" ? "ssr" : "dom";
 
+  const defaults = production
+    ? [
+        ImportMapPlugin({
+          maps: "./import_map.json",
+        }),
+        ...plugins,
+        (await DevServer())!,
+        Svelte({ generate }),
+        postcss(),
+        terser(),
+      ]
+    : [
+        ImportMapPlugin({
+          maps: "./import_map.json",
+        }),
+        ...plugins,
+        (await DevServer())!,
+        Svelte({ generate }),
+        postcss(),
+      ];
+
   const options = {
     input: new URL(entryFile, `${base}/`).href,
-    plugins: [
-      ImportMapPlugin({
-        maps: "./import_map.json",
-      }),
-      ...plugins,
-      (await DevServer())!,
-      Svelte({ generate }),
-      postcss(),
-      terser(),
-    ],
+    plugins: [...defaults],
     output: {
       dir,
       format: "es" as const,

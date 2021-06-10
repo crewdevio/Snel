@@ -23,6 +23,7 @@ export default async function Build() {
     await RollupBuild({
       dir: common.dom.dir,
       entryFile: common.entryFile,
+      production: true,
       generate: mode,
       plugins,
     });
@@ -34,6 +35,7 @@ export default async function Build() {
     await RollupBuild({
       dir: common.ssg.dir,
       entryFile: common.entryFile,
+      production: true,
       generate: mode,
       plugins,
     });

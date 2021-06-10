@@ -111,4 +111,5 @@ export interface RollupBuildProps {
   entryFile?: string;
   generate?: "dom" | "ssg" | "ssr";
   plugins?: Plugin[];
+  production?: boolean;
 }

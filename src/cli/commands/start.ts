@@ -32,8 +32,9 @@ export default async function StartDev() {
     : "";
 
   await RollupBuild({
-    dir: outDir,
     entryFile: common.entryFile,
+    production: false,
+    dir: outDir,
     generate: mode,
     plugins,
   });
@@ -77,8 +78,9 @@ export default async function StartDev() {
     // hot reloading
     await HotReload(toWatch, (port + 1), async () => {
       await RollupBuild({
-        dir: outDir,
         entryFile: common.entryFile,
+        production: false,
+        dir: outDir,
         generate: mode,
         plugins,
       });

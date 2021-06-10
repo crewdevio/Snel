@@ -163,9 +163,10 @@ export async function DevServer({
     });
 
     await RollupBuild({
-      dir: outDir,
       entryFile: entryFile,
+      production: false,
       generate: mode,
+      dir: outDir,
       plugins,
     });
 
