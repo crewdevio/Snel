@@ -1,1 +1,1 @@
-export * from "https://deno.land/x/drollup@2.50.5+0.18.1/mod.ts";
+export * from "https://deno.land/x/drollup@2.50.5+0.18.2/mod.ts";

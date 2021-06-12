@@ -11,7 +11,7 @@ import type { snelConfig } from "../shared/types.ts";
 import server from "../dev_server/server.ts";
 
 export { postcss } from "https://deno.land/x/drollup@2.50.5+0.18.2/plugins/postcss/mod.ts";
-export { terser } from "https://deno.land/x/drollup@2.50.5+0.18.1/plugins/terser/mod.ts";
+export { terser } from "https://deno.land/x/drollup@2.50.5+0.18.2/plugins/terser/mod.ts";
 export { default as Svelte } from "./bundler.js";
 export * from "./import_map.ts";
 
