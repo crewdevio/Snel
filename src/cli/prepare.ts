@@ -14,7 +14,7 @@ import { Bundler } from "../../imports/bundler.ts";
 import { HTMLMinify } from "../shared/utils.ts";
 
 const hotReloadPattern =
-  /<script\s*role="hot-reload"\s*>([\s\S]*?)<\/script>/gm;
+  /<script\s*src="\/__SNEL__HOT__RELOADING.js"\s*>([\s\S]*?)<\/script>/gm;
 const commetPattern = /<!--([\s\S]*?)-->/gm;
 
 function preprocess(source: string) {

@@ -5,6 +5,7 @@ import type { MimeTypeMap } from "https://deno.land/x/mimetypes@v1.0.0/src/mime.
 import { normalize, resolve } from "../../imports/path.ts";
 import type { HTTPSOptions } from "../../imports/http.ts";
 import type { Plugin } from "../../imports/drollup.ts";
+import HotClient from "./hotReloadingClient.js";
 
 export interface ServeOptions<T = unknown> {
   contentBase: Array<string>;
@@ -89,6 +90,20 @@ class BuildServer {
     const response: Response = {
       headers: new Headers(this.options.headers),
     };
+
+    // return snel hot reloading script
+    if (req.method === "GET" && req.url === "/__SNEL__HOT__RELOADING.js") {
+      const headers = new Headers();
+      headers.set("Content-Type", "application/javascript");
+
+      const response: Response = {
+        body: `(${HotClient.toString()})()`,
+        headers,
+      }
+
+      return req.respond(response);
+    }
+
     // Remove querystring
     const unsafePath = decodeURI(req.url.split("?").shift()!);
     // Don't allow path traversal
