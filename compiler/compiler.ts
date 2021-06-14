@@ -18,7 +18,23 @@ import {
 import type { compileOptions, compileOut, PreprocessorGroup } from "./types.ts";
 
 export function compile(source: string, options: compileOptions) {
-  return svelteCompile(source, options) as compileOut;
+  try {
+    return svelteCompile(source, options) as compileOut;
+  } catch (error: any) {
+    // throw error data
+    const { name, start, end, pos, filename, frame, stack, message } = error;
+
+    throw {
+        message,
+        stack,
+        file: filename,
+        errorName: name,
+        start,
+        end,
+        pos,
+        frame,
+      }
+  }
 }
 
 export function preprocess(

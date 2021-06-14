@@ -1,1 +1,1 @@
-export * from "https://deno.land/x/drollup@2.42.3+0.17.1/src/rollup-plugin-deno-resolver/resolveId.ts";
+export * from "https://deno.land/x/drollup@2.50.5+0.18.2/src/rollup-plugin-deno-resolver/resolveId.ts";

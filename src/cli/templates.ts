@@ -6,25 +6,22 @@
  *
  */
 
-import { clientConnection } from "../dev-server/hotReloading.ts";
-import { getIP } from "../../shared/utils.ts";
-
-export const indexHtml = async (
-  script: string,
-  port: number
-) => `<!DOCTYPE html>
+export const indexHtml = async (script: string) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="/global.css" />
     <link rel="icon" type="image/png" href="https://svelte.dev/favicon.png">
+    <!-- hot reloading utils -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>
     <title>Svelte app</title>
   </head>
   <body>
     <script src="${script}"></script>
     <!-- injected by snel don't remove it -->
-${clientConnection(port, await getIP())}
+    <script src="/__SNEL__HOT__RELOADING.js"></script>
   </body>
 </html>
 `;
@@ -244,10 +241,20 @@ export const gitIgnore = (dir: string) =>
 .DS_Store
 /${dir}`;
 
-export const mainjs = (root: string) => `import ${root} from "./${root}.svelte";
+export const mainjs = (
+  root: string,
+  mode: "dom" | "ssr" | "ssg"
+) => `import ${root} from "./${root}.svelte";
 
-const ${root.toLowerCase()} = new ${root}({
+${
+  mode === "dom"
+    ? `const ${root.toLowerCase()} = new ${root}({
   target: document.body,
   props: {},
 });
+`
+    : `export default ${root};`
+}
 `;
+
+export const config = (object: string) => `export default ${object};\n`;

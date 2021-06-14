@@ -2,36 +2,6 @@
 
 > Lower level utilities for compiling svelte components to javascript.
 
-you can also install the compiler as a cli
-
-```console
-deno install -A --unstable ./svlc.ts
-```
-
-or create a standalone executable
-
-```
-deno compile -A --unstable ./svlc.ts
-```
-
-and use:
-
-```console
-svlc ./App.svelte
-```
-
-run example:
-
-```console
-cd ./example && svlc ./App.svelte
-```
-
-there will be the `index.html` file in your browser
-
-## Build Notes
-
-`compiler.js` is the complete compiler of svelte which exposes all the api to create the compilation to javascript.
-
 ### compiler
 
 This is where the magic happens. svelte.compile takes your component source code, and turns it into a JavaScript module that exports a class.
@@ -62,4 +32,4 @@ import { parse } from "./compiler.ts";
 const ast = parse(source, { filename: "App.svelte" });
 ```
 
-# more information about the compiler api [here](https://svelte.dev/docs#Compile_time)
+> more information about the compiler api [here](https://svelte.dev/docs#Compile_time)

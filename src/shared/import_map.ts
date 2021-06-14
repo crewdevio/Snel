@@ -1,4 +1,12 @@
 /**
+ * Copyright (c) Crew Dev.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+/**
  * Derived from <https://github.com/trygve-lie/rollup-plugin-import-map>
  *
  * Licensed as follows:
@@ -26,9 +34,17 @@
  * SOFTWARE.
  */
 
-import { dirname, fromFileUrl, normalize, relative } from "../../imports/path.ts";
+import {
+  dirname,
+  fromFileUrl,
+  normalize,
+  relative,
+  toFileUrl,
+  join,
+} from "../../imports/path.ts";
 import type { NormalizedInputOptions, Plugin } from "../../imports/drollup.ts";
 import { ensureArray } from "./imports/ensureArray.ts";
+import { VERSION, URL_SVELTE_CDN } from "./version.ts";
 import { resolveId } from "./imports/resolveId.ts";
 import { exists } from "../../imports/fs.ts";
 
@@ -153,8 +169,18 @@ const readFile = async (
   baseUrl?: string
 ) => {
   const defaultImports = {
+    snel: `https://deno.land/x/snel@v${VERSION}/mod.ts`,
+    "snel/": `https://deno.land/x/snel@v${VERSION}/`,
+    "snel/core/": `https://deno.land/x/snel@v${VERSION}/core/`,
+    "svelte-routing/": `https://deno.land/x/snel@v${VERSION}/core/router/`,
+    "svelte-routing": `https://deno.land/x/snel@v${VERSION}/core/router/mod.ts`,
+    "snel/utils/": `https://deno.land/x/snel@v${VERSION}/core/utils/`,
+    "snel/utils": `https://deno.land/x/snel@v${VERSION}/core/utils/mod.ts`,
+    svelte: URL_SVELTE_CDN,
+    "svelte/": `${URL_SVELTE_CDN}/`,
     "@/": "./",
-    "/": "./",
+    "~/": `${toFileUrl(join(Deno.cwd(), "src")).href}/`,
+    "$/": `${toFileUrl(Deno.cwd()).href}/`,
   };
 
   const importMapPath = normalize(path);

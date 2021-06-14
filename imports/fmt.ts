@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/crewdevio/Trex@proxy/proxy/files/fmt.ts";
+export *  as colors from "https://deno.land/std@0.98.0/fmt/colors.ts";

@@ -6,159 +6,129 @@
  *
  */
 
-import { PromptConfig, notFoundConfig, serverLog } from "./src/cli/prompt.ts";
-import { flags, keyWords, open, getIP, showHelp } from "./shared/utils.ts";
+import { common, resolverConfigFile, showHelp } from "./src/shared/utils.ts";
+import { CommandNotFound, HelpCommand } from "./src/shared/log.ts";
+import { notFoundConfig, PromptConfig } from "./src/cli/prompt.ts";
 import { VERSION as svelteVersion } from "./compiler/compiler.ts";
 import { VERSION as cliVersion } from "./src/shared/version.ts";
-import { HelpCommand, CommandNotFound } from "./shared/log.ts";
-import { HotReload } from "./src/dev-server/hotReloading.ts";
-import type { snelConfig } from "./src/shared/types.ts";
+import { flags, keyWords } from "./src/shared/utils.ts";
 import { CreateProject } from "./src/cli/create.ts";
-import { prepareDist } from "./src/cli/prepare.ts";
+import StartDev from "./src/cli/commands/start.ts";
 import { RollupBuild } from "./compiler/build.ts";
-import server from "./src/dev-server/server.ts";
-import { readJson } from "./imports/jsonio.ts";
-import { resolve } from "./imports/path.ts";
+import Build from "./src/cli/commands/build.ts";
 import { colors } from "./imports/fmt.ts";
-import { exists } from "./imports/fs.ts";
+
+const { args: Args } = Deno;
+type Command = "create" | "serve" | "dev" | "build";
+const command = Args[0] as Command;
+
+const instructs = {
+  // create a template project
+  async create() {
+    if (flags.help.includes(Args[1])) {
+      return HelpCommand({
+        command: {
+          alias: [keyWords.create],
+          description: "create a template project",
+        },
+        flags: [{ alias: flags.help, description: "show command help" }],
+      });
+    }
+
+    else await CreateProject({ ...PromptConfig(), projectName: Args[1] });
+  },
+  // compile an bundle for production
+  async build() {
+    if (flags.help.includes(Args[1])) {
+      return HelpCommand({
+        command: {
+          alias: [keyWords.build],
+          description: "build application for production",
+        },
+        flags: [{ alias: flags.help, description: "show command help" }],
+      });
+    }
+
+    else if (await resolverConfigFile()) await Build();
+
+    else notFoundConfig();
+  },
+  // compile in dev mode
+  async dev() {
+    if (flags.help.includes(Args[1])) {
+      return HelpCommand({
+        command: {
+          alias: [keyWords.build],
+          description: "build application in dev mode",
+        },
+        flags: [{ alias: flags.help, description: "show command help" }],
+      });
+    }
+
+    else if (await resolverConfigFile()) {
+      console.time(colors.green("Compiled successfully in"));
+      await RollupBuild({ dir: common.dom.dir, entryFile: common.entryFile });
+      console.timeEnd(colors.green("Compiled successfully in"));
+    }
+
+    else notFoundConfig();
+  },
+  // start dev server
+  async serve() {
+    if (flags.help.includes(Args[1])) {
+      return HelpCommand({
+        command: {
+          alias: [keyWords.serve],
+          description: "build and server in a dev server",
+        },
+        flags: [{ alias: flags.help, description: "show command help" }],
+      });
+    }
+
+    else if (await resolverConfigFile()) await StartDev();
+
+    else notFoundConfig();
+  },
+};
 
 async function Main() {
-  const { args } = Deno;
   try {
-    // create a template project
-    if (args[0] === keyWords.create) {
-      if (flags.help.includes(args[1])) {
-        return HelpCommand({
-          command: {
-            alias: [`${keyWords.create} App`],
-            description: "create a template project",
-          },
-          flags: [{ alias: flags.help, description: "show command help" }],
-        });
-      }
-
-      else {
-        await CreateProject({ ...PromptConfig(), projectName: Deno.args[1] });
-      }
+    // execute instructions
+    if (instructs[command]) {
+      return await instructs[command]();
     }
-    // compile an bundle for production
-    else if (args[0] === keyWords.build) {
-      if (flags.help.includes(args[1])) {
-        return HelpCommand({
-          command: {
-            alias: [keyWords.build],
-            description: "build application for production",
-          },
-          flags: [{ alias: flags.help, description: "show command help" }],
-        });
-      }
 
-      else if (await exists(resolve("snel.config.json"))) {
-        const { root } = (await readJson("./snel.config.json")) as snelConfig;
-        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
-        await prepareDist(root);
-      }
-
-      else {
-        notFoundConfig();
-      }
-    }
-    // compile in dev mode
-    else if (args[0] === keyWords.dev) {
-      if (flags.help.includes(args[1])) {
-        return HelpCommand({
-          command: {
-            alias: [keyWords.build],
-            description: "build application in dev mode",
-          },
-          flags: [{ alias: flags.help, description: "show command help" }],
-        });
-      }
-
-      else if (await exists(resolve("snel.config.json"))) {
-        console.time(colors.green("Compiled successfully in"));
-        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
-        console.timeEnd(colors.green("Compiled successfully in"));
-      }
-
-      else {
-        notFoundConfig();
-      }
-    }
-    // start dev server
-    else if (args[0] === keyWords.serve) {
-      if (flags.help.includes(args[1])) {
-        return HelpCommand({
-          command: {
-            alias: [keyWords.serve],
-            description: "build and server in a dev server",
-          },
-          flags: [{ alias: flags.help, description: "show command help" }],
-        });
-      }
-
-      else if (await exists(resolve("snel.config.json"))) {
-        const { port } = (await readJson("./snel.config.json")) as snelConfig;
-
-        console.log(colors.bold(colors.cyan("starting development server.")));
-
-        await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
-
-        const ipv4 = await getIP();
-
-        const dirName = Deno.cwd()
-        .split(Deno.build.os === "windows" ? "\\" : "/")
-        .pop()!;
-
-        // run dev server in localhost and net work
-        server(parseInt(port), "./public", true);
-
-        const localNet =
-            ipv4
-              ? `${colors.bold(
-                  "On Your Network:"
-                )}  http://${ipv4}:${colors.bold(port)}`
-              : "";
-
-        // server logs
-        serverLog({ port, dirName, localNet });
-        // open in browser
-        setTimeout(async () => await open(`http://localhost:${port}`), 500);
-        // hot reloading
-        await HotReload("./src", parseInt(port) + 1, async () => {
-          await RollupBuild({ dir: "./public/dist", entryFile: "./src/main.js" });
-        });
-      }
-
-      else {
-        notFoundConfig();
-      }
-    }
     // show version
-    else if (flags.version.includes(args[0])) {
+    if (flags.version.includes(Args[0])) {
       console.log(
         colors.green(
-          `snel: ${colors.yellow(cliVersion)}\nsvelte: ${colors.yellow(
-            svelteVersion
-          )}`
-        )
+          `snel: ${colors.yellow(cliVersion)}\nsvelte: ${
+            colors.yellow(
+              svelteVersion,
+            )
+          }\ndeno: ${colors.yellow(Deno.version.deno)}`,
+        ),
       );
     }
     // show help
-    else if (flags.help.includes(args[0])) {
+    else if (flags.help.includes(Args[0]) || !Args[0]) {
       showHelp();
     }
 
     else {
       CommandNotFound({
-        commands: [keyWords.build, keyWords.create, keyWords.dev, keyWords.serve],
+        commands: [
+          keyWords.build,
+          keyWords.create,
+          keyWords.dev,
+          keyWords.serve,
+        ],
         flags: [...flags.help, ...flags.version],
       });
     }
   } catch (error: any) {
     if (!(error instanceof Deno.errors.NotFound)) {
-      console.log(colors.red(error?.message));
-      console.log(error.stack);
+      console.log(error);
     }
   }
 }

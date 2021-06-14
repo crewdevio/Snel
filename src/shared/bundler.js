@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) Crew Dev.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
 import { compile, preprocess } from "../../compiler/compiler.ts";
 import { compile as scssCompiler } from "../../imports/scss.ts";
 import { createFilter } from "../../imports/drollup-util.ts";
@@ -74,11 +82,10 @@ export default (options = {}) => {
         {
           async script({ content, attributes, filename }) {
             let code = content;
-            let isTs = false;
-            // transpile to javascript
-            if (attributes?.lang === "ts") isTs = true;
+            let isTs = attributes?.lang === "ts";
 
             return {
+              // transpile to javascript
               code: isTs ? await tsTranspiler(code, filename) : code,
             };
           },
@@ -123,10 +130,11 @@ export default (options = {}) => {
       const compiled = compile(code, {
         filename: filename,
         generate: options?.generate ?? "dom",
-        dev: true,
+        dev: options?.dev ?? false,
         sveltePath: URL_SVELTE_CDN,
         hydratable: true,
         preserveComments: false,
+        preserveWhitespace: false,
       });
 
       if (this.addWatchFile) {

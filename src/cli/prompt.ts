@@ -6,46 +6,80 @@
  *
  */
 
-import { colors } from "../../imports/fmt.ts";
 import type { CreateProjectOptions } from "../shared/types.ts";
+import { colors } from "../../imports/fmt.ts";
 
-export function PromptConfig(): Omit<CreateProjectOptions, "projectName"> {
-  const answers: { [key: string]: string } = {};
+const isNumber = (n: string) => parseInt(n);
+
+function validate(
+  fields: string[],
+  field: string,
+  question: string,
+  type: "number" | "string"
+): string | number {
+
+  if (type === "number" && isNumber(field)) return parseInt(field);
+
+  else if (fields.includes(field)) return field.trim().toLowerCase();
+
+  else {
+    console.log(
+      type === "string"
+        ? colors.red(`\nthis field is no valid, these are valid "${fields.join(", ")}"\n`)
+        : colors.red("\nis not a valid number\n")
+    );
+
+    return validate(fields, prompt(colors.green(question))!, question, type);
+  }
+}
+
+export function PromptConfig(count = 0): Omit<CreateProjectOptions, "projectName"> {
+  const answers: { [key: string]: string | number } = {};
 
   const questions = [
     {
       name: "root",
       message: "what do you want the main component file to be called?",
-      default: "App",
+      _default: "App",
     },
     {
       name: "port",
       message: "which port do you want the development server to run on?",
-      default: "3000",
+      _default: "3000",
     },
+    {
+      name: "mode",
+      message: "What kind of project do you want to do? (ssg, dom)",
+      _default: "dom"
+    }
   ];
 
-  for (const question of questions) {
-    answers[question.name] = prompt(
-      colors.green(question.message),
-      question.default
-    )!;
+  for (const { message, name, _default } of questions) {
+    switch (name) {
+      case "root":
+        answers[name] = prompt(colors.green(message), _default)!;
+        break;
+      case "port":
+        answers[name] = validate([], prompt(colors.green(message), _default)!, message, "number");
+        break;
+      case "mode":
+        answers[name] = validate(["dom", "ssg"], prompt(colors.green(message), _default)!, message, "string");
+        break;
+    }
   }
 
-  for (const answer in answers) {
-    console.log(colors.green(`\n${answer}: ${answers[answer]}`));
-  }
+  for (const answer in answers) console.log(colors.green(`\n${answer}: ${answers[answer]}`));
 
-  if (confirm(colors.yellow("\nthis is the final configuration"))) {
-    return answers as Omit<CreateProjectOptions, "projectName">;
-  } else {
-    return PromptConfig();
-  }
+  const accept = confirm(colors.yellow("\nthis is the final configuration"));
+
+  if (accept) return answers as Omit<CreateProjectOptions, "projectName">;
+
+  return count <= 1 ? PromptConfig(count + 1) : Deno.exit(0);
 }
 
 export function notFoundConfig() {
   throw new Error(
-    colors.red(`${colors.yellow("snel.config.json")} file could not be found`)
+    colors.red(`${colors.yellow("snel config")} file could not be found`)
   ).message;
 }
 
@@ -56,7 +90,7 @@ export function serverLog({ dirName, port, localNet }: any) {
 
   You can now view ${colors.bold(colors.yellow(dirName))} in the browser.
 
-      ${colors.bold("Local:")}            http://localhost:${colors.bold(port)}
+      ${colors.bold("Local:")}            http://localhost:${colors.bold(port.toString())}
       ${localNet}
 
   Note that the development build is not optimized.

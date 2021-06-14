@@ -19,11 +19,9 @@
      <img alt="GitHub license" src="https://img.shields.io/github/license/crewdevio/Snel">
    </a>
    <a href="https://deno.land">
-     <img src="https://img.shields.io/badge/deno-%5E1.7.0-green?logo=deno"/>
+     <img src="https://img.shields.io/badge/deno-%5E1.9.0-green?logo=deno"/>
    </a>
 </p>
-
-#
 
 ## What is Snel?
 
@@ -36,9 +34,9 @@ It is a `tool/framework` to compile .svelte component to javascript files to cre
 - hot reloading
 - [import maps](https://github.com/WICG/import-maps) support
 - support for scss and less out of the box
-- support for typescript and sass out of the box (soon)
+- support for typescript
+- [SSG](docs/ssg.md) (experimental)
 - SSR (soon)
-- SSG (soon)
 
 ## What do I need to start using Snel?
 
@@ -56,6 +54,26 @@ Snel uses several tools to create a better development experience, some of these
 - [**bundler**](https://deno.land/x/bundler) minify and package all files for production
 
 the [install.ts](https://github.com/crewdevio/Snel/blob/main/install.ts) file is responsible for installing all these tools so that you only worry about creating your application.
+
+if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
+
+```console
+trex exec snel create [project name]
+```
+
+> **note**: if you decide use snel using trex exec you need to change this scripts inside run.json file
+
+```javascript
+{
+  "scripts": {
+    "start": "trex exec snel serve",
+    "build": "trex exec snel build"
+  },
+  "files": [
+    "./src"
+  ]
+}
+```
 
 ## how to create a project with Snel?
 
@@ -87,24 +105,6 @@ import { onMount } from "svelte";
 
 `svelte` tells the compiler that svelte core resources are being accessed.
 
-## Using svlc/svelte compiler
-
-Snel uses the svelte compiler to transform the components to javacript, if you just want to use the compiler separately, we provide a compiler wrapper within a simple cli that you can install using deno install or transform it to an executable using deno compile.
-
-`install compiler`
-
-```
-deno install -A --unstable https://deno.land/x/snel/compiler/svlc.ts
-```
-
-`transform to executable`
-
-```
-deno compile -A --unstable https://deno.land/x/snel/compiler/svlc.ts
-```
-
-If you are interested in using the low-level compiler tools, you only have to access the [compiler.ts](https://github.com/crewdevio/Snel/blob/main/compiler/compiler.ts) file, which is a bridge between the svelte compiler (already transformed to javascript see [core.js](https://github.com/crewdevio/Snel/blob/main/compiler/core.js)) which provides typing and useful interfaces when using the compiler core.
-
 ## Using import maps
 
 You can use import maps to reference the dependencies you use, to use import maps from bes have an `import_map.json` file with the following structure:
@@ -124,9 +124,9 @@ import moment from "moment";
 import axios from "axios";
 ```
 
-> **note** you can use import maps inside svelte components
+> **note**: you can use import maps inside svelte components
 
-### Manage import maps dependencies via [trex](https://github.com/crewdevio/Trex)
+### Manage import maps dependencies using [trex](https://github.com/crewdevio/Trex)
 
 if you don't have an import map.json file you can create it using the `trex install` command, trex is mainly focused on handling dependencies for `deno` but this doesn't prevent you from being able to use it to handle your dependencies for `snel/svelte`. to install any dependency you just have to use the [custom command](https://github.com/crewdevio/Trex#adding-custom-packages) from trex:
 
@@ -151,6 +151,139 @@ we recommend these sites for you to install your dependencies
 - [skypack.dev](https://www.skypack.dev/)
 - [esm.sh](https://esm.sh/)
 - [jsdelivr.com](https://www.jsdelivr.com/)
+
+## Typescript, Sass and Less support
+
+snel supports typescript out the box, so you can import typescript files into `.svelte` components without specifying the use of typescript within the component.
+
+`App.svelte`
+
+```html
+<script>
+  import { PI } from "./pi.ts";
+</script>
+
+<h1>PI is = {PI}</h1>
+
+<style>
+  h1 {
+    color: #ff3e00;
+  }
+</style>
+```
+
+`pi.ts`
+
+```typescript
+export const PI: number = Math.PI;
+```
+
+Something important to know is that if you are going to import from typescript files without specifying the use of typescript within the component, you can only import non-types elements, example:
+
+- types
+- interfaces
+
+in case you want to use the typescript inside the components, you just have to specify it in the `lang` attribute:
+
+```html
+<script lang="ts">
+  import { PI } from "./pi.ts";
+
+  const message: string = "hello world";
+
+  interface User {
+    name: string;
+    passworld: string;
+  }
+
+  let user: User = { name: "jhon", passworld: "1234" };
+</script>
+```
+
+to import types and interfaces into components these must be specified using the following syntax:
+
+```html
+<script lang="ts">
+  import type { .... } from "./types.ts";
+</script>
+```
+
+and you should only import types using this syntax and not combine imports with other elements.
+
+```html
+<script lang="ts">
+  // bad
+  import type { UserInterface, myFunction } from "./user.ts";
+
+  // good
+  import type { UserInterface } from "./user.ts";
+  import { myFunction } from "./user.ts";
+</script>
+```
+
+> **note**: typescript support within components is not stable and compilation errors in hot reloading may appear.
+
+in the same way you can use the syntax of sass and less inside the components to define the styles.
+
+```html
+<style lang="scss">
+  /* .... */
+</style>
+
+<!-- or -->
+
+<style lang="less">
+  /* .... */
+</style>
+```
+
+> **note**: for now importing external styles is not available for css, sass and less.
+
+## Import components and files
+
+when you create a project with snel you will notice that the components are imported as follows:
+
+`example`
+
+```javascript
+// App.svelte
+import Home from "@/components/Home.svelte";
+```
+
+`@/` It is equivalent to `./`, Similarly, if you need to access any component or file that is inside the src folder, you can use the following syntax:
+
+`example`
+
+```javascript
+// src/Users.ts
+export default class Users {
+  ...
+}
+```
+
+```javascript
+// src/components/views/content/User.svelte
+import Users from "~/Users.ts";
+```
+
+this would be equivalent to:
+
+```javascript
+import Users from "../../../Users.ts";
+```
+
+summary:
+
+- `@/`
+  - equivalent to `./`
+- `~/`
+  - equivalent to `[current work directory]/src/`
+- `$/`
+  - equivalent to `[current work directory]/`
+
+this syntax can be used in javascript, typescript files and components.
+
+> **note**: you can change the behavior by rewriting the pattern inside the import_map.json file, although be careful when doing this.
 
 ## Hot Reloading
 

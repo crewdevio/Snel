@@ -6,6 +6,8 @@
  *
  */
 
+import type { Plugin } from "../imports/drollup.ts";
+
 export interface compileOptions {
   filename?: string;
   name?: string;
@@ -33,6 +35,7 @@ interface Map {
   sources: string[];
   sourcesContent: string[];
   mappings: string;
+  toUrl(): string;
 }
 
 interface Vars {
@@ -97,17 +100,16 @@ export interface PreprocessorGroup {
   script?: Preprocessor;
 }
 
-export interface BuildOptions {
-  isRoot?: boolean;
-  outDir?: string;
-  dev?: boolean;
-  dist?: boolean;
-  fileOutPut?: string;
-  generate?: "dom" | "ssr";
-}
-
-export interface PreprocessorFunctionProps {
+export interface PreprocessorProps {
   content: string;
   attributes: Record<string, string | boolean>;
   filename?: string;
+}
+
+export interface RollupBuildProps {
+  dir?: string;
+  entryFile?: string;
+  generate?: "dom" | "ssg" | "ssr";
+  plugins?: Plugin[];
+  production?: boolean;
 }

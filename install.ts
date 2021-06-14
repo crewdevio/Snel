@@ -6,12 +6,14 @@
  *
  */
 
-const install = async (name: string, url: string) => {
+const install = async (name: string, url: string, importmap?: boolean) => {
   const process = Deno.run({
     cmd: [
-      ...`${Deno.execPath()} install -A -f -r --no-check --unstable -n ${name} ${url}`.split(
-        " "
-      ),
+      ...`${Deno.execPath()} install -A -f -r --no-check${
+        importmap
+          ? ` --import-map=https://deno.land/x/trex/import_map.json`
+          : ""
+      } --unstable -n ${name} ${url}`.split(" "),
     ],
   });
 
@@ -19,18 +21,16 @@ const install = async (name: string, url: string) => {
 };
 
 async function Main() {
-  try {
-    await install("snel", "https://deno.land/x/snel/cli.ts");
-    await install("trex", "https://deno.land/x/trex/cli.ts");
-    await install("bundler", "https://deno.land/x/bundler@0.6.2/cli.ts");
-  } catch (error: any) {
-    console.log(error?.message);
-    console.log(error?.stack);
-  }
+  await install("snel", "https://deno.land/x/snel/cli.ts");
+  await install("trex", "https://deno.land/x/trex/cli.ts", true);
 }
 
 if (import.meta.main) {
-  await Main();
-  console.clear();
-  console.log("installation complete");
+  Main()
+    .then(() => {
+      console.log("installation complete.");
+    })
+    .catch((error: any) => {
+      console.log(error);
+    });
 }
