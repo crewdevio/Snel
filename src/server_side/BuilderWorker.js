@@ -1,4 +1,5 @@
 import { clientConnection } from "../dev_server/hotReloading.ts";
+import ClientHot from "../dev_server/hotReloadingClient.js";
 import { join, toFileUrl } from "../../imports/path.ts";
 import { VERSION } from "../shared/version.ts";
 import { Application } from "./imports/oak.ts";
@@ -20,11 +21,19 @@ self.onmessage = async (event) => {
         if (request.method === "GET") {
           if (request.url.pathname === "/Snel/client" && clientPath) {
             response.headers.set("content-type", "application/javascript");
+            response.status = 200;
 
             const client = new TextDecoder("utf-8").decode(
               await Deno.readFile(join(Deno.cwd(), clientPath))
             );
 
+            response.body = client;
+          } if (request.url.pathname === "/__SNEL__HOT__RELOADING.js") {
+            response.headers.set("content-type", "application/javascript");
+
+            const client = `(${ClientHot.toString()})();`
+
+            response.status = 200;
             response.body = client;
           } else {
             response.headers.set("content-type", "text/html");
