@@ -2,7 +2,6 @@ import { clientConnection } from "../dev_server/hotReloading.ts";
 import { join, toFileUrl } from "../../imports/path.ts";
 import { VERSION } from "../shared/version.ts";
 import { Application } from "./imports/oak.ts";
-import { getIP } from "../shared/utils.ts";
 import { htmlBody } from "./templates.ts";
 
 self.onmessage = async (event) => {
@@ -78,7 +77,7 @@ self.onmessage = async (event) => {
                 head,
                 css: css.code,
                 client: mode === "ssr" ? "Snel/client" : null,
-                hotReloading: clientConnection(port + 1, await getIP()),
+                hotReloading: clientConnection(),
               });
             }
           }

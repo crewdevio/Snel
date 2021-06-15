@@ -8,7 +8,6 @@
 
 import { Server, Packet } from "../../imports/wocket.ts";
 import { join } from "../../imports/path.ts";
-import Client from "./hotReloadingClient.js";
 
 export async function HotReload(
   toWatch: string | string[],
@@ -76,16 +75,6 @@ export async function HotReload(
   }
 }
 
-export function clientConnection(
-  port: number,
-  onNet: string | null | undefined
-) {
-  const code = Client.toString()
-    .replace("%port%", port.toString())
-    // TODO(buttercubz): fix private net issues
-    .replace("%onNet%", "localhost");
-
-  return `    <script role="hot-reload">
-      (${code})();
-    </script>`;
+export function clientConnection() {
+  return `    <script src="/__SNEL__HOT__RELOADING.js"></script>`;
 }
