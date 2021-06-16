@@ -55,7 +55,7 @@ Snel uses several tools to create a better development experience, some of these
 
 the [install.ts](https://github.com/crewdevio/Snel/blob/main/install.ts) file is responsible for installing all these tools so that you only worry about creating your application.
 
-if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
+<!-- if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
 
 ```console
 trex exec snel create [project name]
@@ -73,7 +73,7 @@ trex exec snel create [project name]
     "./src"
   ]
 }
-```
+``` -->
 
 ## how to create a project with Snel?
 
@@ -126,7 +126,44 @@ import axios from "axios";
 
 > **note**: you can use import maps inside svelte components
 
-### Manage import maps dependencies using [trex](https://github.com/crewdevio/Trex)
+## Snel config file
+
+snel uses a configuration file to define different things, like the development server port or add different plugins, this file can be named as `snel.config.js` or `snel.config.ts`.
+
+`example: snel.config.js`
+
+```javascript
+export default {
+  port: 3000, // development server port
+  mode: "dom", // type project "dom" | "ssg"
+  plugins: [], // plugins must be compatible with rollup deno
+  extendsImportMap: [
+    // extends import map using externas import maps
+    "https://denopkg.com/crewdevio/Snel-carbon@main/components.map.json",
+  ],
+};
+```
+
+config options:
+
+- port (number): port number for development server
+- mode (string): type project "dom" | "ssg"
+- plugins (Plugin[ ]): plugins must be compatible with [rollup deno](https://deno.land/x/drollup)
+- extendsImportMap (string[ ]): extends from externas import maps
+
+if you want to use `snel.config.ts` you can import `snelConfig` interface to provide type checking:
+
+`example: snel.config.ts`
+
+```typescript
+import type { snelConfig } from "https://deno.land/x/snel/mod.ts";
+
+export default <snelConfig>{
+  ...
+};
+```
+
+## Manage import maps dependencies using [trex](https://github.com/crewdevio/Trex)
 
 if you don't have an import map.json file you can create it using the `trex install` command, trex is mainly focused on handling dependencies for `deno` but this doesn't prevent you from being able to use it to handle your dependencies for `snel/svelte`. to install any dependency you just have to use the [custom command](https://github.com/crewdevio/Trex#adding-custom-packages) from trex:
 

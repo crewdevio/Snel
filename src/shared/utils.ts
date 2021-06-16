@@ -39,7 +39,6 @@ export async function getIP() {
       });
 
       const ip = new TextDecoder().decode(await process.output()).trim();
-      // process.close();
       Deno.close(process.rid);
 
       return ip.length ? ip : null;

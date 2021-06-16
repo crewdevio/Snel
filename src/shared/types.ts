@@ -35,4 +35,8 @@ export interface snelConfig extends Omit<CreateProjectOptions, "projectName"> {
    * ```
    */
   plugins: Plugin[];
+  /**
+   * load externals import maps
+   */
+  extendsImportMap?: string[];
 }
