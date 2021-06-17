@@ -48,7 +48,7 @@ export const ssgMain = `<script>
   const { MatchRoute } = Core;
 </script>
 
-{#if MatchRoute(Request?.PathName, "/")}
+{#if MatchRoute("/", Request?.PathName)}
   <Home name={"World"} />
 {:else}
   <main>
@@ -122,8 +122,8 @@ export const serverTemplate = (
   return `
 import { VERSION } from "https://deno.land/x/snel@v${VERSION}/src/shared/version.ts";
 import { htmlBody } from "https://deno.land/x/snel@v${VERSION}/src/server_side/templates.ts";
-import { join, toFileUrl } from "https://deno.land/std@0.98.0/path/mod.ts";
-import { Application } from "https://deno.land/x/oak@v7.4.0/mod.ts";
+import { join, toFileUrl } from "https://deno.land/std@0.99.0/path/mod.ts";
+import { Application } from "https://deno.land/x/oak@v7.5.0/mod.ts";
 
 ${source}
 
