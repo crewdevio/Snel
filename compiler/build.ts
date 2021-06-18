@@ -13,6 +13,7 @@ import {
   DevServer,
   postcss,
 } from "../src/shared/internal_plugins.ts";
+import type { RollupOptions, OutputOptions } from "../imports/drollup.ts";
 import type { RollupBuildProps } from "./types.ts";
 import { toFileUrl } from "../imports/path.ts";
 import { rollup } from "../imports/drollup.ts";
@@ -49,17 +50,17 @@ export async function RollupBuild({
         postcss(),
       ];
 
-  const options = {
+  const options: RollupOptions = {
     input: new URL(entryFile, `${base}/`).href,
     plugins: [...defaults],
     output: {
       dir,
       format: "es" as const,
-      sourcemap: true,
+      sourcemap: !production,
     },
   };
 
   const bundle = await rollup(options);
-  await bundle.write(options.output);
+  await bundle.write(options.output as OutputOptions);
   await bundle.close();
 }
