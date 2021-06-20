@@ -15,7 +15,7 @@ export { terser } from "https://deno.land/x/drollup@2.50.5+0.18.2/plugins/terser
 export { default as Svelte } from "./bundler.js";
 export * from "./import_map.ts";
 
-export async function DevServer() {
+export async function DevServer(ipv4?: string) {
   const { port, mode } = await loadConfig<snelConfig>(
     await resolverConfigFile()
   )!;
@@ -28,6 +28,7 @@ export async function DevServer() {
         host: "0.0.0.0",
         verbose: false,
         historyApiFallback: true,
+        ipv4,
       });
     } catch (error) {
       if (!(error instanceof Deno.errors.AddrInUse)) {

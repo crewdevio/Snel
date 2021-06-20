@@ -24,6 +24,7 @@ export async function RollupBuild({
   generate = "dom",
   plugins = [],
   production = false,
+  ipv4,
 }: RollupBuildProps) {
   const base = toFileUrl(Deno.cwd()).href;
 
@@ -35,7 +36,6 @@ export async function RollupBuild({
           maps: "./import_map.json",
         }),
         ...plugins,
-        (await DevServer())!,
         Svelte({ generate }),
         postcss(),
         terser(),
@@ -45,7 +45,7 @@ export async function RollupBuild({
           maps: "./import_map.json",
         }),
         ...plugins,
-        (await DevServer())!,
+        (await DevServer(ipv4))!,
         Svelte({ generate, dev: true }),
         postcss(),
       ];

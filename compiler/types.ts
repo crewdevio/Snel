@@ -112,4 +112,5 @@ export interface RollupBuildProps {
   generate?: "dom" | "ssg" | "ssr";
   plugins?: Plugin[];
   production?: boolean;
+  ipv4?: string;
 }

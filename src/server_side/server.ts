@@ -120,7 +120,8 @@ export async function DevServer({
   outDir,
   plugins,
   dirName,
-   localNet
+  localNet,
+  ipv4
 }: DevServerProps) {
 
   const compiler = new Worker(
@@ -144,7 +145,8 @@ export async function DevServer({
     port: Number(port),
     path,
     mode,
-    start: true
+    start: true,
+    ipv4
   });
 
   serverLog({ port, dirName, localNet });

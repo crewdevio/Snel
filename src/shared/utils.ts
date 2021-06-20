@@ -83,12 +83,16 @@ export async function getIP() {
 export async function ipv4(port: string | number) {
   const ipv4 = await getIP()!;
 
-  return ipv4?.split(" ").length === 1
-    ? `http://${ipv4}`
-    : ipv4
-        ?.split(" ")
-        .map((ip) => `http://${ip}:${port}`)
-        .join(" or ");
+  return {
+    str:
+      ipv4?.split(" ").length === 1
+        ? `http://${ipv4}`
+        : ipv4
+            ?.split(" ")
+            .map((ip) => `http://${ip}:${port}`)
+            .join(" or "),
+    ipv4,
+  };
 }
 
 export function showHelp() {
@@ -209,18 +213,18 @@ export async function resolverConfigFile(): Promise<string> {
   const js = await exists("./snel.config.js");
 
   if (js && ts) {
-    throw new Error(colors.red("you only can have one snel config file, snel.config.js or snel.config.ts")).message;
-  }
-
-  else if (js) {
+    throw new Error(
+      colors.red(
+        "you only can have one snel config file, snel.config.js or snel.config.ts"
+      )
+    ).message;
+  } else if (js) {
     return "./snel.config.js";
-  }
-
-  else if (ts) {
+  } else if (ts) {
     return "./snel.config.ts";
-  }
-
-  else {
-    throw new Error(colors.red("can't load snel config file, not found in the root project")).message;
+  } else {
+    throw new Error(
+      colors.red("can't load snel config file, not found in the root project")
+    ).message;
   }
 }

@@ -26,7 +26,7 @@ export default async function StartDev() {
     .split(Deno.build.os === "windows" ? "\\" : "/")
     .pop()!;
 
-  const ip = await ipv4(port);
+  const { str: ip, ipv4: ipV4 } = await ipv4(port);
   const localNet = ip
     ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port.toString())}`
     : "";
@@ -37,6 +37,7 @@ export default async function StartDev() {
     dir: outDir,
     generate: mode,
     plugins,
+    ipv4: ipV4!,
   });
 
   if (mode === "ssg" || mode === "ssr") {
@@ -51,6 +52,7 @@ export default async function StartDev() {
       plugins,
       dirName,
       localNet,
+      ipv4: ipV4!,
     });
   }
 
@@ -83,6 +85,7 @@ export default async function StartDev() {
         dir: outDir,
         generate: mode,
         plugins,
+        ipv4: ipV4!,
       });
     });
   }

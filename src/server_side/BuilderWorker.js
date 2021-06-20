@@ -6,7 +6,7 @@ import { Application } from "./imports/oak.ts";
 import { htmlBody } from "./templates.ts";
 
 self.onmessage = async (event) => {
-  const { port, clientPath, path, mode, start, end } = event.data;
+  const { port, clientPath, path, mode, start, end, ipv4 } = event.data;
 
   const serverSide = new Application();
   const controller = new AbortController();
@@ -31,7 +31,7 @@ self.onmessage = async (event) => {
           } if (request.url.pathname === "/__SNEL__HOT__RELOADING.js") {
             response.headers.set("content-type", "application/javascript");
 
-            const client = `(${ClientHot.toString()})();`
+            const client = `(${ClientHot.toString()})("${(ipv4) ?? "localhost" }");`
 
             response.status = 200;
             response.body = client;
