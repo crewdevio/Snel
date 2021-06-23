@@ -68,7 +68,7 @@ export async function HotReload(
         kind = eventKind;
       }
       // debounce recompile
-      setTimeout(() => (kind = ""), 3000);
+      setTimeout(() => (kind = ""), 1000);
     }
   }
 }
