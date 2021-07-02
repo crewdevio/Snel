@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "/": "./",
+    "dinoenv": "https://deno.land/x/dinoenv/mod.ts"
+  }
+}
