@@ -26,6 +26,7 @@ export async function HotReload(
   });
 
   let kind = "";
+  let cancellation = false;
   const events = ["remove", "modify"];
 
   for await (const { kind: eventKind } of Deno.watchFs(toWatch, { recursive: true })) {
@@ -46,22 +47,28 @@ export async function HotReload(
             frame,
           } = error;
 
-          // report Build Error
-          server.to(
-            "Reload",
-            JSON.stringify({
-              type: "BuildError",
-              message: message,
-              stack: stack,
-              file: file.replaceAll("\\", "/"),
-              filepath: join(Deno.cwd(), file),
-              code: frame,
-              errorName,
-              start,
-              end,
-              pos,
-            })
-          );
+          if (!cancellation) {
+            // report Build Error
+            server.to(
+              "Reload",
+              JSON.stringify({
+                type: "BuildError",
+                message: message,
+                stack: stack,
+                file: file.replaceAll("\\", "/"),
+                filepath: join(Deno.cwd(), file),
+                code: frame,
+                errorName,
+                start,
+                end,
+                pos,
+              })
+            );
+
+            // cancellation debounce
+            cancellation = true;
+            setTimeout(() => (cancellation = false), 1000);
+          }
           continue;
         }
         server.to("Reload", "reload");
