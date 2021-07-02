@@ -71,7 +71,7 @@ export default (__SNEL__HOST__) => {
             "background:transparent"
           );
         } else {
-          const { type, message, file, filepath, code, errorName, start } =
+          const { type, message, file, filepath, code, errorName, start, stack } =
             JSON.parse(JSON.parse(event.data).message);
 
           const styles = document.createElement("style");
@@ -82,6 +82,7 @@ export default (__SNEL__HOST__) => {
           document.head.appendChild(styles);
 
           console.error(code);
+          console.error(stack);
 
           document.body.innerHTML = `
               <div style="margin: 40px; margin-left: 70px;">
