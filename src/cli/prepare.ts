@@ -6,11 +6,10 @@
  *
  */
 
-import { createDefaultPlugins } from "../../imports/bundler_defaults.ts";
+import { Bundler, defaultPlugins } from "../../imports/bundler.ts";
 import { ensureFile, exists } from "../../imports/fs.ts";
 import { decoder, encoder } from "../shared/encoder.ts";
 import { join, basename } from "../../imports/path.ts";
-import { Bundler } from "../../imports/bundler.ts";
 import { HTMLMinify } from "../shared/utils.ts";
 
 const hotReloadPattern =
@@ -38,14 +37,14 @@ function preprocess(source: string) {
 }
 
 export async function Dist() {
-  const plugins = createDefaultPlugins();
+  const plugins = defaultPlugins();
   const bundler = new Bundler(plugins);
 
   if (!(await exists("./public/index.html"))) {
     throw new Error("index.html not found").message;
   }
 
-  const entryHtml = "./public/__index.html";
+  const entryHtml = "public/__index.html";
 
   const copy = decoder.decode(await Deno.readFile("./public/index.html"));
   const html = await Deno.create(entryHtml);
@@ -74,6 +73,11 @@ export async function Dist() {
         target: `="/${basename(output)}"`,
         replacer: `="./${basename(output)}"`,
       });
+    }
+
+    if (output.endsWith("index.html")) {
+      source = (source as string).replace(`<base href="/deps/">`, "");
+      source = (source as string).replaceAll(`defer=""`, "defer");
     }
 
     await ensureFile(output);

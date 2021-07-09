@@ -51,8 +51,9 @@ export default async function Build() {
 
     await ServerFile.write(encoder.encode(ServerCode));
     Deno.close(ServerFile.rid);
+
+    console.log(colors.green("build done."));
   }
 
-  console.log(colors.green("\nbuild done."));
   Deno.exit(0);
 }

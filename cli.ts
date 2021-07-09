@@ -99,7 +99,7 @@ async function Main() {
     }
 
     // show version
-    if (flags.version.includes(Args[0])) {
+    else if (flags.version.includes(Args[0])) {
       console.log(
         colors.green(
           `snel: ${colors.yellow(cliVersion)}\nsvelte: ${
