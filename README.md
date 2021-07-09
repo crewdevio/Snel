@@ -55,7 +55,7 @@ Snel uses several tools to create a better development experience, some of these
 
 the [install.ts](https://github.com/crewdevio/Snel/blob/main/install.ts) file is responsible for installing all these tools so that you only worry about creating your application.
 
-<!-- if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
+if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
 
 ```console
 trex exec snel create [project name]
@@ -73,7 +73,7 @@ trex exec snel create [project name]
     "./src"
   ]
 }
-``` -->
+```
 
 ## how to create a project with Snel?
 
