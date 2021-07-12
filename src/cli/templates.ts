@@ -20,7 +20,7 @@ export const indexHtml = async (script: string) => `<!DOCTYPE html>
   </head>
   <body>
     <div id="__snel"></div>
-    <script src="${script}"></script>
+    <script type="module" src="${script}"></script>
     <!-- injected by snel don't remove it -->
     <script src="/__SNEL__HOT__RELOADING.js"></script>
   </body>

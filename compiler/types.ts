@@ -6,7 +6,7 @@
  *
  */
 
-import type { Plugin } from "../imports/drollup.ts";
+import type { Plugin, RollupBuild } from "../imports/drollup.ts";
 
 export interface compileOptions {
   filename?: string;
@@ -113,4 +113,5 @@ export interface RollupBuildProps {
   plugins?: Plugin[];
   production?: boolean;
   ipv4?: string;
+  cache?: undefined | RollupBuild["cache"];
 }

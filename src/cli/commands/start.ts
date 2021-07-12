@@ -31,7 +31,7 @@ export default async function StartDev() {
     ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port.toString())}`
     : "";
 
-  await RollupBuild({
+  let build = await RollupBuild({
     entryFile: common.entryFile,
     production: false,
     dir: outDir,
@@ -79,13 +79,14 @@ export default async function StartDev() {
 
     // hot reloading
     await HotReload(toWatch, (port + 1), async () => {
-      await RollupBuild({
+      build = await RollupBuild({
         entryFile: common.entryFile,
+        cache: build.cache,
         production: false,
-        dir: outDir,
         generate: mode,
-        plugins,
+        dir: outDir,
         ipv4: ipV4!,
+        plugins,
       });
     });
   }

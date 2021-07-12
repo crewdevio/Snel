@@ -24,6 +24,7 @@ export async function RollupBuild({
   generate = "dom",
   plugins = [],
   production = false,
+  cache = undefined,
   ipv4,
 }: RollupBuildProps) {
   const base = toFileUrl(Deno.cwd()).href;
@@ -58,9 +59,12 @@ export async function RollupBuild({
       format: "es" as const,
       sourcemap: !production,
     },
+    cache,
   };
 
   const bundle = await rollup(options);
   await bundle.write(options.output as OutputOptions);
   await bundle.close();
+
+  return bundle;
 }
