@@ -46,7 +46,7 @@ export default (__SNEL__HOST__) => {
     const Reload = () => {
       const badge = document.querySelector("#msg");
       if (badge) badge.setAttribute("style", "margin-top: 30px;");
-      setTimeout(() => window.location.reload(), 50);
+      window.location.reload();
     };
 
     socket.addEventListener("message", (event) => {

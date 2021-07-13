@@ -69,6 +69,7 @@ const instructs = {
       console.time(colors.green("Compiled successfully in"));
       await RollupBuild({ dir: common.dom.dir, entryFile: common.entryFile });
       console.timeEnd(colors.green("Compiled successfully in"));
+      Deno.exit(0);
     }
 
     else notFoundConfig();

@@ -60,6 +60,7 @@ export async function RollupBuild({
       sourcemap: !production,
     },
     cache,
+    treeshake: production
   };
 
   const bundle = await rollup(options);
