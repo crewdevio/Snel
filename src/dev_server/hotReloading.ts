@@ -39,7 +39,7 @@ export async function HotReload(
           const {
             message,
             stack,
-            file,
+            file = "",
             errorName,
             start,
             end,

@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/buttercubz/Bundler/mod.ts";
+export * from "https://deno.land/x/bundler@0.8.1/mod.ts";

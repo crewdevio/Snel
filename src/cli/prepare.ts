@@ -70,8 +70,8 @@ export async function Dist() {
     // normalize path ./example to /example
     if (!output.endsWith(".html")) {
       transform.push({
-        target: `="/${basename(output)}"`,
-        replacer: `="./${basename(output)}"`,
+        target: `="./${basename(output)}"`,
+        replacer: `="/${basename(output)}"`,
       });
     }
 
