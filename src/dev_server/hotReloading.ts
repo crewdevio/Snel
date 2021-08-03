@@ -8,7 +8,6 @@
 
 import { Server, Packet } from "../../imports/wocket.ts";
 import { join } from "../../imports/path.ts";
-import Client from "./hotReloadingClient.js";
 
 export async function HotReload(
   toWatch: string | string[],
@@ -27,9 +26,8 @@ export async function HotReload(
   });
 
   let kind = "";
+  let cancellation = false;
   const events = ["remove", "modify"];
-  // execute action in the first load
-  await action();
 
   for await (const { kind: eventKind } of Deno.watchFs(toWatch, { recursive: true })) {
     if (events.includes(eventKind)) {
@@ -41,7 +39,7 @@ export async function HotReload(
           const {
             message,
             stack,
-            file,
+            file = "",
             errorName,
             start,
             end,
@@ -49,43 +47,39 @@ export async function HotReload(
             frame,
           } = error;
 
-          // report Build Error
-          server.to(
-            "Reload",
-            JSON.stringify({
-              type: "BuildError",
-              message: message,
-              stack: stack,
-              file: file.replaceAll("\\", "/"),
-              filepath: join(Deno.cwd(), file),
-              code: frame,
-              errorName,
-              start,
-              end,
-              pos,
-            })
-          );
+          if (!cancellation) {
+            // report Build Error
+            server.to(
+              "Reload",
+              JSON.stringify({
+                type: "BuildError",
+                message: message,
+                stack: stack,
+                file: file.replaceAll("\\", "/"),
+                filepath: join(Deno.cwd(), file),
+                code: frame,
+                errorName,
+                start,
+                end,
+                pos,
+              })
+            );
+
+            // cancellation debounce
+            cancellation = true;
+            setTimeout(() => (cancellation = false), 1000);
+          }
           continue;
         }
         server.to("Reload", "reload");
         kind = eventKind;
       }
       // debounce recompile
-      setTimeout(() => (kind = ""), 3000);
+      setTimeout(() => (kind = ""), 1000);
     }
   }
 }
 
-export function clientConnection(
-  port: number,
-  onNet: string | null | undefined
-) {
-  const code = Client.toString()
-    .replace("%port%", port.toString())
-    // TODO(buttercubz): fix private net issues
-    .replace("%onNet%", "localhost");
-
-  return `    <script role="hot-reload">
-      (${code})();
-    </script>`;
+export function clientConnection() {
+  return `    <script src="/__SNEL__HOT__RELOADING.js"></script>`;
 }

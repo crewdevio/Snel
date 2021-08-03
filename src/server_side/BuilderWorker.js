@@ -1,12 +1,12 @@
 import { clientConnection } from "../dev_server/hotReloading.ts";
+import ClientHot from "../dev_server/hotReloadingClient.js";
 import { join, toFileUrl } from "../../imports/path.ts";
 import { VERSION } from "../shared/version.ts";
 import { Application } from "./imports/oak.ts";
-import { getIP } from "../shared/utils.ts";
 import { htmlBody } from "./templates.ts";
 
 self.onmessage = async (event) => {
-  const { port, clientPath, path, mode, start, end } = event.data;
+  const { port, clientPath, path, mode, start, end, ipv4 } = event.data;
 
   const serverSide = new Application();
   const controller = new AbortController();
@@ -21,11 +21,19 @@ self.onmessage = async (event) => {
         if (request.method === "GET") {
           if (request.url.pathname === "/Snel/client" && clientPath) {
             response.headers.set("content-type", "application/javascript");
+            response.status = 200;
 
             const client = new TextDecoder("utf-8").decode(
               await Deno.readFile(join(Deno.cwd(), clientPath))
             );
 
+            response.body = client;
+          } if (request.url.pathname === "/__SNEL__HOT__RELOADING.js") {
+            response.headers.set("content-type", "application/javascript");
+
+            const client = `(${ClientHot.toString()})("${(ipv4) ?? "localhost" }");`
+
+            response.status = 200;
             response.body = client;
           } else {
             response.headers.set("content-type", "text/html");
@@ -78,7 +86,7 @@ self.onmessage = async (event) => {
                 head,
                 css: css.code,
                 client: mode === "ssr" ? "Snel/client" : null,
-                hotReloading: clientConnection(port + 1, await getIP()),
+                hotReloading: clientConnection(),
               });
             }
           }

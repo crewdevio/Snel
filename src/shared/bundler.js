@@ -14,6 +14,9 @@ import { URL_SVELTE_CDN } from "../shared/version.ts";
 import * as path from "../../imports/path.ts";
 import { less } from "../../imports/less.ts";
 
+// store all files to check if need to recompile it
+const cacheFiles = new Map();
+
 export default (options = {}) => {
   const { compilerOptions = {}, ...rest } = options;
   const extensions = rest.extensions || [".svelte"];
@@ -70,12 +73,24 @@ export default (options = {}) => {
     async transform(code, id) {
       if (!filter(id)) return null;
 
+      const oldCode = cacheFiles.get(id);
+
+      // get if file not changed
+      if (oldCode?.rawCode === code && oldCode) {
+        return oldCode?.compiledCode;
+      }
+
       const extension = path.extname(id);
       if (!~extensions.indexOf(extension)) return null;
 
       const dependencies = [];
       const filename = path.relative(Deno.cwd(), id);
       const svelte_options = { ...compilerOptions, filename };
+
+      cacheFiles.set(id, {
+        rawCode: code,
+        compiledCode: {},
+      });
 
       const processed = await preprocess(
         code,
@@ -142,6 +157,8 @@ export default (options = {}) => {
       } else {
         compiled.js.dependencies = dependencies;
       }
+
+      cacheFiles.set(id, { ...cacheFiles.get(id), compiledCode: compiled.js });
 
       return compiled.js;
     },

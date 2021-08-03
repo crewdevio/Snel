@@ -26,17 +26,18 @@ export default async function StartDev() {
     .split(Deno.build.os === "windows" ? "\\" : "/")
     .pop()!;
 
-  const ip = await ipv4(port);
+  const { str: ip, ipv4: ipV4 } = await ipv4(port);
   const localNet = ip
     ? `${colors.bold("On Your Network:")}  ${ip}:${colors.bold(port.toString())}`
     : "";
 
-  await RollupBuild({
+  let build = await RollupBuild({
     entryFile: common.entryFile,
     production: false,
     dir: outDir,
     generate: mode,
     plugins,
+    ipv4: ipV4!,
   });
 
   if (mode === "ssg" || mode === "ssr") {
@@ -51,6 +52,7 @@ export default async function StartDev() {
       plugins,
       dirName,
       localNet,
+      ipv4: ipV4!,
     });
   }
 
@@ -77,11 +79,13 @@ export default async function StartDev() {
 
     // hot reloading
     await HotReload(toWatch, (port + 1), async () => {
-      await RollupBuild({
+      build = await RollupBuild({
         entryFile: common.entryFile,
+        cache: build.cache,
         production: false,
-        dir: outDir,
         generate: mode,
+        dir: outDir,
+        ipv4: ipV4!,
         plugins,
       });
     });

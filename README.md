@@ -126,7 +126,44 @@ import axios from "axios";
 
 > **note**: you can use import maps inside svelte components
 
-### Manage import maps dependencies using [trex](https://github.com/crewdevio/Trex)
+## Snel config file
+
+snel uses a configuration file to define different things, like the development server port or add different plugins, this file can be named as `snel.config.js` or `snel.config.ts`.
+
+`example: snel.config.js`
+
+```javascript
+export default {
+  port: 3000, // development server port
+  mode: "dom", // type project "dom" | "ssg"
+  plugins: [], // plugins must be compatible with rollup deno
+  extendsImportMap: [
+    // extends import map using externas import maps
+    "https://denopkg.com/crewdevio/Snel-carbon@main/components.map.json",
+  ],
+};
+```
+
+config options:
+
+- port (number): port number for development server
+- mode (string): type project "dom" | "ssg"
+- plugins (Plugin[ ]): plugins must be compatible with [rollup deno](https://deno.land/x/drollup)
+- extendsImportMap (string[ ]): extends from externas import maps
+
+if you want to use `snel.config.ts` you can import `snelConfig` interface to provide type checking:
+
+`example: snel.config.ts`
+
+```typescript
+import type { snelConfig } from "https://deno.land/x/snel/mod.ts";
+
+export default <snelConfig>{
+  ...
+};
+```
+
+## Manage import maps dependencies using [trex](https://github.com/crewdevio/Trex)
 
 if you don't have an import map.json file you can create it using the `trex install` command, trex is mainly focused on handling dependencies for `deno` but this doesn't prevent you from being able to use it to handle your dependencies for `snel/svelte`. to install any dependency you just have to use the [custom command](https://github.com/crewdevio/Trex#adding-custom-packages) from trex:
 
@@ -284,6 +321,157 @@ summary:
 this syntax can be used in javascript, typescript files and components.
 
 > **note**: you can change the behavior by rewriting the pattern inside the import_map.json file, although be careful when doing this.
+
+## Deploy SPA app
+
+If you want to have a simple workflow to deploy your SPA application, you can use this.
+
+`deploy`
+
+```yml
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+
+      - name: Install Deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.x
+
+      - name: Build
+        run: |
+          deno run --allow-run --allow-read https://deno.land/x/snel/install.ts
+          trex run build
+      - name: Upload Artifacts 🔺
+        uses: actions/upload-artifact@v1
+        with:
+          name: site
+          path: dist
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+
+      - name: Download Artifacts 🔻
+        uses: actions/download-artifact@v1
+        with:
+          name: site
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          branch: deploy
+          folder: "site"
+          clean-exclude: |
+            vercel.json
+            manifest.json
+```
+
+this compiles the application every time it is pushed to the `main` branch, and uploads the compiled files to the `deploy` branch, which could be deployed in hosts such as `vercel` or `netlify`.
+
+If you are using the snel client router and you are going to deploy vercel or netlify you must add the respective configuration files to avoid having 404 errors.
+
+`for vercel: vercel.json`
+
+```json
+{
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
+}
+```
+
+`for netlify: _redirects`
+
+```console
+/*   /index.html   200
+```
+
+to avoid this files was removed in each deploy, you can ignore specific files:
+
+```yml
+....
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          branch: deploy
+          folder: "site"
+          clean-exclude: |
+            vercel.json # <- ignore vercel.json and manifest.json file
+            manifest.json
+```
+
+for github pages you can use this trick:
+
+create a `404.html` file:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>....</title>
+  <script>
+    sessionStorage.redirect = location.href;
+  </script>
+  <meta http-equiv="refresh" content="0;URL='/sghpa'"></meta>
+</head>
+  <body>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </body>
+</html>
+```
+
+and in your `index.html` add this:
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>....</title>
+  <style type="text/css">
+    body:before {
+      content: attr(message);
+    }
+  </style>
+</head>
+<body>
+  .....
+  <script>
+    (() => {
+      const redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+        // REMOVE THIS - just showing the redirect route in the UI
+        document.body.setAttribute('message', 'This page was redirected by 404.html, from the route: ' + redirect);
+      } else {
+        // REMOVE THIS - just showing the redirect route in the UI
+        document.body.setAttribute('message', 'This page was loaded directly from the index.html file');
+      }
+    })();
+  </script>
+</body>
+</html>
+```
 
 ## Hot Reloading
 

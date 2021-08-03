@@ -20,6 +20,7 @@ export interface ServeOptions<T = unknown> {
   verbose: boolean;
   open: boolean;
   historyApiFallback?: string | boolean;
+  ipv4?: string;
 }
 
 export type Defined<T> = Exclude<T, undefined>;
@@ -60,6 +61,7 @@ class BuildServer {
     defaultType: "text/plain",
     verbose: true,
     onListening() {},
+    ipv4: undefined,
   };
 
   server: Server;
@@ -97,7 +99,7 @@ class BuildServer {
       headers.set("Content-Type", "application/javascript");
 
       const response: Response = {
-        body: `(${HotClient.toString()})()`,
+        body: `(${HotClient.toString()})("${this.options.ipv4 ?? "localhost"}")`,
         headers,
       }
 

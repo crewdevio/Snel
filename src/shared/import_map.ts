@@ -43,10 +43,74 @@ import {
   join,
 } from "../../imports/path.ts";
 import type { NormalizedInputOptions, Plugin } from "../../imports/drollup.ts";
+import { resolverConfigFile, loadConfig } from "./utils.ts";
 import { ensureArray } from "./imports/ensureArray.ts";
 import { VERSION, URL_SVELTE_CDN } from "./version.ts";
 import { resolveId } from "./imports/resolveId.ts";
+import { colors } from "../../imports/fmt.ts";
+import type { snelConfig } from "./types.ts";
 import { exists } from "../../imports/fs.ts";
+
+// store extenas import maps
+const Cache = new Map<string, string>();
+
+/**
+ * resolve externals import maps
+ */
+async function resolveExternalsImportMaps() {
+  const externaMaps: Record<string, string> = {};
+
+  // prevent try to load config when run create command
+  if ((await exists("./snel.config.ts")) || (await exists("./snel.config.js"))) {
+    // get externals import maps
+    const { extendsImportMap } = await loadConfig<snelConfig>(
+      await resolverConfigFile()
+    )!;
+
+    if (extendsImportMap && extendsImportMap?.length > 0) {
+      for (const map of extendsImportMap) {
+        if (map.startsWith("http") && map.endsWith(".json")) {
+          // get it from cache
+          if (Cache.has(map)) {
+            const externals = JSON.parse(Cache.get(map)!) as ImportMapObject;
+
+            for (const [key, value] of Object.entries(externals.imports)) {
+              externaMaps[key] = value;
+            }
+          }
+          // load from url and store it in cache
+          else {
+            try {
+              const response = await fetch(map);
+              const data = await response.text();
+
+              const externals = JSON.parse(data) as ImportMapObject;
+              Cache.set(map, data);
+
+              for (const [key, value] of Object.entries(externals.imports)) {
+                externaMaps[key] = value;
+              }
+            } catch (error: any) {
+              throw new Error(
+                colors.red(`can't load external import map ${colors.yellow(map)}`)
+              ).message;
+            }
+          }
+        } else {
+          throw new Error(
+            colors.red(
+              `you only can extends remote import maps from http or https`
+            )
+          ).message;
+        }
+      }
+    }
+  }
+
+  return externaMaps;
+}
+
+const externaMaps = await resolveExternalsImportMaps();
 
 /**
  * @public
@@ -197,6 +261,7 @@ const readFile = async (
 
   const importMap = {
     imports: {
+      ...externaMaps,
       ...defaultImports,
       ...importsFallback,
     },

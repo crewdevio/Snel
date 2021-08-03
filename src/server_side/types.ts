@@ -31,4 +31,5 @@ export interface DevServerProps extends Omit<ServerProps, "dist">{
   plugins: Plugin[];
   dirName: string;
   localNet: string;
+  ipv4?: string;
 }

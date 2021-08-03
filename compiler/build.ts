@@ -13,6 +13,7 @@ import {
   DevServer,
   postcss,
 } from "../src/shared/internal_plugins.ts";
+import type { RollupOptions, OutputOptions } from "../imports/drollup.ts";
 import type { RollupBuildProps } from "./types.ts";
 import { toFileUrl } from "../imports/path.ts";
 import { rollup } from "../imports/drollup.ts";
@@ -23,6 +24,8 @@ export async function RollupBuild({
   generate = "dom",
   plugins = [],
   production = false,
+  cache = undefined,
+  ipv4,
 }: RollupBuildProps) {
   const base = toFileUrl(Deno.cwd()).href;
 
@@ -34,7 +37,6 @@ export async function RollupBuild({
           maps: "./import_map.json",
         }),
         ...plugins,
-        (await DevServer())!,
         Svelte({ generate }),
         postcss(),
         terser(),
@@ -44,22 +46,26 @@ export async function RollupBuild({
           maps: "./import_map.json",
         }),
         ...plugins,
-        (await DevServer())!,
+        (await DevServer(ipv4))!,
         Svelte({ generate, dev: true }),
         postcss(),
       ];
 
-  const options = {
+  const options: RollupOptions = {
     input: new URL(entryFile, `${base}/`).href,
     plugins: [...defaults],
     output: {
       dir,
       format: "es" as const,
-      sourcemap: true,
+      sourcemap: !production,
     },
+    cache,
+    treeshake: production
   };
 
   const bundle = await rollup(options);
-  await bundle.write(options.output);
+  await bundle.write(options.output as OutputOptions);
   await bundle.close();
+
+  return bundle;
 }
