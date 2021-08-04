@@ -17,7 +17,7 @@ import "https://cdn.skypack.dev/svelte@3.38.2/store";
 const install = async (name: string, url: string, importmap?: boolean) => {
   const process = Deno.run({
     cmd: [
-      ...`${Deno.execPath()} install -A -f -r --no-check${
+      ...`${Deno.execPath()} install -q -A -f -r --no-check${
         importmap
           ? ` --import-map=https://deno.land/x/trex/import_map.json`
           : ""
