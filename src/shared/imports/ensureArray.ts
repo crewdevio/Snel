@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/buttercubz/deno-rollup@improve-perfomance/src/ensureArray.ts";
+export * from "https://denopkg.com/buttercubz/deno-rollup@next/src/ensureArray.ts";

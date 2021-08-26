@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/buttercubz/deno-rollup@improve-perfomance/mod.ts";
+export * from "https://denopkg.com/buttercubz/deno-rollup@next/mod.ts";

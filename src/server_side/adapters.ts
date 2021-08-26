@@ -95,7 +95,7 @@ export function denoDeploy(clientPath: string) {
 import { htmlBody } from "https://deno.land/x/snel@v${VERSION}/src/server_side/templates.ts";
 import { VERSION } from "https://deno.land/x/snel@v${VERSION}/src/shared/version.ts";
 import { Application } from "https://deno.land/x/oak@v7.6.3/mod.ts ";
-import { join } from "https://deno.land/std@0.99.0/path/mod.ts";
+import { join } from "https://deno.land/std@0.106.0/path/mod.ts";
 import Module from "${clientPath}";
 
 ${DeployServer.toString()}
