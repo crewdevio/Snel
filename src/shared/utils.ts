@@ -33,13 +33,24 @@ export const flags = {
 export async function getIP() {
   try {
     if (Deno.build.os === "linux") {
-      const process = Deno.run({
-        cmd: ["hostname", "-I"],
-        stdout: "piped",
-      });
+      const run = async (cmd: string) => {
+        const process = Deno.run({
+          cmd: cmd.split(" "),
+          stdout: "piped",
+        });
+        const result = new TextDecoder().decode(await process.output()).trim();
+        Deno.close(process.rid);
+        return result;
+      }
 
-      const ip = new TextDecoder().decode(await process.output()).trim();
-      Deno.close(process.rid);
+      let ip: string;
+
+      try {
+        ip = await run(`docker info -f {{.Swarm.NodeAddr}}`);
+      } catch {
+        ip = await run(`hostname -I`);
+      }
+
 
       return ip.length ? ip : null;
     } else if (Deno.build.os === "windows") {
