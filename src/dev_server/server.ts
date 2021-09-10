@@ -99,7 +99,7 @@ class BuildServer {
       headers.set("Content-Type", "application/javascript");
 
       const response: Response = {
-        body: `(${HotClient.toString()})("${this.options.ipv4 ?? "localhost"}")`,
+        body: `(${HotClient.toString()})(location.hostname)`,
         headers,
       }
 
