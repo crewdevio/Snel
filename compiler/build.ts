@@ -49,6 +49,7 @@ export async function RollupBuild({
         (await DevServer(ipv4))!,
         Svelte({ generate, dev: true }),
         postcss(),
+        terser(),
       ];
 
   const options: RollupOptions = {
