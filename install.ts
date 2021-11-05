@@ -7,12 +7,12 @@
  */
 
 // cache in instalation time
-import "https://cdn.skypack.dev/svelte@3.42.6/transition";
-import "https://cdn.skypack.dev/svelte@3.42.6/internal";
-import "https://cdn.skypack.dev/svelte@3.42.6/animate";
-import "https://cdn.skypack.dev/svelte@3.42.6/easing";
-import "https://cdn.skypack.dev/svelte@3.42.6/motion";
-import "https://cdn.skypack.dev/svelte@3.42.6/store";
+import "https://cdn.skypack.dev/svelte@3.44.1/transition";
+import "https://cdn.skypack.dev/svelte@3.44.1/internal";
+import "https://cdn.skypack.dev/svelte@3.44.1/animate";
+import "https://cdn.skypack.dev/svelte@3.44.1/easing";
+import "https://cdn.skypack.dev/svelte@3.44.1/motion";
+import "https://cdn.skypack.dev/svelte@3.44.1/store";
 
 const install = async (name: string, url: string, importmap?: boolean) => {
   const process = Deno.run({

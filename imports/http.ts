@@ -1,1 +1,1 @@
-export * from "https://deno.land/std@0.106.0/http/mod.ts";
+export * from "https://deno.land/std@0.113.0/http/server_legacy.ts";

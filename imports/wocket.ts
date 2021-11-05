@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/crewdevio/wocket@dev/mod.ts";
+export * from "https://denopkg.com/crewdevio/tools@main/wocket/mod.ts";
