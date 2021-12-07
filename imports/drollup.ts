@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/buttercubz/deno-rollup@next/mod.ts";
+export * from "https://denopkg.com/crewdevio/tools@main/deno-rollup/mod.ts";

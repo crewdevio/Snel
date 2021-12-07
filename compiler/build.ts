@@ -7,11 +7,10 @@
  */
 
 import {
-  terser,
   ImportMapPlugin,
   Svelte,
   DevServer,
-  postcss,
+  terser
 } from "../src/shared/internal_plugins.ts";
 import type { RollupOptions, OutputOptions } from "../imports/drollup.ts";
 import type { RollupBuildProps } from "./types.ts";
@@ -38,8 +37,7 @@ export async function RollupBuild({
         }),
         ...plugins,
         Svelte({ generate }),
-        postcss(),
-        terser(),
+        terser()
       ]
     : [
         ImportMapPlugin({
@@ -48,7 +46,7 @@ export async function RollupBuild({
         ...plugins,
         (await DevServer(ipv4))!,
         Svelte({ generate, dev: true }),
-        postcss(),
+        terser(),
       ];
 
   const options: RollupOptions = {
