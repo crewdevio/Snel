@@ -1,1 +1,1 @@
-export * from "https://cdn.jsdelivr.net/npm/svelte@3.44.1/compiler.mjs";
+export * from "https://cdn.jsdelivr.net/npm/svelte@3.44.2/compiler.mjs";
