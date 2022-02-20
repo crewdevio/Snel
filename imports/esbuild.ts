@@ -1,5 +1,5 @@
-//@deno-types="https://deno.land/x/esbuild@v0.14.2/mod.d.ts"
-export * from "https://deno.land/x/esbuild@v0.14.2/mod.js";
+//@deno-types="https://deno.land/x/esbuild@v0.12.15/mod.d.ts"
+export * from "https://deno.land/x/esbuild@v0.12.15/mod.js";
 export type {
   BuildFailure,
   BuildIncremental,
@@ -39,4 +39,4 @@ export type {
   TransformFailure,
   TransformOptions,
   TransformResult,
-} from "https://deno.land/x/esbuild@v0.14.2/mod.d.ts";
+} from "https://deno.land/x/esbuild@v0.12.15/mod.d.ts";

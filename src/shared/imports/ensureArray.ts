@@ -1,1 +1,1 @@
-export * from "https://denopkg.com/crewdevio/tools@main/deno-rollup/src/ensureArray.ts";
+export * from "https://raw.githubusercontent.com/crewdevio/deno-rollup/main/src/ensureArray.ts";
