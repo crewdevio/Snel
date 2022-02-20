@@ -47,7 +47,7 @@ export async function RollupBuild({
         (await DevServer(ipv4))!,
         Svelte({ generate, dev: true }),
         terser(),
-      ];
+      ] as any;
 
   const options: RollupOptions = {
     input: new URL(entryFile, `${base}/`).href,
