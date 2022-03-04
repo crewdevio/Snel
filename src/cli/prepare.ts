@@ -67,13 +67,14 @@ export async function Dist() {
       ? join("dist", "index.html")
       : join("dist", basename(output));
 
-    // normalize path ./example to /example
-    if (!output.endsWith(".html")) {
-      transform.push({
-        target: `="./${basename(output)}"`,
-        replacer: `="/${basename(output)}"`,
-      });
-    }
+    // Commenting the following lines to fix https://github.com/crewdevio/Snel/issues/52
+    // // normalize path ./example to /example
+    // if (!output.endsWith(".html")) {
+    //   transform.push({
+    //     target: `="./${basename(output)}"`,
+    //     replacer: `="/${basename(output)}"`,
+    //   });
+    // }
 
     if (output.endsWith("index.html")) {
       source = (source as string).replace(`<base href="/deps/">`, "");
