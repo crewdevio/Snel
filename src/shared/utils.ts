@@ -34,7 +34,7 @@ export async function getIP() {
   try {
     if (Deno.build.os === "linux") {
       const process = Deno.run({
-        cmd: ["hostname", "-I"],
+        cmd: ["hostname", "-i"],
         stdout: "piped",
       });
 
@@ -88,9 +88,9 @@ export async function ipv4(port: string | number) {
       ipv4?.split(" ").length === 1
         ? `http://${ipv4}`
         : ipv4
-            ?.split(" ")
-            .map((ip) => `http://${ip}:${port}`)
-            .join(" or "),
+          ?.split(" ")
+          .map((ip) => `http://${ip}:${port}`)
+          .join(" or "),
     ipv4,
   };
 }
