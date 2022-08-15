@@ -10,7 +10,7 @@ import { loadConfig, resolverConfigFile } from "./utils.ts";
 import type { snelConfig } from "../shared/types.ts";
 import server from "../dev_server/server.ts";
 
-export { terser } from "https://denopkg.com/buttercubz/deno-rollup@next/plugins/terser/mod.ts";
+export { terser } from "https://deno.land/x/drollup@2.58.0+0.20.0/plugins/terser/mod.ts";
 export { default as Svelte } from "./bundler.js";
 export * from "./import_map.ts";
 
