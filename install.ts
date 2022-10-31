@@ -7,12 +7,9 @@
  */
 
 // cache in instalation time
-import "https://cdn.skypack.dev/svelte@3.46.4/transition";
-import "https://cdn.skypack.dev/svelte@3.46.4/internal";
-import "https://cdn.skypack.dev/svelte@3.46.4/animate";
-import "https://cdn.skypack.dev/svelte@3.46.4/easing";
-import "https://cdn.skypack.dev/svelte@3.46.4/motion";
-import "https://cdn.skypack.dev/svelte@3.46.4/store";
+import "npm:@sveltejs/vite-plugin-svelte";
+import "npm:svelte";
+import "npm:vite";
 
 const install = async (name: string, url: string, importmap?: boolean) => {
   const process = Deno.run({
@@ -31,7 +28,6 @@ const install = async (name: string, url: string, importmap?: boolean) => {
 
 async function Main() {
   await install("snel", "https://deno.land/x/snel/cli.ts");
-  await install("trex", "https://deno.land/x/trex/cli.ts", true);
 }
 
 if (import.meta.main) {
