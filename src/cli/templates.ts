@@ -17,7 +17,7 @@ export const indexHtml = () => `<!DOCTYPE html>
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>`;
 
@@ -104,7 +104,7 @@ button:focus-visible {
 }
 `;
 
-export const rootSvelte = `<script>
+export const rootSvelte = `<script lang="ts">
   import svelteLogo from "./assets/svelte.svg";
   import Counter from "./components/Counter.svelte";
 </script>
@@ -140,7 +140,7 @@ export const rootSvelte = `<script>
 </style>
 `;
 
-export const Home = `<script>
+export const Home = `<script lang="ts">
   let count = 0;
   const increment = () => {
     count += 1;
@@ -207,12 +207,21 @@ export default defineConfig({
 
 export const DENO = `{
   "tasks": {
-    "dev": "deno run -A --unstable --node-modules-dir npm:vite",
-    "build": "deno run -A --unstable --node-modules-dir npm:vite build",
-    "preview": "deno run -A --unstable --node-modules-dir npm:vite preview",
+    "dev": "deno run -A --node-modules-dir npm:vite",
+    "build": "deno run -A --node-modules-dir npm:vite build",
+    "preview": "deno run -A --node-modules-dir npm:vite preview",
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts dist/"
   }
 }`;
+
+export const SVELTE_CONFIG = `import { vitePreprocess } from "npm:@sveltejs/vite-plugin-svelte";
+
+export default {
+  // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
+  // for more information about preprocessors
+  preprocess: vitePreprocess(),
+};
+`;
 
 export const gitIgnore = (dir: string) =>
   `/public/dist/

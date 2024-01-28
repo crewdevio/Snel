@@ -17,6 +17,8 @@ import {
   JSCONFIg,
   VITE,
   DENO,
+  SVELTE_CONFIG,
+  gitIgnore,
 } from "./templates.ts";
 import type { CreateProjectOptions } from "../shared/types.ts";
 import { createDir, createFile } from "./io.ts";
@@ -62,12 +64,12 @@ export async function CreateProject(options: CreateProjectOptions) {
         source: Home,
       },
       {
-        name: "main.js",
+        name: "main.ts",
         path: `${projectRoot}/src/`,
         source: mainjs(),
       },
       {
-        name: "vite.config.mjs",
+        name: "vite.config.mts",
         path: projectRoot,
         source: VITE(port),
       },
@@ -77,9 +79,19 @@ export async function CreateProject(options: CreateProjectOptions) {
         source: DENO,
       },
       {
+        name: "svelte.config.js",
+        path: projectRoot,
+        source: SVELTE_CONFIG,
+      },
+      {
         name: "svelte.svg",
         path: `${projectRoot}/src/assets/`,
         source: SVG,
+      },
+      {
+        name: ".gitignore",
+        path: projectRoot,
+        source: gitIgnore,
       },
     ],
     domDir: [
@@ -119,7 +131,7 @@ export async function CreateProject(options: CreateProjectOptions) {
 
   for (const file of builder.files()) {
     const { name, path, source } = file;
-    await createFile(name, path, source);
+    await createFile(name, path, source as string);
   }
 
   const endTime = Date.now();

@@ -55,9 +55,7 @@ async function Main() {
       showHelp();
     } else {
       CommandNotFound({
-        commands: [
-          keyWords.create,
-        ],
+        commands: [keyWords.create],
         flags: [...flags.help, ...flags.version],
       });
     }

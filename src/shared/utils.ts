@@ -16,7 +16,7 @@ export const flags = {
 export function showHelp() {
   console.log(
     colors.green(
-      `A Cybernetical compiler for svelte applications
+      `A Cybernetical tool for svelte applications on deno
 
 USAGE:
   ${colors.white("snel")} ${colors.yellow("[SUBCOMMAND] [OPTIONS]")}

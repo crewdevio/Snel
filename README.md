@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/crewdevio/Snel/main/static/svelte-logo.svg" width="250">
-  <p align="center">A Cybernetical compiler for svelte applications in deno (Snel = fast in Nederlands) </p>
+  <p align="center">A Cybernetical tool for svelte applications on deno in deno (Snel = fast in Nederlands) </p>
 </p>
 
 <p align="center">
@@ -25,54 +25,25 @@
 
 ## What is Snel?
 
-It is a `tool/framework` to compile .svelte component to javascript files to create web application using deno and svelte
+It is a `tool/framework` to compile .svelte component to javascript files to create web application using deno, vite and svelte
 
 ## Main features
 
 - simple setup
 - quick compilation
 - hot reloading
-- [import maps](https://github.com/WICG/import-maps) support
-- support for scss and less out of the box
+- [import maps](https://github.com/WICG/import-maps) support (WIP)
+- support for scss and less out of the box (WIP)
 - support for typescript
-- [SSG](docs/ssg.md) (experimental)
-- SSR (soon)
+- [SSG](docs/ssg.md) (WIP)
+- SSR (WIP)
 
 ## What do I need to start using Snel?
 
 the only thing you need is to run the installation command.
 
 ```console
-deno run --allow-run --allow-read https://deno.land/x/snel/install.ts
-```
-
-> wait wait! Why should I run a script instead of using deno install to install Snel?
-
-Snel uses several tools to create a better development experience, some of these tools are:
-
-- [**trex**](https://github.com/crewdevio/Trex) to handle scripts and compilation in watch mode.
-- [**bundler**](https://deno.land/x/bundler) minify and package all files for production
-
-the [install.ts](https://github.com/crewdevio/Snel/blob/main/install.ts) file is responsible for installing all these tools so that you only worry about creating your application.
-
-if you not want install snel, you can execute it using [trex](https://deno.land/x/trex)
-
-```console
-trex exec snel create [project name]
-```
-
-> **note**: if you decide use snel using trex exec you need to change this scripts inside run.json file
-
-```javascript
-{
-  "scripts": {
-    "start": "trex exec snel serve",
-    "build": "trex exec snel build"
-  },
-  "files": [
-    "./src"
-  ]
-}
+deno install -A -n snel https://deno.land/x/snel/install.ts
 ```
 
 ## how to create a project with Snel?
@@ -88,7 +59,7 @@ then you just have to enter the created project and start the development server
 ```console
 cd ./[project name]
 
-trex run start
+deno task start
 ```
 
 this starts your application on a development server in the port you entered in the configuration
@@ -440,36 +411,41 @@ create a `404.html` file:
 
 and in your `index.html` add this:
 
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>....</title>
-  <style type="text/css">
-    body:before {
-      content: attr(message);
-    }
-  </style>
-</head>
-<body>
-  .....
-  <script>
-    (() => {
-      const redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
-      if (redirect && redirect !== location.href) {
-        history.replaceState(null, null, redirect);
-        // REMOVE THIS - just showing the redirect route in the UI
-        document.body.setAttribute('message', 'This page was redirected by 404.html, from the route: ' + redirect);
-      } else {
-        // REMOVE THIS - just showing the redirect route in the UI
-        document.body.setAttribute('message', 'This page was loaded directly from the index.html file');
+  <head>
+    <meta charset="utf-8" />
+    <title>....</title>
+    <style type="text/css">
+      body:before {
+        content: attr(message);
       }
-    })();
-  </script>
-</body>
+    </style>
+  </head>
+  <body>
+    .....
+    <script>
+      (() => {
+        const redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+          // REMOVE THIS - just showing the redirect route in the UI
+          document.body.setAttribute(
+            "message",
+            "This page was redirected by 404.html, from the route: " + redirect
+          );
+        } else {
+          // REMOVE THIS - just showing the redirect route in the UI
+          document.body.setAttribute(
+            "message",
+            "This page was loaded directly from the index.html file"
+          );
+        }
+      })();
+    </script>
+  </body>
 </html>
 ```
 
