@@ -17,15 +17,14 @@ function validate(
   question: string,
   type: "number" | "string"
 ): string | number {
-
   if (type === "number" && isNumber(field)) return parseInt(field);
-
   else if (fields.includes(field)) return field.trim().toLowerCase();
-
   else {
     console.log(
       type === "string"
-        ? colors.red(`\nthis field is no valid, these are valid "${fields.join(", ")}"\n`)
+        ? colors.red(
+            `\nthis field is no valid, these are valid "${fields.join(", ")}"\n`
+          )
         : colors.red("\nis not a valid number\n")
     );
 
@@ -33,42 +32,34 @@ function validate(
   }
 }
 
-export function PromptConfig(count = 0): Omit<CreateProjectOptions, "projectName"> {
+export function PromptConfig(
+  count = 0
+): Omit<CreateProjectOptions, "projectName"> {
   const answers: { [key: string]: string | number } = {};
 
   const questions = [
-    {
-      name: "root",
-      message: "what do you want the main component file to be called?",
-      _default: "App",
-    },
     {
       name: "port",
       message: "which port do you want the development server to run on?",
       _default: "3000",
     },
-    {
-      name: "mode",
-      message: "What kind of project do you want to do? (ssg, dom)",
-      _default: "dom"
-    }
   ];
 
   for (const { message, name, _default } of questions) {
     switch (name) {
-      case "root":
-        answers[name] = prompt(colors.green(message), _default)!;
-        break;
       case "port":
-        answers[name] = validate([], prompt(colors.green(message), _default)!, message, "number");
-        break;
-      case "mode":
-        answers[name] = validate(["dom", "ssg"], prompt(colors.green(message), _default)!, message, "string");
+        answers[name] = validate(
+          [],
+          prompt(colors.green(message), _default)!,
+          message,
+          "number"
+        );
         break;
     }
   }
 
-  for (const answer in answers) console.log(colors.green(`\n${answer}: ${answers[answer]}`));
+  for (const answer in answers)
+    console.log(colors.green(`\n${answer}: ${answers[answer]}`));
 
   const accept = confirm(colors.yellow("\nthis is the final configuration"));
 
@@ -90,10 +81,14 @@ export function serverLog({ dirName, port, localNet }: any) {
 
   You can now view ${colors.bold(colors.yellow(dirName))} in the browser.
 
-      ${colors.bold("Local:")}            http://localhost:${colors.bold(port.toString())}
+      ${colors.bold("Local:")}            http://localhost:${colors.bold(
+    port.toString()
+  )}
       ${localNet}
 
   Note that the development build is not optimized.
-  To create a production build, use ${colors.bold(colors.blue("trex run build"))}.
+  To create a production build, use ${colors.bold(
+    colors.blue("trex run build")
+  )}.
   `);
 }
